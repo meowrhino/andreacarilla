@@ -331,6 +331,32 @@
 
 
 
+        // ==== 1) FUNCIONES DE DEBUG ====
+        function añadirLabelsDebug() {
+            // limpia los anteriores
+            document.querySelectorAll('.debug-label').forEach(e => e.remove());
+
+            document.querySelectorAll('.portada').forEach(img => {
+                const rect = img.getBoundingClientRect();
+
+                const label = document.createElement('div');
+                label.className = 'debug-label';
+                label.textContent = img.src.split('/').pop();
+                label.style.position = 'absolute';
+                label.style.left = rect.left + window.scrollX + 'px';
+                label.style.top = (rect.top + window.scrollY - 16) + 'px';
+                label.style.background = 'white';
+                label.style.fontSize = '10px';
+                label.style.padding = '2px 4px';
+                label.style.zIndex = '4';
+                label.style.pointerEvents = 'none';
+
+                document.body.appendChild(label);
+            });
+        }
+
+        
+
         // ==== 2) RENDERIZADORES ====
         function renderGallery() {
             const galleryContainer = document.getElementById('gallery-container');

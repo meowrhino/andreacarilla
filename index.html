@@ -98,26 +98,26 @@
             [
                 {
                     src: '_portada/1/1_1.jpg',
-                    desktopStyle: { top: 0, left: 0, scale: 70 },
-                    mobileStyle: { top: 0, left: 0, scale: 90 },
+                    desktopStyle: { top: 0, left: 0, index: 0, scale: 70 },
+                    mobileStyle: { top: 0, left: 0, index: 0, scale: 90 },
                     url: '#'
                 },
                 {
                     src: '_portada/1/1_2.jpg',
-                    desktopStyle: { top: 0, left: 62, scale: 50 },
-                    mobileStyle: { top: 42, left: 50, scale: 60 },
+                    desktopStyle: { top: 0, left: 62, index: 0, scale: 50 },
+                    mobileStyle: { top: 42, left: 50, index: 0, scale: 60 },
                     url: '#'
                 },
                 {
                     src: '_portada/1/1_3.jpg',
-                    desktopStyle: { top: 32, left: 62, scale: 65 },
-                    mobileStyle: { top: 70, left: 5, scale: 60 },
+                    desktopStyle: { top: 32, left: 62, index: 0, scale: 65 },
+                    mobileStyle: { top: 70, left: 5, index: 0, scale: 60 },
                     url: '#'
                 },
                 {
                     src: '_portada/1/1_4.jpg',
-                    desktopStyle: { top: 60, left: 20, scale: 55 },
-                    mobileStyle: { top: 60, left: 50, scale: 60 },
+                    desktopStyle: { top: 60, left: 20, index: 0, scale: 55 },
+                    mobileStyle: { top: 60, left: 50, index: 0, scale: 60 },
                     url: '#'
                 }
             ],
@@ -126,26 +126,26 @@
             [
                 {
                     src: '_portada/2/2_1.jpg',
-                    desktopStyle: { top: 0, left: 55, scale: 65 },
-                    mobileStyle: { top: 0, left: 0, scale: 90 },
+                    desktopStyle: { top: 0, left: 55, index: 0, scale: 65 },
+                    mobileStyle: { top: 0, left: 0, index: 0, scale: 90 },
                     url: '#'
                 },
                 {
                     src: '_portada/2/2_2.jpg',
-                    desktopStyle: { top: 10, left: 5, scale: 50 },
-                    mobileStyle: { top: 45, left: 0, scale: 55 },
+                    desktopStyle: { top: 10, left: 5, index: 0, scale: 50 },
+                    mobileStyle: { top: 45, left: 0, index: 0, scale: 55 },
                     url: '#'
                 },
                 {
                     src: '_portada/2/2_3.jpg',
-                    desktopStyle: { top: 45, left: 50, scale: 65 },
-                    mobileStyle: { top: 75, left: 50, scale: 60 },
+                    desktopStyle: { top: 45, left: 50, index: 0, scale: 65 },
+                    mobileStyle: { top: 75, left: 50, index: 0, scale: 60 },
                     url: '#'
                 },
                 {
                     src: '_portada/2/2_4.jpg',
-                    desktopStyle: { top: 60, left: 5, scale: 55 },
-                    mobileStyle: { top: 70, left: 5, scale: 50 },
+                    desktopStyle: { top: 60, left: 5, index: 0, scale: 55 },
+                    mobileStyle: { top: 70, left: 5, index: 0, scale: 50 },
                     url: '#'
                 }
             ],
@@ -154,20 +154,20 @@
             [
                 {
                     src: '_portada/3/3_1.jpg',
-                    desktopStyle: { top: 0, left: 0, scale: 70 },
-                    mobileStyle: { top: 0, left: 0, scale: 90 },
+                    desktopStyle: { top: 0, left: 0, index: 0, scale: 70 },
+                    mobileStyle: { top: 0, left: 0, index: 0, scale: 90 },
                     url: '#'
                 },
                 {
                     src: '_portada/3/3_2.jpg',
-                    desktopStyle: { top: 10, left: 65, scale: 55 },
-                    mobileStyle: { top: 50, left: 0, scale: 60 },
+                    desktopStyle: { top: 10, left: 65, index: 0, scale: 55 },
+                    mobileStyle: { top: 50, left: 0, index: 0, scale: 60 },
                     url: '#'
                 },
                 {
                     src: '_portada/3/3_3.jpg',
-                    desktopStyle: { top: 55, left: 30, scale: 60 },
-                    mobileStyle: { top: 80, left: 50, scale: 60 },
+                    desktopStyle: { top: 55, left: 30, index: 0, scale: 60 },
+                    mobileStyle: { top: 80, left: 50, index: 0, scale: 60 },
                     url: '#'
                 }
             ]
@@ -227,9 +227,13 @@
                 const styleToApply = isMobile ? item.mobileStyle : item.desktopStyle;
 
                 // Aseguramos top, left y scale
-                img.style.top = (styleToApply.top || 0) + '%';
-                img.style.left = (styleToApply.left || 0) + '%';
+                if ('top' in styleToApply) img.style.top = styleToApply.top + '%';
+                if ('left' in styleToApply) img.style.left = styleToApply.left + '%';
+                if ('bottom' in styleToApply) img.style.bottom = styleToApply.bottom + '%';
+                if ('right' in styleToApply) img.style.right = styleToApply.right + '%';
+
                 img.style.transform = `scale(${(styleToApply.scale || 100) / 1000})`;
+                img.style.zIndex = index.toString(); // más tarde en el array, más arriba en apilamiento
 
                 a.appendChild(img);
                 setEl.appendChild(a);

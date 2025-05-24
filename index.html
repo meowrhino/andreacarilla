@@ -243,15 +243,15 @@
 
                 let responsiveFactor = 1;
 
-                if (screenWidth >= 375 && screenWidth < 768) {
-                    // Escala progresiva entre 375 y 768px (1 → 1.2)
-                    const t = (screenWidth - 375) / (768 - 375);
+                // Escala móvil (de 320 a 768px → 1 → 1.2)
+                if (screenWidth >= 320 && screenWidth < 768) {
+                    const t = (screenWidth - 320) / (768 - 320);
                     responsiveFactor = 1 + t * 0.2;
                 }
 
-                else if (screenWidth >= 1000) {
-                    // Crecimiento lineal desde 1000px: cada 800px suma 0.4 (como de 1000 a 1800)
-                    responsiveFactor = 1 + ((screenWidth - 1000) / 800) * 0.4;
+                // Escala desktop (de 1280px en adelante → 1 → ∞ en bloques de +0.4 cada 800px)
+                else if (screenWidth > 1280) {
+                    responsiveFactor = 1 + ((screenWidth - 1280) / 800) * 0.4;
                 }
 
                 img.style.transform = `scale(${baseScale * responsiveFactor})`;

@@ -329,8 +329,9 @@
 
         let selectedGallery = null;
 
-        // ==== 2) RENDERIZADORES ====
 
+
+        // ==== 2) RENDERIZADORES ====
         function renderGallery() {
             const galleryContainer = document.getElementById('gallery-container');
             galleryContainer.innerHTML = ''; // limpiar anterior si lo hay
@@ -450,8 +451,9 @@
             });
         }
 
-        // ==== 3) SETUPS ====
 
+
+        // ==== 3) SETUPS ====
         function setupTemaNav() {
             const nav = document.getElementById('tema-nav');
             gallerySets.forEach((_, i) => {
@@ -506,8 +508,9 @@
             });
         }
 
-        // ==== 4) INIT ====
 
+
+        // ==== 4) INIT ====
         document.addEventListener('DOMContentLoaded', () => {
             setupTemaNav();
             // elige aleatorio y marca botón
@@ -523,15 +526,23 @@
             setupAndreaPopup();
         });
 
+
+
         // ==== 5) RESIZE CON DEBOUNCE ====
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                renderGallery();
-                renderProjects();
-            }, 200);
-        });
+        function debounce(fn, delay) {
+            let timer;
+            return function (...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => fn.apply(this, args), delay);
+            };
+        }
+        const onResize = debounce(() => {
+            renderGallery();
+            renderProjects();
+        }, 200);
+        window.addEventListener('resize', onResize);
+
+
 
         // ==== 6) LINKS _blank ====
         document.addEventListener('DOMContentLoaded', () => {
@@ -539,66 +550,6 @@
         });
     </script>
 
-    <script>
-        // ==== 6) LINKS _blank ==== 
-        /* me da como miedo borrarlo lo dejo aqui de momento
-document.addEventListener('DOMContentLoaded', () => {
-    const temaNav = document.getElementById('tema-nav')
-    const categoryNav = document.getElementById('category-nav')
-    const selectedCategories = new Set()
-
-    // 1) Generar botones de tema
-    gallerySets.forEach((_, i) => {
-        const btn = document.createElement('button')
-        btn.textContent = i + 1
-        btn.className = 'tema-btn'
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('#tema-nav .tema-btn').forEach(b => b.classList.remove('active'))
-            btn.classList.add('active')
-            selectedGallery = i
-            renderGallery()
-        })
-        temaNav.appendChild(btn)
-    })
-
-    // 2) Generar botones de categoría
-    Array.from(new Set(projects.map(p => p.category))).forEach(cat => {
-        const btn = document.createElement('button')
-        btn.textContent = cat
-        btn.className = 'category-btn'
-        btn.addEventListener('click', () => {
-            btn.classList.toggle('active')
-            if (btn.classList.contains('active')) selectedCategories.add(cat)
-            else selectedCategories.delete(cat)
-            document.querySelectorAll('#links-container .project-link').forEach(link => {
-                const nombre = link.querySelector('a').textContent.trim()
-                link.style.display = (
-                    selectedCategories.size === 0 ||
-                    selectedCategories.has(projects.find(p => p.name === nombre).category)
-                ) ? 'block' : 'none'
-            })
-        })
-        categoryNav.appendChild(btn)
-    })
-})
-
-// popup Andrea
-document.addEventListener('DOMContentLoaded', () => {
-    const openBtn = document.getElementById('open-andrea')
-    const closeBtn = document.getElementById('close-andrea')
-    const popup = document.getElementById('andrea-popup')
-
-    openBtn.addEventListener('click', e => {
-        e.preventDefault()               // si fuese un <a href="#">, evita el salto de página
-        popup.style.display = 'flex'     // muestra el overlay
-    })
-
-    closeBtn.addEventListener('click', e => {
-        e.preventDefault()
-        popup.style.display = 'none'     // oculta el overlay
-    })
-})*/
-    </script>
 </body>
 
 </html>

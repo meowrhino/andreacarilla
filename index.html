@@ -92,6 +92,56 @@
             width: auto;
             height: auto;
         }
+
+
+        /* Navegación fija abajo a la derecha */
+        #home-nav {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
+        }
+
+        /* Botones generales de nav */
+        #home-nav button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25em 0.4em;
+            font-family: inherit;
+            font-size: 14px;
+            transition: font-weight 0.2s, color 0.2s;
+        }
+
+        /* Tema y categoría: estado base (inactivo) */
+        #home-nav .tema-btn,
+        #home-nav .category-btn {
+            color: #ccc;
+            font-weight: normal;
+        }
+
+        /* Hover: negrita pero no negro */
+        #home-nav .tema-btn:hover,
+        #home-nav .category-btn:hover {
+            font-weight: bold;
+        }
+
+        /* Activo: negrita y negro */
+        #home-nav .active {
+            color: black;
+            font-weight: bold;
+        }
+
+        /* Contenedor de categorías con alineación flexible */
+        #category-nav {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
     </style>
 </head>
 
@@ -101,6 +151,12 @@
 
     <!-- Zona de enlaces a proyectos -->
     <div id="links-container"></div>
+
+    <!-- Navegación fija: temas y categorías -->
+    <nav id="home-nav">
+        <div id="tema-nav"></div>
+        <div id="category-nav"></div>
+    </nav>
 
     <script>
         // 1) Datos de los 3 sets de galería (rellena con tus rutas y estilos exactos)
@@ -389,6 +445,73 @@
             link.setAttribute('target', '_blank');
         });
         */
+    </script>
+
+    <script>
+        (function () {
+            const temaNav = document.getElementById('tema-nav');
+            const categoryNav = document.getElementById('category-nav');
+            const links = document.querySelectorAll('#links-container .project-link');
+
+            // TEMAS
+            gallerySets.forEach((_, index) => {
+                const btn = document.createElement('button');
+                btn.textContent = index + 1;
+                btn.className = 'tema-btn';
+                if (index === 0) btn.classList.add('active');
+
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tema-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    // Aquí podrías activar otro set si quieres
+                });
+
+                temaNav.appendChild(btn);
+            });
+
+            // CATEGORÍAS
+            const selectedCategories = new Set();
+            const categories = [...new Set(projects.map(p => p.category))];
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.textContent = cat;
+                btn.className = 'category-btn';
+                btn.dataset.category = cat;
+
+                btn.addEventListener('click', () => {
+                    const isActive = btn.classList.contains('active');
+                    btn.classList.toggle('active');
+
+                    if (isActive) {
+                        selectedCategories.delete(cat);
+                    } else {
+                        selectedCategories.add(cat);
+                    }
+
+                    filterProjects();
+                });
+
+                categoryNav.appendChild(btn);
+            });
+
+            function filterProjects() {
+                const actives = [...selectedCategories];
+
+                links.forEach(link => {
+                    const a = link.querySelector('a');
+                    const projectName = a.textContent.trim();
+                    const project = projects.find(p => p.name === projectName);
+                    if (!project) return;
+
+                    if (actives.length === 0 || actives.includes(project.category)) {
+                        link.style.display = 'block';
+                    } else {
+                        link.style.display = 'none';
+                    }
+                });
+            }
+        })();
     </script>
 </body>
 

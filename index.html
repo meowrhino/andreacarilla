@@ -171,6 +171,10 @@
             z-index: 100;
         }
 
+        #andrea-popup.visible {
+            display: flex;
+        }
+
         #andrea-popup .content {
             max-width: 600px;
             padding: 2rem;
@@ -329,7 +333,7 @@
         // mezcla aleatoriamente los elementos de un array
         function shuffle(array) {
             for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i +1));
+                const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
             }
         }
@@ -524,48 +528,62 @@
     </script>
 
     <script>
-        (function () {
-            const temaNav = document.getElementById('tema-nav');
+        document.addEventListener('DOMContentLoaded', () => {
+            const temaNav = document.getElementById('tema-nav')
+            const categoryNav = document.getElementById('category-nav')
+            const selectedCategories = new Set()
+
+            // 1) Generar botones de tema
             gallerySets.forEach((_, i) => {
-                const btn = document.createElement('button'); btn.textContent = i + 1; btn.className = 'tema-btn';
-                if (i === 0) btn.classList.add('active');
+                const btn = document.createElement('button')
+                btn.textContent = i + 1
+                btn.className = 'tema-btn'
                 btn.addEventListener('click', () => {
-                    document.querySelectorAll('#tema-nav .tema-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active'); selectedGallery = i; renderGallery();
-                });
-                temaNav.appendChild(btn);
-            });
+                    document.querySelectorAll('#tema-nav .tema-btn').forEach(b => b.classList.remove('active'))
+                    btn.classList.add('active')
+                    selectedGallery = i
+                    renderGallery()
+                })
+                temaNav.appendChild(btn)
+            })
 
-            // categorías
-            const categoryNav = document.getElementById('category-nav');
-            const selectedCategories = new Set();
-            const links = document.getElementById('links-container');
-            [...new Set(projects.map(p => p.category))].forEach(cat => {
-                const btn = document.createElement('button'); btn.textContent = cat; btn.className = 'category-btn';
+            // 2) Generar botones de categoría
+            Array.from(new Set(projects.map(p => p.category))).forEach(cat => {
+                const btn = document.createElement('button')
+                btn.textContent = cat
+                btn.className = 'category-btn'
                 btn.addEventListener('click', () => {
-                    btn.classList.toggle('active');
-                    if (btn.classList.contains('active')) selectedCategories.add(cat);
-                    else selectedCategories.delete(cat);
-                    // filtrar
+                    btn.classList.toggle('active')
+                    if (btn.classList.contains('active')) selectedCategories.add(cat)
+                    else selectedCategories.delete(cat)
                     document.querySelectorAll('#links-container .project-link').forEach(link => {
-                        const name = link.querySelector('a').textContent.trim();
-                        const proj = projects.find(p => p.name === name);
-                        link.style.display = (selectedCategories.size === 0 || selectedCategories.has(proj.category)) ? 'block' : 'none';
-                    });
-                });
-                categoryNav.appendChild(btn);
-            });
+                        const nombre = link.querySelector('a').textContent.trim()
+                        link.style.display = (
+                            selectedCategories.size === 0 ||
+                            selectedCategories.has(projects.find(p => p.name === nombre).category)
+                        ) ? 'block' : 'none'
+                    })
+                })
+                categoryNav.appendChild(btn)
+            })
+        })
 
-            // popup Andrea
-            document.getElementById('open-andrea').addEventListener('click', () => {
-                document.getElementById('andrea-popup').style.display = 'flex';
-            });
-            document.getElementById('close-andrea').addEventListener('click', () => {
-                document.getElementById('andrea-popup').style.display = 'none';
-            });
+        // popup Andrea
+        document.addEventListener('DOMContentLoaded', () => {
+            const openBtn = document.getElementById('open-andrea')
+            const closeBtn = document.getElementById('close-andrea')
+            const popup = document.getElementById('andrea-popup')
 
-            window.addEventListener('resize', () => { renderGallery(); renderProjects(); });
-        });
+            openBtn.addEventListener('click', e => {
+                e.preventDefault()               // si fuese un <a href="#">, evita el salto de página
+                popup.style.display = 'flex'     // muestra el overlay
+            })
+
+            closeBtn.addEventListener('click', e => {
+                e.preventDefault()
+                popup.style.display = 'none'     // oculta el overlay
+            })
+        })
     </script>
 </body>
 

@@ -73,7 +73,6 @@
             object-fit: cover;
             width: auto;
             height: auto;
-            transform-origin: top left;
         }
     </style>
 </head>
@@ -98,25 +97,25 @@
             [
                 {
                     src: '_portada/1/1_1.jpg',
-                    desktopStyle: { top: 10, left: 10, index: 1, scale: 70 },
+                    desktopStyle: { top: 10, left: 10, index: 1, scale: 80 },
                     mobileStyle: { top: 0, left: 0, index: 0, scale: 90 },
                     url: '#'
                 },
                 {
                     src: '_portada/1/1_2.jpg',
-                    desktopStyle: { top: 60, left: 50, index: 2, scale: 50 },
+                    desktopStyle: { bottom: 10, left: 40, index: 2, scale: 50 },
                     mobileStyle: { top: 42, left: 50, index: 0, scale: 60 },
                     url: '#'
                 },
                 {
                     src: '_portada/1/1_3.jpg',
-                    desktopStyle: { top: 5, left: 65, index: 2, scale: 65 },
+                    desktopStyle: { top: 5, right: 30, index: 2, scale: 65 },
                     mobileStyle: { top: 70, left: 5, index: 0, scale: 60 },
                     url: '#'
                 },
                 {
                     src: '_portada/1/1_4.jpg',
-                    desktopStyle: { top: 25, left: 70, index: 1, scale: 55 },
+                    desktopStyle: { top: 25, right: 5, index: 1, scale: 55 },
                     mobileStyle: { top: 60, left: 50, index: 0, scale: 60 },
                     url: '#'
                 }
@@ -198,7 +197,7 @@
         /*propuesta: y si cuando sean de otros artistas el titulo sale dentro y fuera solo se ve un numero romano que equivale al proyecto? en plan si hay 2 proyectos de hifas studio el primero en ingresar en el index sera el i y el 2o sera el ii y asi */
         /*o sea es que queda raro como ese guion*/
 
-        // Función para mezclar un array
+        // mezcla aleatoriamente los elementos de un array
         function shuffle(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -207,11 +206,9 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // -- Renderizar galería aleatoria --
+            // -- renderizar una galería aleatoria (por ahora forzado al set 1) --
             const galleryContainer = document.getElementById('gallery-container');
             /*const chosenSet = gallerySets[Math.floor(Math.random() * gallerySets.length)];*/
-
-
             const chosenSet = gallerySets[1-1];
 
             const setEl = document.createElement('div');
@@ -230,14 +227,34 @@
 
                 const styleToApply = isMobile ? item.mobileStyle : item.desktopStyle;
 
-                // Aseguramos top, left y scale
-                if ('top' in styleToApply) img.style.top = styleToApply.top + '%';
-                if ('left' in styleToApply) img.style.left = styleToApply.left + '%';
-                if ('bottom' in styleToApply) img.style.bottom = styleToApply.bottom + '%';
-                if ('right' in styleToApply) img.style.right = styleToApply.right + '%';
+                // posicionamiento desde los valores dados
+                ['top', 'left', 'right', 'bottom'].forEach(pos => {
+                    if (styleToApply[pos] !== undefined) {
+                        img.style[pos] = styleToApply[pos] + '%';
+                    } else {
+                        img.style[pos] = 'auto';
+                    }
+                });
 
-                img.style.transform = `scale(${(styleToApply.scale || 100) / 1000})`;
-                img.style.zIndex = index.toString(); // más tarde en el array, más arriba en apilamiento
+                // origen de escala para mantener anclaje visual correcto
+                let originX = 'left';
+                let originY = 'top';
+                if ('right' in styleToApply) originX = 'right';
+                if ('bottom' in styleToApply) originY = 'bottom';
+                img.style.transformOrigin = `${originY} ${originX}`;
+
+                // escala basada en valor introducido, ajustado dinámicamente con factor responsive
+                let baseScale = (styleToApply.scale || 100) / 1000;
+                let screenWidth = window.innerWidth;
+                let responsiveFactor = 1;
+                if (screenWidth < 500) responsiveFactor = 1.2;
+                else if (screenWidth < 768) responsiveFactor = 1.1;
+                else if (screenWidth > 1400) responsiveFactor = 0.9;
+
+                img.style.transform = `scale(${baseScale * responsiveFactor})`;
+
+                // apilamiento según valor index dado
+                img.style.zIndex = styleToApply.index?.toString() || '0';
 
                 a.appendChild(img);
                 setEl.appendChild(a);
@@ -261,6 +278,17 @@
                 linksContainer.appendChild(wrapper);
             });
         });
+
+        // asegura que todos los enlaces se abran en nueva pestaña
+        document.querySelectorAll('a').forEach(link => {
+            link.setAttribute('target', '_blank');
+        });
+
+        /*
+        document.querySelectorAll('a').forEach(link => {
+            link.setAttribute('target', '_blank');
+        });
+        */
     </script>
 </body>
 

@@ -320,13 +320,16 @@
             { name: 'magical theys - ali arévalo', category: 'artist image', status: true, url: '#' },
         ];
 
+        // índice actual de galería (0-based)
+        let selectedGallery = 1;
+
         /*propuesta: y si cuando sean de otros artistas el titulo sale dentro y fuera solo se ve un numero romano que equivale al proyecto? en plan si hay 2 proyectos de hifas studio el primero en ingresar en el index sera el i y el 2o sera el ii y asi */
         /*o sea es que queda raro como ese guion*/
 
         // mezcla aleatoriamente los elementos de un array
         function shuffle(array) {
             for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
+                const j = Math.floor(Math.random() * (i 1));
                 [array[i], array[j]] = [array[j], array[i]];
             }
         }
@@ -336,8 +339,8 @@
             const galleryContainer = document.getElementById('gallery-container');
             galleryContainer.innerHTML = ''; // limpiar anterior si lo hay
 
-            /*const chosenSet = gallerySets[Math.floor(Math.random() * gallerySets.length)];*/
-            const chosenSet = gallerySets[2 - 1];
+            chosenSet = gallerySets[Math.floor(Math.random() * gallerySets.length)];
+            selectedGallery = chosenSet;
 
             const setEl = document.createElement('div');
             setEl.className = 'gallery-set';
@@ -429,6 +432,23 @@
             });
         }
 
+        function renderProjects() {
+            const activeProjects = projects.filter(p => p.status);
+            shuffle(activeProjects);
+            const linksContainer = document.getElementById('links-container');
+            linksContainer.innerHTML = ''; // limpia previo
+            const isMobile = window.innerWidth <= 768;
+            activeProjects.forEach(p => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'project-link';
+                const a = document.createElement('a');
+                a.href = p.url; a.textContent = p.name;
+                wrapper.appendChild(a);
+                wrapper.style.top = (Math.random() * 90) + '%';
+                wrapper.style.left = (Math.random() * (isMobile ? 50 : 85)) + '%';
+                linksContainer.appendChild(wrapper);
+            });
+        }
         function añadirLabelsDebug() {
             // limpia los anteriores
             document.querySelectorAll('.debug-label').forEach(e => e.remove());
@@ -457,6 +477,7 @@
             renderGallery();
 
             // renderizar enlaces de proyectos activos
+            /*
             const activeProjects = projects.filter(p => p.status);
             shuffle(activeProjects);
 
@@ -479,11 +500,15 @@
 
                 linksContainer.appendChild(wrapper);
             });
+
+            */
+            renderProjects();
         });
 
         // re-renderiza galería si la ventana cambia de tamaño
         window.addEventListener('resize', () => {
             renderGallery();
+            renderProjects();
         });
 
         // asegura que todos los enlaces se abran en nueva pestaña

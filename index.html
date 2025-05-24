@@ -215,7 +215,7 @@
 
             const isMobile = window.innerWidth <= 768;
 
-            chosenSet.forEach(item => {
+            chosenSet.forEach((item, index) => {
                 const a = document.createElement('a');
                 a.href = item.url;
                 a.target = '_blank';

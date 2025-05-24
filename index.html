@@ -207,7 +207,7 @@
             galleryContainer.innerHTML = ''; // limpiar anterior si lo hay
 
             /*const chosenSet = gallerySets[Math.floor(Math.random() * gallerySets.length)];*/
-            const chosenSet = gallerySets[1-1];
+            const chosenSet = gallerySets[1 - 1];
 
             const setEl = document.createElement('div');
             setEl.className = 'gallery-set';
@@ -216,20 +216,6 @@
 
             chosenSet.forEach((item, index) => {
                 const styleToApply = isMobile ? item.mobileStyle : item.desktopStyle;
-
-                // Etiqueta arriba de cada imagen
-                const label = document.createElement('div');
-                label.style.position = 'absolute';
-                label.style.background = 'white';
-                label.style.fontSize = '10px';
-                label.style.padding = '2px';
-                label.style.zIndex = '9999';
-                label.style.pointerEvents = 'none';
-                label.style.left = styleToApply.left !== undefined ? styleToApply.left + '%' : 'auto';
-                label.style.top = styleToApply.top !== undefined ? (styleToApply.top - 5) + '%' : '0';
-                label.textContent = item.src.split('/').pop();
-
-                setEl.appendChild(label);
 
                 const a = document.createElement('a');
                 a.href = item.url;
@@ -268,7 +254,45 @@
             });
 
             galleryContainer.appendChild(setEl);
-            galleryContainer.offsetHeight; // fuerza reflow por si el navegador se queda pillado
+            galleryContainer.offsetHeight; // fuerza reflow
+
+            // Espera a que todas las imágenes se hayan cargado antes de poner los labels
+            const images = setEl.querySelectorAll('img');
+            let loaded = 0;
+            images.forEach(img => {
+                if (img.complete) {
+                    loaded++;
+                    if (loaded === images.length) añadirLabelsDebug();
+                } else {
+                    img.onload = () => {
+                        loaded++;
+                        if (loaded === images.length) añadirLabelsDebug();
+                    };
+                }
+            });
+        }
+
+        function añadirLabelsDebug() {
+            // limpia los anteriores
+            document.querySelectorAll('.debug-label').forEach(e => e.remove());
+
+            document.querySelectorAll('.portada').forEach(img => {
+                const rect = img.getBoundingClientRect();
+
+                const label = document.createElement('div');
+                label.className = 'debug-label';
+                label.textContent = img.src.split('/').pop();
+                label.style.position = 'absolute';
+                label.style.left = rect.left + window.scrollX + 'px';
+                label.style.top = (rect.top + window.scrollY - 16) + 'px';
+                label.style.background = 'white';
+                label.style.fontSize = '10px';
+                label.style.padding = '2px 4px';
+                label.style.zIndex = '9999';
+                label.style.pointerEvents = 'none';
+
+                document.body.appendChild(label);
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {

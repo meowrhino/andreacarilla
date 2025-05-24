@@ -229,7 +229,7 @@
                 // Aseguramos top, left y scale
                 img.style.top = (styleToApply.top || 0) + '%';
                 img.style.left = (styleToApply.left || 0) + '%';
-                img.style.transform = `scale(${(styleToApply.scale || 100) / 100})`;
+                img.style.transform = `scale(${(styleToApply.scale || 100) / 1000})`;
 
                 a.appendChild(img);
                 setEl.appendChild(a);

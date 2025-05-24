@@ -1,0 +1,255 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Fotógrafía</title>
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            font-family: sans-serif;
+        }
+
+        /* Contenedor de galería: ocupa los primeros 2/3 de la ventana */
+        #gallery-container {
+            height: 66vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-set {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .gallery-set img {
+            position: absolute;
+            object-fit: cover;
+        }
+
+        /* Contenedor de enlaces: ocupa el último tercio, con scroll si hace falta */
+        #links-container {
+            height: 34vh;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .project-link {
+            position: absolute;
+            white-space: nowrap;
+        }
+
+        .project-link a {
+            text-decoration: none;
+            color: #000;
+            font-size: 1rem;
+        }
+
+        /* Media query de ejemplo para móvil: ajustar alturas si hace falta */
+        @media (max-width: 768px) {
+            #gallery-container {
+                height: 60vh;
+            }
+
+            #links-container {
+                height: 40vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Zona de galería aleatoria -->
+    <div id="gallery-container"></div>
+
+    <!-- Zona de enlaces a proyectos -->
+    <div id="links-container"></div>
+
+    <script>
+        // 1) Datos de los 3 sets de galería (rellena con tus rutas y estilos exactos)
+        /*issue: tienen que tener las coordenadas para movil y para ordenador "separadas"*/
+        /*issue 2: las imagenes estaran en la carpeta _portada/[númeroDelSet]/[nombreDeLaImagen]*/
+        /*issue 3: y necesitaran un scale tambien no? o no sé si el scale será según responsive,... 
+        pero pensemos que el objetivo es que sea andrea quien haga el mantenimiento, ha de ser muy sencillito 
+        y mantenible*/
+        /*issue 4: las imagenes si les clicas te han de llevar a su proyecto, asi que igual el array cada item ha de tener una url tmb*/
+        const gallerySets = [
+            // SET 1
+            [
+                {
+                    src: '_portada/1/1_1.jpg',
+                    desktopStyle: { top: 0, left: 0, scale: 70 },
+                    mobileStyle: { top: 0, left: 0, scale: 90 },
+                    url: '#'
+                },
+                {
+                    src: '_portada/1/1_2.jpg',
+                    desktopStyle: { top: 0, left: 62, scale: 50 },
+                    mobileStyle: { top: 42, left: 50, scale: 60 },
+                    url: '#'
+                },
+                {
+                    src: '_portada/1/1_3.jpg',
+                    desktopStyle: { top: 32, left: 62, scale: 65 },
+                    mobileStyle: { top: 70, left: 5, scale: 60 },
+                    url: '#'
+                },
+                {
+                    src: '_portada/1/1_4.jpg',
+                    desktopStyle: { top: 60, left: 20, scale: 55 },
+                    mobileStyle: { top: 60, left: 50, scale: 60 },
+                    url: '#'
+                }
+            ],
+
+            // SET 2
+            [
+                {
+                    src: '_portada/2/2_1.jpg',
+                    desktopStyle: { top: 0, left: 55, scale: 65 },
+                    mobileStyle: { top: 0, left: 0, scale: 90 },
+                    url: '#'
+                },
+                {
+                    src: '_portada/2/2_2.jpg',
+                    desktopStyle: { top: 10, left: 5, scale: 50 },
+                    mobileStyle: { top: 45, left: 0, scale: 55 },
+                    url: '#'
+                },
+                {
+                    src: '_portada/2/2_3.jpg',
+                    desktopStyle: { top: 45, left: 50, scale: 65 },
+                    mobileStyle: { top: 75, left: 50, scale: 60 },
+                    url: '#'
+                },
+                {
+                    src: '_portada/2/2_4.jpg',
+                    desktopStyle: { top: 60, left: 5, scale: 55 },
+                    mobileStyle: { top: 70, left: 5, scale: 50 },
+                    url: '#'
+                }
+            ],
+
+            // SET 3
+            [
+                {
+                    src: '_portada/3/3_1.jpg',
+                    desktopStyle: { top: 0, left: 0, scale: 70 },
+                    mobileStyle: { top: 0, left: 0, scale: 90 },
+                    url: '#'
+                },
+                {
+                    src: '_portada/3/3_2.jpg',
+                    desktopStyle: { top: 10, left: 65, scale: 55 },
+                    mobileStyle: { top: 50, left: 0, scale: 60 },
+                    url: '#'
+                },
+                {
+                    src: '_portada/3/3_3.jpg',
+                    desktopStyle: { top: 55, left: 30, scale: 60 },
+                    mobileStyle: { top: 80, left: 50, scale: 60 },
+                    url: '#'
+                }
+            ]
+        ];
+
+        // 2) Datos de proyectos: nombre, categoría, status (on/off), url
+        const projects = [
+            { name: 'quien no corre vuela', category: 'editorial', status: true, url: '#' },
+            { name: 'recogeteme el pelo', category: 'investigación', status: true, url: '#' },
+            { name: 'aines', category: 'artist image', status: true, url: '#' },
+            { name: 'testigodelpero', category: 'artist image', status: true, url: '#' },
+            { name: 'st. frances', category: 'artist image', status: true, url: '#' },
+            { name: '8kito', category: 'artist image', status: true, url: '#' },
+            { name: 'ariezz', category: 'artist image', status: true, url: '#' },
+            { name: 'estrella fugaz - ela rea', category: 'artist image', status: true, url: '#' },
+            { name: 'high tide - crommo', category: 'fashion story', status: true, url: '#' },
+            { name: 'waiting the rain - hifas studio', category: 'fashion story', status: true, url: '#' },
+            { name: 'working on the periphery', category: 'fashion story', status: true, url: '#' },
+            { name: 'lost letter for a tale thief', category: 'fashion story', status: true, url: '#' },
+            { name: 'spin-collection - ana albert', category: 'product', status: true, url: '#' },
+            { name: 'dear xx. are you mad at me? - hifas studio', category: 'look book', status: true, url: '#' },
+            { name: 'diario', category: 'personal', status: true, url: '#' },
+            { name: 'sangre y sal - vangoura', category: 'album design', status: true, url: '#' },
+            { name: 'retalls', category: 'retalls', status: true, url: '#' },
+            { name: 'magical theys - ali arévalo', category: 'artist image', status: true, url: '#' },
+        ];
+
+        /*propuesta: y si cuando sean de otros artistas el titulo sale dentro y fuera solo se ve un numero romano que equivale al proyecto? en plan si hay 2 proyectos de hifas studio el primero en ingresar en el index sera el i y el 2o sera el ii y asi */
+        /*o sea es que queda raro como ese guion*/
+
+        // Función para mezclar un array
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // -- Renderizar galería aleatoria --
+            const galleryContainer = document.getElementById('gallery-container');
+            const chosenSet = gallerySets[Math.floor(Math.random() * gallerySets.length)];
+            const setEl = document.createElement('div');
+            setEl.className = 'gallery-set';
+
+            const isMobile = window.innerWidth <= 768;
+
+            chosenSet.forEach(item => {
+                const a = document.createElement('a');
+                a.href = item.url;
+                a.target = '_blank';
+
+                const img = document.createElement('img');
+                img.src = item.src;
+
+                const styleToApply = isMobile ? item.mobileStyle : item.desktopStyle;
+
+                // Convertimos scale: 70 => transform: scale(0.7)
+                const computedStyle = {
+                    ...styleToApply,
+                    transform: `scale(${(styleToApply.scale || 100) / 100})`
+                };
+                delete computedStyle.scale; // eliminamos la clave 'scale' antes de aplicar
+
+                Object.assign(img.style, computedStyle);
+
+                a.appendChild(img);
+                setEl.appendChild(a);
+            });
+
+            galleryContainer.appendChild(setEl);
+
+            // -- Renderizar enlaces de proyectos --
+            const activeProjects = projects.filter(p => p.status);
+            shuffle(activeProjects);
+            const linksContainer = document.getElementById('links-container');
+            activeProjects.forEach(p => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'project-link';
+                const a = document.createElement('a');
+                a.href = p.url;
+                a.textContent = p.name;
+                wrapper.appendChild(a);
+                // Posición aleatoria (%) dentro del contenedor
+                wrapper.style.top = (Math.random() * 85) + '%';
+                wrapper.style.left = (Math.random() * 85) + '%';
+                linksContainer.appendChild(wrapper);
+            });
+        });
+    </script>
+</body>
+
+</html>

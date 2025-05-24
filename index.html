@@ -205,9 +205,11 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // -- renderizar una galería aleatoria (por ahora forzado al set 1) --
+        // función que renderiza la galería
+        function renderGallery() {
             const galleryContainer = document.getElementById('gallery-container');
+            galleryContainer.innerHTML = ''; // limpiar anterior si lo hay
+
             /*const chosenSet = gallerySets[Math.floor(Math.random() * gallerySets.length)];*/
             const chosenSet = gallerySets[1-1];
 
@@ -229,11 +231,7 @@
 
                 // posicionamiento desde los valores dados
                 ['top', 'left', 'right', 'bottom'].forEach(pos => {
-                    if (styleToApply[pos] !== undefined) {
-                        img.style[pos] = styleToApply[pos] + '%';
-                    } else {
-                        img.style[pos] = 'auto';
-                    }
+                    img.style[pos] = styleToApply[pos] !== undefined ? styleToApply[pos] + '%' : 'auto';
                 });
 
                 // origen de escala para mantener anclaje visual correcto
@@ -261,22 +259,36 @@
             });
 
             galleryContainer.appendChild(setEl);
+        }
 
-            // -- Renderizar enlaces de proyectos --
+        document.addEventListener('DOMContentLoaded', () => {
+            // renderizar galería
+            renderGallery();
+
+            // renderizar enlaces de proyectos activos
             const activeProjects = projects.filter(p => p.status);
             shuffle(activeProjects);
+
             const linksContainer = document.getElementById('links-container');
             activeProjects.forEach(p => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'project-link';
+
                 const a = document.createElement('a');
                 a.href = p.url;
                 a.textContent = p.name;
+
                 wrapper.appendChild(a);
                 wrapper.style.top = (Math.random() * 85) + '%';
                 wrapper.style.left = (Math.random() * 85) + '%';
+
                 linksContainer.appendChild(wrapper);
             });
+        });
+
+        // re-renderiza galería si la ventana cambia de tamaño
+        window.addEventListener('resize', () => {
+            renderGallery();
         });
 
         // asegura que todos los enlaces se abran en nueva pestaña

@@ -23,7 +23,7 @@
 
         /* Contenedor de galería: ocupa los primeros 2/3 de la ventana */
         #gallery-container {
-            height: 66vh;
+            height: 70vh;
             position: relative;
             overflow: hidden;
         }
@@ -41,7 +41,7 @@
 
         /* Contenedor de enlaces: ocupa el último tercio, con scroll si hace falta */
         #links-container {
-            height: 34vh;
+            height: 30vh;
             position: relative;
             overflow-y: auto;
         }
@@ -59,12 +59,8 @@
 
         /* Media query de ejemplo para móvil: ajustar alturas si hace falta */
         @media (max-width: 768px) {
-            #gallery-container {
-                height: 60vh;
-            }
-
             #links-container {
-                height: 40vh;
+                height: 60vh;
             }
         }
 
@@ -98,7 +94,7 @@
                 {
                     src: '_portada/1/1_1.jpg',
                     desktopStyle: { top: 10, left: 10, index: 1, scale: 80 },
-                    mobileStyle: { top: 0, left: 0, index: 0, scale: 90 },
+                    mobileStyle: { top: 10, left: 5, index: 0, scale: 45 },
                     url: '#'
                 },
                 {
@@ -110,13 +106,13 @@
                 {
                     src: '_portada/1/1_3.jpg',
                     desktopStyle: { top: 5, right: 30, index: 2, scale: 65 },
-                    mobileStyle: { top: 70, left: 5, index: 0, scale: 60 },
+                    mobileStyle: { top: 50, right: 5, index: 1, scale: 60 },
                     url: '#'
                 },
                 {
                     src: '_portada/1/1_4.jpg',
                     desktopStyle: { top: 25, right: 5, index: 1, scale: 55 },
-                    mobileStyle: { top: 60, left: 50, index: 0, scale: 60 },
+                    mobileStyle: { top: 60, left: 12, index: 0, scale: 60 },
                     url: '#'
                 }
             ],
@@ -219,6 +215,22 @@
             const isMobile = window.innerWidth <= 768;
 
             chosenSet.forEach((item, index) => {
+                const styleToApply = isMobile ? item.mobileStyle : item.desktopStyle;
+
+                // Etiqueta arriba de cada imagen
+                const label = document.createElement('div');
+                label.style.position = 'absolute';
+                label.style.background = 'white';
+                label.style.fontSize = '10px';
+                label.style.padding = '2px';
+                label.style.zIndex = '9999';
+                label.style.pointerEvents = 'none';
+                label.style.left = styleToApply.left !== undefined ? styleToApply.left + '%' : 'auto';
+                label.style.top = styleToApply.top !== undefined ? (styleToApply.top - 5) + '%' : '0';
+                label.textContent = item.src.split('/').pop();
+
+                setEl.appendChild(label);
+
                 const a = document.createElement('a');
                 a.href = item.url;
                 a.target = '_blank';
@@ -226,8 +238,6 @@
                 const img = document.createElement('img');
                 img.src = item.src;
                 img.classList.add('portada');
-
-                const styleToApply = isMobile ? item.mobileStyle : item.desktopStyle;
 
                 // posicionamiento desde los valores dados
                 ['top', 'left', 'right', 'bottom'].forEach(pos => {
@@ -245,13 +255,12 @@
                 let baseScale = (styleToApply.scale || 100) / 1000;
                 let screenWidth = window.innerWidth;
                 let responsiveFactor = 1;
-                if (screenWidth < 500) responsiveFactor = 1.2;
-                else if (screenWidth < 768) responsiveFactor = 1.1;
-                else if (screenWidth > 1400) responsiveFactor = 0.9;
+                if (screenWidth > 1800) responsiveFactor = 1.4;
+                else if (screenWidth > 1400) responsiveFactor = 1.2;
 
                 img.style.transform = `scale(${baseScale * responsiveFactor})`;
 
-                // apilamiento según valor index dado
+                // apilamiento
                 img.style.zIndex = styleToApply.index?.toString() || '0';
 
                 a.appendChild(img);
@@ -259,6 +268,7 @@
             });
 
             galleryContainer.appendChild(setEl);
+            galleryContainer.offsetHeight; // fuerza reflow por si el navegador se queda pillado
         }
 
         document.addEventListener('DOMContentLoaded', () => {

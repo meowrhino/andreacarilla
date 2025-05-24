@@ -37,6 +37,10 @@
         .gallery-set img {
             position: absolute;
             object-fit: cover;
+            /*
+            border-radius: 1px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        */
         }
 
         /* Contenedor de enlaces: ocupa el último tercio, con scroll si hace falta */
@@ -240,6 +244,19 @@
                 a.href = item.url;
                 a.target = '_blank';
 
+                const wrapper = document.createElement('div');
+                wrapper.style.position = 'absolute';
+                wrapper.style.borderRadius = '10px';
+                wrapper.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.25)';
+                wrapper.style.overflow = 'visible';
+
+                // posicionamiento desde los valores dados
+                ['top', 'left', 'right', 'bottom'].forEach(pos => {
+                    wrapper.style[pos] = styleToApply[pos] !== undefined ? styleToApply[pos] + '%' : 'auto';
+                });
+
+                wrapper.style.zIndex = styleToApply.index?.toString() || '0';
+
                 const img = document.createElement('img');
                 img.src = item.src;
                 img.classList.add('portada');
@@ -259,7 +276,6 @@
                 // escala basada en valor introducido, ajustado dinámicamente con factor responsive
                 let baseScale = (styleToApply.scale || 100) / 1000;
                 let screenWidth = window.innerWidth;
-
                 let responsiveFactor = 1;
 
                 if (screenWidth < 375 && screenWidth >= 320) {
@@ -281,10 +297,9 @@
 
                 img.style.transform = `scale(${baseScale * responsiveFactor})`;
 
-                // apilamiento
-                img.style.zIndex = styleToApply.index?.toString() || '0';
-
-                a.appendChild(img);
+                // sin z-index en img, ya lo tiene el wrapper
+                a.appendChild(wrapper);
+                wrapper.appendChild(img);
                 setEl.appendChild(a);
             });
 

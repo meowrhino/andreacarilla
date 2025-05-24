@@ -140,26 +140,26 @@
             [
                 {
                     src: '_portada/2/2_1.jpg',
-                    desktopStyle: { top: 0, left: 55, index: 0, scale: 65 },
-                    mobileStyle: { top: 0, left: 0, index: 0, scale: 90 },
+                    desktopStyle: { top: 30, left: 5, index: 2, scale: 45 },
+                    mobileStyle: { bottom: 0, left: 20, index: 0, scale: 25 },
                     url: '#'
                 },
                 {
                     src: '_portada/2/2_2.jpg',
-                    desktopStyle: { top: 10, left: 5, index: 0, scale: 50 },
-                    mobileStyle: { top: 45, left: 0, index: 0, scale: 55 },
+                    desktopStyle: { bottom: 15, left: 12, index: 1, scale: 45 },
+                    mobileStyle: { bottom: 10, right: 10, index: 2, scale: 32 },
                     url: '#'
                 },
                 {
                     src: '_portada/2/2_3.jpg',
-                    desktopStyle: { top: 45, left: 50, index: 0, scale: 65 },
-                    mobileStyle: { top: 75, left: 50, index: 0, scale: 60 },
+                    desktopStyle: { top: 5, left: 20, index: 1, scale: 65 },
+                    mobileStyle: { top: 45, left: 5, index: 1, scale: 25 },
                     url: '#'
                 },
                 {
                     src: '_portada/2/2_4.jpg',
-                    desktopStyle: { top: 60, left: 5, index: 0, scale: 55 },
-                    mobileStyle: { top: 70, left: 5, index: 0, scale: 50 },
+                    desktopStyle: { bottom: 5, right: 5, index: 0, scale: 85 },
+                    mobileStyle: { top: 10, right: 5, index: 0, scale: 50 },
                     url: '#'
                 }
             ],
@@ -226,7 +226,7 @@
             galleryContainer.innerHTML = ''; // limpiar anterior si lo hay
 
             /*const chosenSet = gallerySets[Math.floor(Math.random() * gallerySets.length)];*/
-            const chosenSet = gallerySets[1 - 1];
+            const chosenSet = gallerySets[2 - 1];
 
             const setEl = document.createElement('div');
             setEl.className = 'gallery-set';
@@ -261,6 +261,12 @@
                 let screenWidth = window.innerWidth;
 
                 let responsiveFactor = 1;
+
+                if (screenWidth < 375 && screenWidth >= 320) {
+                    // Escala progresiva entre 375 y 320px (1 → 0.85)
+                    const t = (375 - screenWidth) / (375 - 320);
+                    responsiveFactor = 1 - t * 0.15;
+                }
 
                 if (screenWidth >= 375 && screenWidth < 768) {
                     // Escala progresiva entre 375 y 768px (1 → 1.2)

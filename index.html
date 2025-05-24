@@ -240,9 +240,19 @@
                 // escala basada en valor introducido, ajustado dinámicamente con factor responsive
                 let baseScale = (styleToApply.scale || 100) / 1000;
                 let screenWidth = window.innerWidth;
+
                 let responsiveFactor = 1;
-                if (screenWidth > 1800) responsiveFactor = 1.4;
-                else if (screenWidth > 1400) responsiveFactor = 1.2;
+
+                if (screenWidth >= 375 && screenWidth < 768) {
+                    // Escala progresiva entre 375 y 768px (1 → 1.2)
+                    const t = (screenWidth - 375) / (768 - 375);
+                    responsiveFactor = 1 + t * 0.2;
+                }
+
+                else if (screenWidth >= 1000) {
+                    // Crecimiento lineal desde 1000px: cada 800px suma 0.4 (como de 1000 a 1800)
+                    responsiveFactor = 1 + ((screenWidth - 1000) / 800) * 0.4;
+                }
 
                 img.style.transform = `scale(${baseScale * responsiveFactor})`;
 

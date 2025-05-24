@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 
@@ -64,7 +63,7 @@
             font-size: 14px;
             text-decoration: none;
             color: black;
-
+            /*el fondo gris*/
             padding: 0.4em 0.6em;
             background: rgba(0, 0, 0, 0.1);
             border-radius: 1px;
@@ -74,8 +73,6 @@
         @media (max-width: 768px) {
             .project-link {
                 max-width: 70vw;
-                /* solo para móvil, puedes ajustar */
-
             }
         }
 
@@ -86,6 +83,7 @@
             }
         }
 
+        /* Portadas */
         .portada {
             position: absolute;
             object-fit: cover;
@@ -142,17 +140,70 @@
             flex-direction: column;
             text-align: right;
         }
+
+        /* Andrea nav */
+        #andrea-nav {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 60;
+        }
+
+        #andrea-nav button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5em;
+            font-size: 14px;
+        }
+
+        /* Popup overlay */
+        #andrea-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        #andrea-popup .content {
+            max-width: 600px;
+            padding: 2rem;
+            background: white;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #andrea-popup .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
 <body>
-    <!-- Zona de galería aleatoria -->
+    <nav id="andrea-nav">
+        <button id="open-andrea">andrea carilla</button>
+    </nav>
+    <div id="andrea-popup">
+        <button class="close-btn" id="close-andrea">&times;</button>
+        <div class="content">
+            <p>holaaa soy andrea y molo que flipas</p>
+        </div>
+    </div>
+
     <div id="gallery-container"></div>
-
-    <!-- Zona de enlaces a proyectos -->
     <div id="links-container"></div>
-
-    <!-- Navegación fija: temas y categorías -->
     <nav id="home-nav">
         <div id="tema-nav"></div>
         <div id="category-nav"></div>
@@ -450,68 +501,46 @@
     <script>
         (function () {
             const temaNav = document.getElementById('tema-nav');
-            const categoryNav = document.getElementById('category-nav');
-            const links = document.querySelectorAll('#links-container .project-link');
-
-            // TEMAS
-            gallerySets.forEach((_, index) => {
-                const btn = document.createElement('button');
-                btn.textContent = index + 1;
-                btn.className = 'tema-btn';
-                if (index === 0) btn.classList.add('active');
-
+            gallerySets.forEach((_, i) => {
+                const btn = document.createElement('button'); btn.textContent = i + 1; btn.className = 'tema-btn';
+                if (i === 0) btn.classList.add('active');
                 btn.addEventListener('click', () => {
-                    document.querySelectorAll('.tema-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    // Aquí podrías activar otro set si quieres
+                    document.querySelectorAll('#tema-nav .tema-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active'); selectedGallery = i; renderGallery();
                 });
-
                 temaNav.appendChild(btn);
             });
 
-            // CATEGORÍAS
+            // categorías
+            const categoryNav = document.getElementById('category-nav');
             const selectedCategories = new Set();
-            const categories = [...new Set(projects.map(p => p.category))];
-
-            categories.forEach(cat => {
-                const btn = document.createElement('button');
-                btn.textContent = cat;
-                btn.className = 'category-btn';
-                btn.dataset.category = cat;
-
+            const links = document.getElementById('links-container');
+            [...new Set(projects.map(p => p.category))].forEach(cat => {
+                const btn = document.createElement('button'); btn.textContent = cat; btn.className = 'category-btn';
                 btn.addEventListener('click', () => {
-                    const isActive = btn.classList.contains('active');
                     btn.classList.toggle('active');
-
-                    if (isActive) {
-                        selectedCategories.delete(cat);
-                    } else {
-                        selectedCategories.add(cat);
-                    }
-
-                    filterProjects();
+                    if (btn.classList.contains('active')) selectedCategories.add(cat);
+                    else selectedCategories.delete(cat);
+                    // filtrar
+                    document.querySelectorAll('#links-container .project-link').forEach(link => {
+                        const name = link.querySelector('a').textContent.trim();
+                        const proj = projects.find(p => p.name === name);
+                        link.style.display = (selectedCategories.size === 0 || selectedCategories.has(proj.category)) ? 'block' : 'none';
+                    });
                 });
-
                 categoryNav.appendChild(btn);
             });
 
-            function filterProjects() {
-                const actives = [...selectedCategories];
+            // popup Andrea
+            document.getElementById('open-andrea').addEventListener('click', () => {
+                document.getElementById('andrea-popup').style.display = 'flex';
+            });
+            document.getElementById('close-andrea').addEventListener('click', () => {
+                document.getElementById('andrea-popup').style.display = 'none';
+            });
 
-                links.forEach(link => {
-                    const a = link.querySelector('a');
-                    const projectName = a.textContent.trim();
-                    const project = projects.find(p => p.name === projectName);
-                    if (!project) return;
-
-                    if (actives.length === 0 || actives.includes(project.category)) {
-                        link.style.display = 'block';
-                    } else {
-                        link.style.display = 'none';
-                    }
-                });
-            }
-        })();
+            window.addEventListener('resize', () => { renderGallery(); renderProjects(); });
+        });
     </script>
 </body>
 

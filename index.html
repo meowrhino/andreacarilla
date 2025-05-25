@@ -110,24 +110,20 @@
 
         /* Portadas */
         .portada-wrapper {
-            filter: drop-shadow(2px 2px 2.5px #00000020);
             position: absolute;
-            border-radius: 10px;
             overflow: hidden;
+            border-radius: 2px;
+            filter: drop-shadow(2px 2px 2.5px rgba(0, 0, 0, 0.12));
         }
 
         .portada {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            /* recorta bien */
-            transform: none;
-            /* eliminamos el transform aquí */
-        }
+            display: block;
 
+            height: auto;
+            /* altura según proporción real */
+            object-fit: cover;
+            /* opcional para recortes suaves */
+        }
 
 
         /* Navegación fija abajo a la derecha */
@@ -463,45 +459,51 @@
         // 3. funciones de renderizado
         // Clear and render the selected gallery
         function renderGallery() {
-            // 1. Limpiar y preparar el contenedor
             const container = document.getElementById('gallery-container');
             container.innerHTML = '';
-
-            // 2. Elegir el set y calcular responsive
-            const set = gallerySets[selectedGallery];
             const isMobile = window.innerWidth <= 768;
             const factor = computeResponsiveFactor();
 
-            // 3. Recorrer el set de imágenes
-            set.forEach(item => {
+            gallerySets[selectedGallery].forEach(item => {
                 const style = isMobile ? item.mobileStyle : item.desktopStyle;
+                const baseScale = (style.scale || 100) / 1000;
 
-                // 3.1 Tamaño del wrapper en % del contenedor
-                //    (style.scale se trata como porcentaje directo)
-                const sizePct = (style.scale || 100) * factor;
-
-                // 3.2 Crear el wrapper (con overflow:hidden en CSS)
+                // 1) crear wrapper
                 const wrapper = document.createElement('a');
+                wrapper.className = 'portada-wrapper';
                 wrapper.href = item.url;
                 wrapper.target = '_blank';
-                wrapper.className = 'portada-wrapper';
-                wrapper.style.width = `${sizePct}%`;
-                wrapper.style.height = `${sizePct}%`;
                 wrapper.style.zIndex = style.index || 0;
+                container.appendChild(wrapper);
 
-                // 3.3 Posicionar el wrapper según top/left/right/bottom
-                ['top', 'left', 'right', 'bottom'].forEach(dir => {
-                    if (style[dir] != null) wrapper.style[dir] = style[dir] + '%';
-                });
-
-                // 3.4 Insertar la imagen que ocupa todo el wrapper
+                // 2) crear la imagen
                 const img = document.createElement('img');
                 img.src = item.src;
                 img.className = 'portada';
                 wrapper.appendChild(img);
 
-                // 3.5 Añadir al DOM
-                container.appendChild(wrapper);
+                // 3) definir un handler reutilizable
+                function resizeWrapper() {
+                    const w = img.naturalWidth;
+                    const h = img.naturalHeight;
+                    const widthPx = w * baseScale * factor;
+                    const heightPx = h * baseScale * factor;
+
+                    wrapper.style.width = `${widthPx}px`;
+                    wrapper.style.height = `${heightPx}px`;
+
+                    ['top', 'left', 'right', 'bottom'].forEach(dir => {
+                        if (style[dir] != null) wrapper.style[dir] = style[dir] + '%';
+                    });
+
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.objectFit = 'cover';
+                }
+
+                // 4) asignar el handler y forzarlo si ya está cargada
+                img.addEventListener('load', resizeWrapper);
+                if (img.complete) resizeWrapper();
             });
 
             // 4. (Opcional) Debug: etiquetas con nombre de archivo

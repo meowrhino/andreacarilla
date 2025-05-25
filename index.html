@@ -242,6 +242,8 @@
     </nav>
 
     <script>
+
+        // 1. Datos de entrada
         // 1) Datos de los 3 sets de galería (rellena con tus rutas y estilos exactos)
         /*issue 2: las imagenes estaran en la carpeta _portada/[númeroDelSet]/[nombreDeLaImagen]*/
         /*las imágenes podrian aprovechar el label para coplocarlas y tener titulos que expliquen su historia*/
@@ -325,6 +327,8 @@
             ]
         ];
 
+        let selectedGallery = 0;
+
         // 2) Datos de proyectos: nombre, categoría, status (on/off), url
         /*propuesta: y si cuando sean de otros artistas el titulo sale dentro y fuera solo se ve un numero romano que equivale al proyecto? en plan si hay 2 proyectos de hifas studio el primero en ingresar en el index sera el i y el 2o sera el ii y asi */
         /*o sea es que queda raro como ese guion*/
@@ -350,135 +354,9 @@
             { name: 'magical theys - ali arévalo', category: 'artist image', status: true, url: '#' },
         ];
 
-        let selectedGallery = null;
 
 
-
-        // ==== 1) FUNCIONES DE DEBUG ====
-        function añadirLabelsDebug() {
-            // limpia los anteriores
-            document.querySelectorAll('.debug-label').forEach(e => e.remove());
-
-            document.querySelectorAll('.portada').forEach(img => {
-                const rect = img.getBoundingClientRect();
-
-                const label = document.createElement('div');
-                label.className = 'debug-label';
-                label.textContent = img.src.split('/').pop();
-                label.style.position = 'absolute';
-                label.style.left = rect.left + window.scrollX + 'px';
-                label.style.top = (rect.top + window.scrollY - 16) + 'px';
-                label.style.background = 'white';
-                label.style.fontSize = '10px';
-                label.style.padding = '2px 4px';
-                label.style.zIndex = '4';
-                label.style.pointerEvents = 'none';
-
-                wrapper.appendChild(label);
-                //document.body.appendChild(label);
-            });
-        }
-
-
-
-        // ==== 2) RENDERIZADORES ====
-        function renderGallery() {
-            const galleryContainer = document.getElementById('gallery-container');
-            galleryContainer.innerHTML = ''; // limpiar anterior si lo hay
-
-            // Usa siempre el índice seleccionado
-            const idx = selectedGallery;
-            const chosenSet = gallerySets[idx];
-            /*para fijar el set cuando lo estas colocando:*/
-            //const chosenSet = gallerySets[2];
-
-            const setEl = document.createElement('div');
-            setEl.className = 'gallery-set';
-            const isMobile = window.innerWidth <= 768;
-
-            chosenSet.forEach(item => {
-                const styleToApply = isMobile ? item.mobileStyle : item.desktopStyle;
-
-                const a = document.createElement('a');
-                a.href = item.url;
-                a.target = '_blank';
-
-                // escala basada en valor introducido, ajustado dinámicamente con factor responsive
-                let baseScale = (styleToApply.scale || 100) / 1000;
-                let screenWidth = window.innerWidth;
-                let responsiveFactor = 1;
-
-                const wrapper = document.createElement('div');
-
-                // posicionamiento desde los valores dados
-                ['top', 'left', 'right', 'bottom'].forEach(pos => {
-                    wrapper.style[pos] = styleToApply[pos] != null ? styleToApply[pos] + '%' : 'auto';
-                });
-                wrapper.style.zIndex = styleToApply.index ?? 0;
-                wrapper.classList.add('portada-wrapper');
-                wrapper.style.width = `${100 * baseScale}px`;
-                wrapper.style.height = `${100 * baseScale}px`;
-
-
-                const img = document.createElement('img');
-                img.src = item.src;
-                img.classList.add('portada');
-
-                // posicionamiento desde los valores dados
-                ['top', 'left', 'right', 'bottom'].forEach(pos => {
-                    img.style[pos] = styleToApply[pos] != null ? styleToApply[pos] + '%' : 'auto';
-                });
-
-                // origen de escala para mantener anclaje visual correcto
-                let originX = 'left';
-                let originY = 'top';
-                if ('right' in styleToApply) originX = 'right';
-                if ('bottom' in styleToApply) originY = 'bottom';
-                img.style.transformOrigin = `${originY} ${originX}`;
-
-
-
-                if (screenWidth < 375 && screenWidth >= 320) {
-                    // Escala progresiva entre 375 y 320px (1 → 0.85)
-                    const t = (375 - screenWidth) / (375 - 320);
-                    responsiveFactor = 1 - t * 0.15;
-                }
-
-                if (screenWidth >= 375 && screenWidth < 768) {
-                    // Escala progresiva entre 375 y 768px (1 → 1.2)
-                    const t = (screenWidth - 375) / (768 - 375);
-                    responsiveFactor = 1 + t * 0.75;
-                }
-
-                else if (screenWidth >= 1000) {
-                    // Crecimiento lineal desde 1000px: cada 800px suma 0.4 (como de 1000 a 1800)
-                    responsiveFactor = 1 + ((screenWidth - 1000) / 800) * 0.4;
-                }
-
-                img.style.transform = `scale(${baseScale * responsiveFactor})`;
-
-                // sin z-index en img, ya lo tiene el wrapper
-                a.appendChild(wrapper);
-                wrapper.appendChild(img);
-                setEl.appendChild(a);
-            });
-
-            galleryContainer.appendChild(setEl);
-            galleryContainer.offsetHeight; // fuerza reflow
-
-            // labels debug (si usas)
-            const images = setEl.querySelectorAll('img');
-            let loaded = 0;
-            images.forEach(img => {
-                if (img.complete) count();
-                else img.onload = count;
-            });
-            function count() {
-                loaded++;
-                if (loaded === images.length) añadirLabelsDebug();
-            }
-        }
-
+        // 2. Utilidades
         function shuffle(arr) {
             for (let i = arr.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -486,42 +364,194 @@
             }
         }
 
-        function renderProjects() {
-            const activeProjects = projects.filter(p => p.status);
-            shuffle(activeProjects);
-            const linksContainer = document.getElementById('links-container');
-            linksContainer.innerHTML = ''; // limpia previo
-            const isMobile = window.innerWidth <= 768;
-            activeProjects.forEach(p => {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'project-link';
-                const a = document.createElement('a');
-                a.href = p.url;
-                a.textContent = p.name;
-                wrapper.appendChild(a);
-                wrapper.style.top = (Math.random() * 90) + '%';
-                wrapper.style.left = (Math.random() * (isMobile ? 50 : 85)) + '%';
-                linksContainer.appendChild(wrapper);
+        /**
+         * Calcula un factor de escala global según el ancho de la ventana.
+         * - Menor que 375px: reduce hasta un 15%
+         * - Entre 375px y 768px: amplía hasta un 75%
+         * - A partir de 1000px: amplía ligeramente según excedente
+         * - Resto de casos: factor 1 (sin cambio)
+         */
+        function computeResponsiveFactor() {
+            const w = window.innerWidth;
+
+            // Pantallas muy estrechas (320–374px): ligera reducción
+            if (w < 375 && w >= 320) {
+                const t = (375 - w) / (375 - 320);
+                return 1 - t * 0.15;
+            }
+            // Pantallas pequeñas / tablets (375–767px): incremento progresivo
+            else if (w >= 375 && w < 768) {
+                const t = (w - 375) / (768 - 375);
+                return 1 + t * 0.75;
+            }
+            // Pantallas muy anchas (1000px+): ligero aumento según excedente
+            else if (w >= 1000) {
+                return 1 + ((w - 1000) / 800) * 0.4;
+            }
+            // Resto de casos (768–999px): sin cambio
+            return 1;
+        }
+
+        function añadirLabelsDebug() {
+            // limpia los anteriores
+            document.querySelectorAll('.debug-label').forEach(e => e.remove());
+
+            document.querySelectorAll('.portada').forEach(img => {
+                const rect = img.getBoundingClientRect();
+                const label = document.createElement('div');
+                label.className = 'debug-label';
+                label.textContent = img.src.split('/').pop();
+
+                // posición absoluta respecto al viewport
+                label.style.position = 'absolute';
+                label.style.left = rect.left + window.scrollX + 'px';
+                label.style.top = (rect.top + window.scrollY - 16) + 'px';
+
+                //estilo de cajita
+                label.style.background = 'white';
+                label.style.fontSize = '10px';
+                label.style.padding = '2px 4px';
+                label.style.zIndex = '4';
+                label.style.pointerEvents = 'none';
+
+                //auinque dice que lo cambie por este:
+                document.body.appendChild(label);
+
+                //document.getElementById('gallery-container').appendChild(label);
+                //img.parentNode.appendChild(label);
+                //no nos gustan las de abajo: las de arriba son mejores, pero no las hemos probado
+                //wrapper.appendChild(label);
+                //document.body.appendChild(label);
             });
         }
 
 
 
-        // ==== 3) SETUPS ====
+        // 3. funciones de renderizado
+        // Clear and render the selected gallery
+        function renderGallery() {
+            //Limpiar y preparar el contenedor
+            const container = document.getElementById('gallery-container');
+            container.innerHTML = '';
+
+            //Elegir el set de imágenes y el factor responsive
+            const set = gallerySets[selectedGallery];
+            const isMobile = window.innerWidth <= 768;
+            const factor = computeResponsiveFactor();
+
+            //Recorrer el set de imágenes
+            set.forEach(item => {
+                //calcular escalas y tamaño del wrapper
+                const style = isMobile ? item.mobileStyle : item.desktopStyle;
+                const baseScale = (style.scale || 100) / 1000;
+                const size = 100 * baseScale * factor;
+
+                //crear el contenedor con sombra
+                const wrapper = document.createElement('a');
+                wrapper.href = item.url;
+                wrapper.target = '_blank';
+                wrapper.className = 'portada-wrapper';
+                wrapper.style.position = 'absolute';
+                wrapper.style.zIndex = style.index || 0;
+                wrapper.style.width = `${size}px`;
+                wrapper.style.height = `${size}px`;
+
+                //luego colocas top/left/right/bottom en % segun style
+                ['top', 'left', 'right', 'bottom'].forEach(dir => {
+                    if (style[dir] != null) wrapper.style[dir] = style[dir] + '%';
+                });
+
+                //Crear la etiqueta <img> y posicionarla dentro del wrapper
+                const img = document.createElement('img');
+                img.src = item.src;
+                img.className = 'portada';
+
+                // Position inside wrapper (absolute offsets)
+                ['top', 'left', 'right', 'bottom'].forEach(dir => {
+                    if (style[dir] != null) {
+                        img.style[dir] = style[dir] + '%';
+                    }
+                });
+
+                // 3.3.6 Definir origen y aplicar transform scale
+                img.style.transformOrigin =
+                    (style.right != null ? 'right' : 'left') + ' ' +
+                    (style.bottom != null ? 'bottom' : 'top');
+                img.style.transform = `scale(${baseScale * factor})`;
+
+                // 3.3.7 Añadir al DOM
+                wrapper.appendChild(img);
+                container.appendChild(wrapper);
+
+                // 3.4 (Opcional) Añadir etiquetas de debug con nombre de archivo
+                /*
+                const imgs = container.querySelectorAll('.portada');
+                let loaded = 0;
+                function check() {
+                    if (++loaded === imgs.length) {
+                        añadirLabelsDebug();  // solo una vez, cuando estén todas cargadas
+                    }
+                }
+                imgs.forEach(i => {
+                    if (i.complete) check();
+                    else i.onload = check;
+                });*/
+            });
+            /*
+            const imgs = container.querySelectorAll('img');
+            let loaded = 0;
+            function check() {
+                if (++loaded === imgs.length) añadirLabelsDebug();
+            }
+            imgs.forEach(i => i.complete ? check() : i.onload = check);
+            */
+            // 3.4 (Opcional) Añadir etiquetas de debug una sola vez
+            const imgs = container.querySelectorAll('.portada');
+            let loaded = 0;
+            function check() {
+                if (++loaded === imgs.length) añadirLabelsDebug();
+            }
+            imgs.forEach(i => i.complete ? check() : i.onload = check);
+        }
+
+        // Render project links
+        function renderProjects() {
+            const linksContainer = document.getElementById('links-container');
+            linksContainer.innerHTML = '';               // vacías una vez
+            const isMobile = window.innerWidth <= 768;
+            const active = projects.filter(p => p.status);
+            shuffle(active);                             // mezclas el array filtrado
+
+            active.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'project-link';
+                div.style.position = 'absolute';
+                div.style.top = `${Math.random() * 90}%`;
+                div.style.left = `${Math.random() * (isMobile ? 50 : 85)}%`;
+                const a = document.createElement('a');
+                a.href = p.url;
+                a.target = '_blank';                       // si quieres que también abra en nueva pestaña
+                a.textContent = p.name;
+                div.appendChild(a);
+                linksContainer.appendChild(div);
+            });
+        }
+
+        //4. funciones de UI:
+        // Setup theme buttons and gallery initialization
         function setupTemaNav() {
             const nav = document.getElementById('tema-nav');
-            gallerySets.forEach((_, i) => {
-                const b = document.createElement('button');
-                b.textContent = i + 1;
-                b.className = 'tema-btn';
-                b.addEventListener('click', () => {
-                    document.querySelectorAll('#tema-nav .tema-btn')
-                        .forEach(x => x.classList.remove('active'));
-                    b.classList.add('active');
-                    selectedGallery = i;
+            gallerySets.forEach((_, idx) => {
+                const btn = document.createElement('button');
+                btn.textContent = idx + 1;
+                btn.className = 'tema-btn';
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#tema-nav .tema-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedGallery = idx;
                     renderGallery();
                 });
-                nav.appendChild(b);
+                nav.appendChild(btn);
             });
         }
 
@@ -564,25 +594,8 @@
 
 
 
-        // ==== 4) INIT ====
-        document.addEventListener('DOMContentLoaded', () => {
-            setupTemaNav();
-            // elige aleatorio y marca botón
-            const btns = document.querySelectorAll('#tema-nav .tema-btn');
-            const rand = Math.floor(Math.random() * btns.length);
-            selectedGallery = rand;
-            btns[rand].classList.add('active');
 
-            // pinta todo
-            renderGallery();
-            renderProjects();
-            setupCategoryNav();
-            setupAndreaPopup();
-        });
-
-
-
-        // ==== 5) RESIZE CON DEBOUNCE ====
+        //5. manejador de redimensionado
         function debounce(fn, delay) {
             let timer;
             return function (...args) {
@@ -590,16 +603,49 @@
                 timer = setTimeout(() => fn.apply(this, args), delay);
             };
         }
+
         const onResize = debounce(() => {
             renderGallery();
             renderProjects();
         }, 200);
+
+        // 5. manejador de redimensionado
         window.addEventListener('resize', onResize);
 
+        // Debounced resize handler
+        /*
+        window.addEventListener('resize', (() => {
+            let timeout;
+            return () => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    renderGallery();
+                    renderProjects();
+                }, 200);
+            };
+        })());
+        */
 
-
-        // ==== 6) LINKS _blank ====
+        // 6. Inicialización al cargar el DOM
         document.addEventListener('DOMContentLoaded', () => {
+            // 6.1 Configurar la navegación de temas
+            setupTemaNav();
+
+            // 6.2 Selección aleatoria de tema al cargar
+            const btns = document.querySelectorAll('#tema-nav .tema-btn');
+            const rand = Math.floor(Math.random() * btns.length);
+            selectedGallery = rand;
+            btns[rand].classList.add('active');
+
+            // 6.3 Renderizado inicial de galería y proyectos
+            renderGallery();
+            renderProjects();
+
+            // 6.4 Configurar filtros y popup
+            setupCategoryNav();
+            setupAndreaPopup();
+
+            // 6.5 Forzar que todos los <a> abran en nueva pestaña
             document.querySelectorAll('a').forEach(a => a.target = '_blank');
         });
     </script>

@@ -374,7 +374,8 @@
                 label.style.zIndex = '4';
                 label.style.pointerEvents = 'none';
 
-                document.body.appendChild(label);
+                wrapper.appendChild(label);
+                //document.body.appendChild(label);
             });
         }
 
@@ -401,6 +402,11 @@
                 const a = document.createElement('a');
                 a.href = item.url;
                 a.target = '_blank';
+
+                // escala basada en valor introducido, ajustado dinámicamente con factor responsive
+                let baseScale = (styleToApply.scale || 100) / 1000;
+                let screenWidth = window.innerWidth;
+                let responsiveFactor = 1;
 
                 const wrapper = document.createElement('div');
 
@@ -430,10 +436,7 @@
                 if ('bottom' in styleToApply) originY = 'bottom';
                 img.style.transformOrigin = `${originY} ${originX}`;
 
-                // escala basada en valor introducido, ajustado dinámicamente con factor responsive
-                let baseScale = (styleToApply.scale || 100) / 1000;
-                let screenWidth = window.innerWidth;
-                let responsiveFactor = 1;
+
 
                 if (screenWidth < 375 && screenWidth >= 320) {
                     // Escala progresiva entre 375 y 320px (1 → 0.85)

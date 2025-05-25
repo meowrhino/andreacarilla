@@ -227,7 +227,8 @@
                 social. Investiga cómo la circulación y manipulación de imágenes digitales altera su significado,
                 inspirándose en el concepto de “imagen pobre*”. Al mismo tiempo, examina críticamente la feminidad desde
                 una perspectiva performativa y despatriarcalizada.</p>
-            <small style="margin-top: 20px;">*La “imagen pobre”, según Hito Steyerl, es una imagen de baja calidad que ha sido copiada,
+            <small style="margin-top: 20px;">*La “imagen pobre”, según Hito Steyerl, es una imagen de baja calidad que
+                ha sido copiada,
                 comprimida, recortada y compartida muchas veces en internet. Pierde resolución, pero gana vida: viaja,
                 cambia de contexto y se convierte en algo colectivo, flexible y político.</small>
         </div>
@@ -409,6 +410,8 @@
                 });
                 wrapper.style.zIndex = styleToApply.index ?? 0;
                 wrapper.classList.add('portada-wrapper');
+                wrapper.style.width = `${100 * baseScale}px`;
+                wrapper.style.height = `${100 * baseScale}px`;
 
 
                 const img = document.createElement('img');

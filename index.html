@@ -84,12 +84,17 @@
         }
 
         /* Portadas */
-        .portada {
+        .portada-wrapper {
+            filter: drop-shadow(2px 2px 2.5px #00000020);
             position: absolute;
-            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .portada {
             width: auto;
             height: auto;
         }
+
 
 
         /* Navegación fija abajo a la derecha */
@@ -163,8 +168,6 @@
         #andrea-nav button {
             background: none;
             border: none;
-            padding: 0.5em;
-            font-size: 14px;
         }
 
         /* Popup overlay */
@@ -188,6 +191,12 @@
         #andrea-popup .content {
             max-width: 600px;
             text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         #andrea-popup .close-btn {
@@ -207,7 +216,20 @@
     <div id="andrea-popup">
         <button class="close-btn" id="close-andrea">cerrar</button>
         <div class="content">
-            <p>holaaa soy andrea y molo que flipas</p>
+            <p>Andrea Carilla es fotógrafa y artista visual, graduada en Comunicación Audiovisual por la Universidad de
+                Granada y especializada en fotografía de moda y documental. Residente en Barcelona, su obra transita
+                entre el fotografía de calle y la fotografía de moda, siempre desde una perspectiva documental y de
+                archivo. </p>
+            <p>Su trabajo se construye como un diálogo entre lo íntimo y lo colectivo, lo tradicional y lo
+                contemporáneo. Explora la identidad, el espacio urbano y las múltiples capas de las narrativas visuales,
+                empleando recursos que desafían las convenciones fotográficas.</p>
+            <p>Su práctica se articula en torno a la repetición y la serialidad como herramientas de análisis visual y
+                social. Investiga cómo la circulación y manipulación de imágenes digitales altera su significado,
+                inspirándose en el concepto de “imagen pobre*”. Al mismo tiempo, examina críticamente la feminidad desde
+                una perspectiva performativa y despatriarcalizada.</p>
+            <small style="margin-top: 20px;">*La “imagen pobre”, según Hito Steyerl, es una imagen de baja calidad que ha sido copiada,
+                comprimida, recortada y compartida muchas veces en internet. Pierde resolución, pero gana vida: viaja,
+                cambia de contexto y se convierte en algo colectivo, flexible y político.</small>
         </div>
     </div>
 
@@ -283,20 +305,20 @@
             [
                 {
                     src: '_portada/3/3_1.jpg',
-                    desktopStyle: { top: 0, left: 0, index: 0, scale: 70 },
-                    mobileStyle: { top: 0, left: 0, index: 0, scale: 90 },
+                    desktopStyle: { top: 10, left: 10, index: 0, scale: 80 },
+                    mobileStyle: { top: 15, left: 5, index: 0, scale: 48 },
                     url: '#'
                 },
                 {
                     src: '_portada/3/3_2.jpg',
-                    desktopStyle: { top: 10, left: 65, index: 0, scale: 55 },
-                    mobileStyle: { top: 50, left: 0, index: 0, scale: 60 },
+                    desktopStyle: { bottom: 10, right: 20, index: 1, scale: 65 },
+                    mobileStyle: { top: 50, right: 5, index: 0, scale: 35 },
                     url: '#'
                 },
                 {
                     src: '_portada/3/3_3.jpg',
-                    desktopStyle: { top: 55, left: 30, index: 0, scale: 60 },
-                    mobileStyle: { top: 80, left: 50, index: 0, scale: 60 },
+                    desktopStyle: { top: 20, right: 10, index: 2, scale: 30 },
+                    mobileStyle: { bottom: 5, left: 20, index: 0, scale: 18 },
                     url: '#'
                 }
             ]
@@ -355,7 +377,7 @@
             });
         }
 
-        
+
 
         // ==== 2) RENDERIZADORES ====
         function renderGallery() {
@@ -365,6 +387,8 @@
             // Usa siempre el índice seleccionado
             const idx = selectedGallery;
             const chosenSet = gallerySets[idx];
+            /*para fijar el set cuando lo estas colocando:*/
+            //const chosenSet = gallerySets[2];
 
             const setEl = document.createElement('div');
             setEl.className = 'gallery-set';
@@ -378,16 +402,14 @@
                 a.target = '_blank';
 
                 const wrapper = document.createElement('div');
-                wrapper.style.position = 'absolute';
-                wrapper.style.borderRadius = '10px';
-                wrapper.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.25)';
-                wrapper.style.overflow = 'visible';
 
                 // posicionamiento desde los valores dados
                 ['top', 'left', 'right', 'bottom'].forEach(pos => {
                     wrapper.style[pos] = styleToApply[pos] != null ? styleToApply[pos] + '%' : 'auto';
                 });
                 wrapper.style.zIndex = styleToApply.index ?? 0;
+                wrapper.classList.add('portada-wrapper');
+
 
                 const img = document.createElement('img');
                 img.src = item.src;

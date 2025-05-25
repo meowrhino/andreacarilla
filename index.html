@@ -20,6 +20,11 @@
             font-family: sans-serif;
         }
 
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
         /* móvil: dejamos que el body fluya */
         @media (max-width: 768px) {
 
@@ -50,23 +55,6 @@
             overflow: hidden;
         }
 
-        /*
-        .gallery-set {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        .gallery-set img {
-            position: absolute;
-            object-fit: cover;
-            
-            border-radius: 1px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        
-        }
-            */
-
         /* Contenedor de enlaces: ocupa el último tercio, con scroll si hace falta */
         #links-container {
             height: 30vh;
@@ -86,7 +74,6 @@
         .project-link a {
             display: inline-block;
             font-size: 14px;
-            text-decoration: none;
             color: black;
             /*el fondo gris*/
             padding: 0.4em 0.6em;
@@ -150,7 +137,6 @@
             font-family: inherit;
             font-size: 14px;
             text-align: right;
-            ;
         }
 
         .tema-btn {
@@ -202,6 +188,7 @@
         /* Popup overlay */
         #andrea-popup {
             display: none;
+            flex-direction: column;
             position: fixed;
             top: 0;
             left: 0;
@@ -235,6 +222,14 @@
             background: none;
             border: none;
         }
+
+        .footer {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            bottom: 20px
+        }
     </style>
 </head>
 
@@ -260,6 +255,13 @@
                 ha sido copiada,
                 comprimida, recortada y compartida muchas veces en internet. Pierde resolución, pero gana vida: viaja,
                 cambia de contexto y se convierte en algo colectivo, flexible y político.</small>
+        </div>
+
+        <div class="footer">
+            <a href="">email</a>
+            <a href="">email</a>
+            <a href="">email</a>
+            <a href="">email</a>
         </div>
     </div>
 

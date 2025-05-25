@@ -18,6 +18,7 @@
             height: 100%;
             width: 100%;
             font-family: sans-serif;
+            overflow: hidden;
         }
 
         /* Contenedor de galería: ocupa los primeros 2/3 de la ventana */
@@ -443,7 +444,7 @@
             set.forEach(item => {
                 //calcular escalas y tamaño del wrapper
                 const style = isMobile ? item.mobileStyle : item.desktopStyle;
-                const baseScale = (style.scale || 100) / 1000;
+                const baseScale = (style.scale || 100) / 100;
                 const size = 100 * baseScale * factor;
 
                 //crear el contenedor con sombra
@@ -517,23 +518,30 @@
         // Render project links
         function renderProjects() {
             const linksContainer = document.getElementById('links-container');
-            linksContainer.innerHTML = '';               // vacías una vez
+            linksContainer.innerHTML = '';
             const isMobile = window.innerWidth <= 768;
             const active = projects.filter(p => p.status);
-            shuffle(active);                             // mezclas el array filtrado
+            shuffle(active);
 
             active.forEach(p => {
-                const div = document.createElement('div');
-                div.className = 'project-link';
-                div.style.position = 'absolute';
-                div.style.top = `${Math.random() * 90}%`;
-                div.style.left = `${Math.random() * (isMobile ? 50 : 85)}%`;
+                const wrapper = document.createElement('div');
+                wrapper.className = 'project-link';
+                wrapper.style.position = 'absolute';
+
                 const a = document.createElement('a');
                 a.href = p.url;
-                a.target = '_blank';                       // si quieres que también abra en nueva pestaña
                 a.textContent = p.name;
-                div.appendChild(a);
-                linksContainer.appendChild(div);
+                wrapper.appendChild(a);
+                linksContainer.appendChild(wrapper);
+
+                // ahora que existe en el DOM:
+                const contRect = linksContainer.getBoundingClientRect();
+                const wrapRect = wrapper.getBoundingClientRect();
+                const maxTop = contRect.height - wrapRect.height;
+                const maxLeft = contRect.width - wrapRect.width;
+
+                wrapper.style.top = Math.random() * Math.max(0, maxTop) + 'px';
+                wrapper.style.left = Math.random() * Math.max(0, maxLeft) + 'px';
             });
         }
 

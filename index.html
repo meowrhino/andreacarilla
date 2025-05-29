@@ -77,8 +77,6 @@
             color: black;
             /*el fondo gris*/
             padding: 0.4em 0.6em;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 1px;
         }
 
         /* Opcional: solo aplicar en pantallas pequeñas */
@@ -225,7 +223,9 @@
 
         .footer {
             display: flex;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             gap: 1rem;
             margin-top: 1rem;
             bottom: 20px
@@ -240,28 +240,14 @@
     <div id="andrea-popup">
         <button class="close-btn" id="close-andrea">cerrar</button>
         <div class="content">
-            <p>Andrea Carilla es fotógrafa y artista visual, graduada en Comunicación Audiovisual por la Universidad de
-                Granada y especializada en fotografía de moda y documental. Residente en Barcelona, su obra transita
-                entre el fotografía de calle y la fotografía de moda, siempre desde una perspectiva documental y de
-                archivo. </p>
-            <p>Su trabajo se construye como un diálogo entre lo íntimo y lo colectivo, lo tradicional y lo
-                contemporáneo. Explora la identidad, el espacio urbano y las múltiples capas de las narrativas visuales,
-                empleando recursos que desafían las convenciones fotográficas.</p>
-            <p>Su práctica se articula en torno a la repetición y la serialidad como herramientas de análisis visual y
-                social. Investiga cómo la circulación y manipulación de imágenes digitales altera su significado,
-                inspirándose en el concepto de “imagen pobre*”. Al mismo tiempo, examina críticamente la feminidad desde
-                una perspectiva performativa y despatriarcalizada.</p>
-            <small style="margin-top: 20px;">*La “imagen pobre”, según Hito Steyerl, es una imagen de baja calidad que
-                ha sido copiada,
-                comprimida, recortada y compartida muchas veces en internet. Pierde resolución, pero gana vida: viaja,
-                cambia de contexto y se convierte en algo colectivo, flexible y político.</small>
+            <p>Graduada en Comunicación Audiovisual por la Universidad de Granada en 2019, su práctica fotográfica se articula entre la moda, el diario personal y la fotografía robada, tensionando los límites entre lo documental y lo construido. </p>
+            <p>​​Es cofundadora de la editorial de autoedición <a href="https://quiennocorrevuela.bigcartel.com/?fbclid=PAZXh0bgNhZW0CMTEAAaeD5HE7eqz3clCroc1q8Labj2UxE02BKaDYj4XjX9j3x6AG2RHXeJdkwn_DMQ_aem_cYV44I_-xAyTOest-WaJPQ ">Quien no corre, vuela</a>, desde donde ha publicado archivo en pixel y no time left for square, investigando nuevas formas de narrar, publicar y distribuir fotografía contemporánea desde los márgenes.</p>
+            <p>Su trabajo se construye desde la serialidad y la repetición: las imágenes no funcionan de forma aislada, sino que se organizan como fragmentos de una narrativa abierta. Dispara desde el impulso y el error, con una cámara que no busca certezas ni discursos cerrados, sino que reacciona ante lo que hiere, incomoda o emociona. Una mirada crítica, permeable y radicalmente encarnada en lo cotidiano.</p>
         </div>
 
         <div class="footer">
-            <a href="">email</a>
-            <a href="">email</a>
-            <a href="">email</a>
-            <a href="">email</a>
+            <a href="mailto:carillagonzalezandrea@gmail.com">correo</a>
+            <a href="https://www.instagram.com/andreacarilla/">instagram</a>
         </div>
     </div>
 
@@ -381,7 +367,6 @@
             { name: 'dear xx. are you mad at me? - hifas studio', category: 'look book', status: true, url: '#' },
             { name: 'diario', category: 'personal', status: true, url: '#' },
             { name: 'sangre y sal - vangoura', category: 'album design', status: true, url: '#' },
-            { name: 'retalls', category: 'retalls', status: true, url: '#' },
             { name: 'magical theys - ali arévalo', category: 'artist image', status: true, url: '#' },
         ];
 
@@ -511,10 +496,12 @@
             // 4. (Opcional) Debug: etiquetas con nombre de archivo
             const imgs = container.querySelectorAll('.portada');
             let loaded = 0;
+            /*
             function check() {
                 if (++loaded === imgs.length) añadirLabelsDebug();
             }
             imgs.forEach(i => i.complete ? check() : i.onload = check);
+            */
         }
 
         // Render project links

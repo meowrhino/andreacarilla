@@ -1,0 +1,18 @@
+// scripts/components/convert-category-link.js
+
+export function convertFirstLiToLink() {
+  const metaList = document.querySelector(".project-meta ul");
+  if (!metaList) return;
+
+  const firstItem = metaList.querySelector("li");
+  if (!firstItem) return;
+
+  const category = firstItem.textContent.trim();
+  const encodedCategory = encodeURIComponent(category.toLowerCase());
+
+  const link = document.createElement("a");
+  link.href = `/index.html?category=${encodedCategory}`;
+  link.textContent = category;
+  firstItem.textContent = "";
+  firstItem.appendChild(link);
+}

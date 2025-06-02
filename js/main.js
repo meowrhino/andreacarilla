@@ -1,33 +1,5 @@
 import { injectComponents } from "./components.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-  injectComponents();
-
-  const pageType = document.body.dataset.pageType;
-  if (pageType === "proyecto") {
-    activarCategoriaDesdeURL();
-
-    // Convertir primer <li> en enlace a categoría
-    const metaList = document.querySelector(".project-meta ul");
-    if (metaList) {
-      const firstItem = metaList.querySelector("li");
-      if (firstItem) {
-        const category = firstItem.textContent.trim();
-        const encodedCategory = encodeURIComponent(category.toLowerCase());
-
-        const link = document.createElement("a");
-        link.href = `/index.html?category=${encodedCategory}`;
-        link.textContent = category;
-
-        firstItem.textContent = ""; // vaciar contenido
-        firstItem.appendChild(link);
-      }
-    }
-  } else if (pageType === "diario") {
-    initDiario();
-  }
-});
-
 // 1. Datos de entrada
 // 1) Datos de los 3 sets de galería (rellena con tus rutas y estilos exactos)
 /*issue 2: las imagenes estaran en la carpeta _portada/[númeroDelSet]/[nombreDeLaImagen]*/
@@ -124,8 +96,8 @@ const gallerySets = [
 let selectedGallery = 0;
 
 // 2) Datos de proyectos: nombre, categoría, status (on/off), url
-/*propuesta: y si cuando sean de otros artistas el titulo sale dentro y fuera solo se ve un numero romano que equivale al proyecto? en plan si hay 2 proyectos de hifas studio el primero en ingresar en el index sera el i y el 2o sera el ii y asi */
-/*o sea es que queda raro como ese guion*/
+/* propuesta: y si cuando sean de otros artistas el título sale dentro y fuera solo se ve un número romano que equivale al proyecto?
+   Ej. si hay 2 proyectos de “hifas studio”, el primero en ingresar en el index será “I” y el 2º será “II” */
 
 const projects = [
   {
@@ -182,6 +154,7 @@ const projects = [
   { name: "magical theys", category: "artist image", status: true, url: "#" },
 ];
 
+// -----------------------------------------------------------------------------
 // 2. Utilidades
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -382,24 +355,19 @@ function setupTemaNav() {
 // Setup category buttons
 function setupCategoryNav() {
   const nav = document.getElementById("category-nav");
-  if (!nav) return; // ← no petamos si no hay nav
-  const sel = new Set();
-  Array.from(new Set(projects.map((p) => p.category))).forEach((cat) => {
+  if (!nav) return; // ← si no hay nav, no hacemos nada
+
+  // Obtenemos la lista única de categorías de todos los proyectos
+  const categories = Array.from(new Set(projects.map((p) => p.category)));
+  categories.forEach((cat) => {
     const b = document.createElement("button");
     b.textContent = cat;
     b.className = "category-btn";
     b.addEventListener("click", () => {
+      // Alternar la clase "active" en el botón
       b.classList.toggle("active");
-      if (b.classList.contains("active")) sel.add(cat);
-      else sel.delete(cat);
-      document
-        .querySelectorAll("#links-container .project-link")
-        .forEach((link) => {
-          const name = link.querySelector("a").textContent.trim();
-          const catOf = projects.find((p) => p.name === name).category;
-          link.style.display =
-            sel.size === 0 || sel.has(catOf) ? "block" : "none";
-        });
+      // Luego, volver a renderizar todos los proyectos según botones activos
+      renderProjects();
     });
     nav.appendChild(b);
   });
@@ -469,6 +437,8 @@ window.addEventListener("resize", onResize);
 // 6. Inicialización al cargar el DOM
 
 document.addEventListener("DOMContentLoaded", () => {
+    // 6.0 Inyectar los componentes “Andrea” en todas las páginas
+
   injectComponents();
 
   const pageType = document.body.dataset.pageType;

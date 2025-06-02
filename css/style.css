@@ -1,0 +1,329 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-family: sans-serif;
+}
+
+/* Solo en páginas de proyecto: aseguramos que se pueda hacer scroll */
+body[data-page-type="proyecto"] {
+  overflow-y: auto;
+  height: auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:active {
+  color: #000;
+}
+
+/* móvil: dejamos que el body fluya */
+@media (max-width: 768px) {
+  html,
+  body {
+    overflow: visible;
+  }
+
+  #links-container {
+    /* para un scroll interior más suave */
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* escritorio: seguimos sin scroll global */
+@media (min-width: 769px) {
+  body[data-page-type="home"] {
+    overflow: hidden;
+  }
+}
+
+/* Contenedor de galería: ocupa los primeros 2/3 de la ventana */
+#gallery-container {
+  height: 70vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Contenedor de enlaces: ocupa el último tercio, con scroll si hace falta */
+#links-container {
+  height: 30vh;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* Estilo base para todos los project-link */
+.project-link {
+  position: absolute;
+  word-break: break-word;
+  white-space: normal;
+  overflow-wrap: break-word;
+  pointer-events: auto;
+}
+
+.project-link a {
+  display: inline-block;
+  font-size: 14px;
+  color: black;
+  /*el fondo gris*/
+  padding: 0.4em 0.6em;
+}
+
+/* Opcional: solo aplicar en pantallas pequeñas */
+@media (max-width: 768px) {
+  .project-link {
+    max-width: 70vw;
+  }
+}
+
+/* Media query de ejemplo para móvil: ajustar alturas si hace falta */
+@media (max-width: 768px) {
+  #links-container {
+    height: 60vh;
+  }
+}
+
+/* Portadas */
+.portada-wrapper {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 2px;
+  filter: drop-shadow(2px 2px 2.5px rgba(0, 0, 0, 0.12));
+}
+
+.portada {
+  display: block;
+
+  height: auto;
+  /* altura según proporción real */
+  object-fit: cover;
+  /* opcional para recortes suaves */
+}
+
+/* Navegación fija abajo a la derecha */
+#home-nav {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+#tema-nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Botones generales de nav */
+.category-btn {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: right;
+}
+
+.tema-btn {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* Tema y categoría: estado base (inactivo) */
+#home-nav .tema-btn,
+#home-nav .category-btn {
+  color: #ccc;
+  font-weight: normal;
+}
+
+/* Hover: negrita pero no negro */
+#home-nav .tema-btn:hover,
+#home-nav .category-btn:hover {
+  font-weight: bold;
+}
+
+/* Activo: negrita y negro */
+#home-nav .active {
+  color: black;
+  font-weight: bold;
+}
+
+/* Contenedor de categorías con alineación flexible */
+#category-nav {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+/* Andrea nav */
+#andrea-nav {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 60;
+}
+
+.home-button {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+
+  background: none;
+  border: none;
+}
+
+#andrea-nav button {
+  background: none;
+  border: none;
+}
+
+#andrea-nav button:hover {
+  text-decoration: underline;
+}
+
+/* Popup overlay */
+#andrea-popup {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+#andrea-popup.visible {
+  display: flex;
+}
+
+#andrea-popup .content {
+  max-width: 600px;
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.8rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#andrea-popup .close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  bottom: 20px;
+}
+
+/* === PROYECTO INDIVIDUAL === */
+
+.project-header img {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  height: auto;
+  max-width: 900px;
+}
+
+.project-body {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 2rem 1rem;
+  align-items: start;
+}
+
+/* Esto define el comportamiento en móvil */
+@media (max-width: 768px) {
+  .project-body {
+    grid-template-columns: 1fr;
+  }
+  .project-meta {
+    justify-self: end;
+    width: 33.333%; /* mantiene 1/3 de ancho */
+  }
+}
+
+.project-description {
+  flex: 2;
+  min-width: 200px;
+}
+
+.project-meta {
+  min-width: 150px;
+}
+
+.project-meta ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.project-meta li {
+  margin-bottom: 0.5rem;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.project-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.project-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  max-width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .project-body {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+span.meta {
+    color: #C4C4C4;
+    text-transform: lowercase;
+}

@@ -257,6 +257,7 @@ function computeResponsiveFactor() {
 // Clear and render the selected gallery
 function renderGallery() {
   const container = document.getElementById("gallery-container");
+  if (!container) return; // ← bloquea la función si el contenedor no existe
   container.innerHTML = "";
   const isMobile = window.innerWidth <= 768;
   const factor = computeResponsiveFactor();
@@ -304,30 +305,30 @@ function renderGallery() {
   });
 
   // 4. (Opcional) Debug: etiquetas con nombre de archivo
-  const imgs = container.querySelectorAll(".portada");
-  let loaded = 0;
-  /*
-            function check() {
-                if (++loaded === imgs.length) añadirLabelsDebug();
-            }
-            imgs.forEach(i => i.complete ? check() : i.onload = check);
-            */
+  // const imgs = container.querySelectorAll(".portada");
+  // let loaded = 0;
+  // function check() {
+  //   if (++loaded === imgs.length) añadirLabelsDebug();
+  // }
+  // imgs.forEach(i => i.complete ? check() : i.onload = check);
 }
 
 // Render project links
 function renderProjects() {
   const linksContainer = document.getElementById("links-container");
+  if (!linksContainer) return; // ← evita el error si no existe
+
   linksContainer.innerHTML = "";
   const isMobile = window.innerWidth <= 768;
-  const active = projects.filter((p) => p.status);
-  shuffle(active);
+  const activeProjects = projects.filter((p) => p.status);
+  shuffle(activeProjects);
 
   // 🔸 PASO 1: recoger las categorías seleccionadas
   const selectedCategories = Array.from(
     document.querySelectorAll("#category-nav .category-btn.active")
   ).map((b) => b.textContent.trim());
 
-  active.forEach((p) => {
+  activeProjects.forEach((p) => {
     const wrapper = document.createElement("div");
     wrapper.className = "project-link";
     wrapper.style.position = "absolute";
@@ -355,10 +356,13 @@ function renderProjects() {
   });
 }
 
-//4. funciones de UI:
-// Setup theme buttons and gallery initialization
+// -----------------------------------------------------------------------------
+// 4. Funciones de UI
+
+// Setup theme buttons y galería
 function setupTemaNav() {
   const nav = document.getElementById("tema-nav");
+  if (!nav) return;
   gallerySets.forEach((_, idx) => {
     const btn = document.createElement("button");
     btn.textContent = idx + 1;
@@ -375,8 +379,10 @@ function setupTemaNav() {
   });
 }
 
+// Setup category buttons
 function setupCategoryNav() {
   const nav = document.getElementById("category-nav");
+  if (!nav) return; // ← no petamos si no hay nav
   const sel = new Set();
   Array.from(new Set(projects.map((p) => p.category))).forEach((cat) => {
     const b = document.createElement("button");
@@ -399,6 +405,7 @@ function setupCategoryNav() {
   });
 }
 
+// Activar botón de categoría según URL (?category=...)
 function activarCategoriaDesdeURL() {
   const params = new URLSearchParams(window.location.search);
   const categoria = params.get("category");
@@ -412,6 +419,7 @@ function activarCategoriaDesdeURL() {
   });
 }
 
+// Setup popup “Andrea”
 function setupAndreaPopup() {
   const openBtn = document.getElementById("open-andrea");
   const closeBtn = document.getElementById("close-andrea");
@@ -426,7 +434,8 @@ function setupAndreaPopup() {
   });
 }
 
-//5. manejador de redimensionado
+// -----------------------------------------------------------------------------
+// 5. Manejador de redimensionado
 function debounce(fn, delay) {
   let timer;
   return function (...args) {
@@ -458,24 +467,59 @@ window.addEventListener("resize", onResize);
         */
 
 // 6. Inicialización al cargar el DOM
+
 document.addEventListener("DOMContentLoaded", () => {
-  // 6.1 Configurar la navegación de temas
-  setupTemaNav();
+  injectComponents();
 
-  // 6.2 Selección aleatoria de tema al cargar
-  const btns = document.querySelectorAll("#tema-nav .tema-btn");
-  const rand = Math.floor(Math.random() * btns.length);
-  selectedGallery = rand;
-  btns[rand].classList.add("active");
+  const pageType = document.body.dataset.pageType;
+  if (pageType === "proyecto") {
+    // Si estamos en página de proyecto, convertir el primer <li> en enlace con filtro
+    activarCategoriaDesdeURL();
 
-  // 6.3 Renderizado inicial de galería y proyectos
-  renderGallery();
-  renderProjects();
+    const metaList = document.querySelector(".project-meta ul");
+    if (metaList) {
+      const firstItem = metaList.querySelector("li");
+      if (firstItem) {
+        const category = firstItem.textContent.trim();
+        const encodedCategory = encodeURIComponent(category.toLowerCase());
 
-  // 6.4 Configurar filtros y popup
-  setupCategoryNav();
-  setupAndreaPopup();
+        const link = document.createElement("a");
+        link.href = `/index.html?category=${encodedCategory}`;
+        link.textContent = category;
 
-  // 6.5 Forzar que todos los <a> abran en nueva pestaña
-  document.querySelectorAll("a").forEach((a) => (a.target = "_blank"));
+        firstItem.textContent = ""; // vaciar contenido
+        firstItem.appendChild(link);
+      }
+    }
+  } else if (pageType === "diario") {
+    // En diario, inicializar galería del diario (si existe)
+    initDiario();
+  } else if (pageType === "home") {
+    // 6.1 Configurar la navegación de temas (solo en home)
+    setupTemaNav();
+
+    // 6.2 Selección aleatoria de tema al cargar (solo en home)
+    const temaBtns = document.querySelectorAll("#tema-nav .tema-btn");
+    if (temaBtns.length > 0) {
+      const rand = Math.floor(Math.random() * temaBtns.length);
+      selectedGallery = rand;
+      temaBtns[rand].classList.add("active");
+    }
+
+    // 6.3 Configurar filtros (crear botones de categoría)
+    setupCategoryNav();
+
+    // 6.4 Activar categoría que venga en la URL (si existe ?category=)
+    activarCategoriaDesdeURL();
+
+    // 6.5 Renderizar proyectos según filtro activado
+    renderProjects();
+
+    // 6.6 Renderizar galería (solo en home)
+    renderGallery();
+
+    // 6.7 Configurar popup “Andrea” y forzar que <a> abra en nueva pestaña
+    setupAndreaPopup();
+    document.querySelectorAll("a").forEach((a) => (a.target = "_blank"));
+  }
 });

@@ -106,7 +106,7 @@ export function initDiarioGallery() {
   }
 
   function updateCurrentImage() {
-    const images = document.querySelectorAll('.diario-galleryIMG');
+    const images = document.querySelectorAll('.profilePic');
     const rect = gallery.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     let closest = null, minDiff = Infinity;
@@ -125,36 +125,50 @@ export function initDiarioGallery() {
     }
   }
 
-  // Autodetectar imágenes disponibles
   let i = 1;
+  const extensions = ['jpg', 'jpeg', 'png'];
+
   function tryLoadNext() {
-    const img = new Image();
-    img.onload = () => {
-      const wrapper = document.createElement("img");
-      wrapper.src = img.src;
-      wrapper.classList.add("diario-galleryIMG");
-      gallery.appendChild(wrapper);
-      i++;
-      tryLoadNext();
-    };
-    img.onerror = () => {
-      // cuando ya no hay más, añade margen y termina
-      addScrollMargin();
-      updateCurrentImage();
-      gallery.addEventListener('scroll', updateCurrentImage);
-      window.addEventListener('resize', () => {
-        document.querySelectorAll('.galleryMargin')
-          .forEach(m => m.style.width = `${calculateMargin()}px`);
+    let extIndex = 0;
+    let found = false;
+
+    function tryNextExtension() {
+      if (extIndex >= extensions.length) {
+        // ninguna extensión funcionó → se terminó la galería
+        addScrollMargin();
         updateCurrentImage();
-      });
-      // mostrar galería
-      document.getElementById('loader').style.display = 'none';
-      document.querySelectorAll('.diario-gallery, #current-number, #arrow')
-              .forEach(el => el.style.visibility = 'visible');
-    };
-    img.src = `img/${i}.jpg`;
+        gallery.addEventListener('scroll', updateCurrentImage);
+        window.addEventListener('resize', () => {
+          document.querySelectorAll('.galleryMargin')
+                  .forEach(m => m.style.width = `${calculateMargin()}px`);
+          updateCurrentImage();
+        });
+        document.getElementById('loader').style.display = 'none';
+        document.querySelectorAll('.diario-gallery, #current-number, #arrow')
+                .forEach(el => el.style.visibility = 'visible');
+        return;
+      }
+
+      const ext = extensions[extIndex];
+      const testImg = new Image();
+      testImg.onload = () => {
+        const img = document.createElement("img");
+        img.src = testImg.src;
+        img.classList.add("profilePic");
+        gallery.appendChild(img);
+        i++;
+        tryLoadNext(); // siguiente imagen
+      };
+      testImg.onerror = () => {
+        extIndex++;
+        tryNextExtension(); // intenta con otra extensión
+      };
+      testImg.src = `img/${i}.${ext}`;
+    }
+
+    tryNextExtension();
   }
 
-  addScrollMargin(); // margen inicial
-  tryLoadNext();     // arranca carga
+  addScrollMargin();
+  tryLoadNext();
 }

@@ -248,17 +248,10 @@ a:active {
 
 /* === PROYECTO INDIVIDUAL === */
 
-.project-header img {
-  display: block;
-  margin: 0 auto;
-  width: 100%;
-  height: auto;
-  max-width: 900px;
-}
 
 .project-header img {
   display: block;
-  margin: 0 auto;
+  margin: 20vh auto 0 auto;
   width: 100%;
   height: auto;
   max-width: 900px;

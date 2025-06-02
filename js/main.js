@@ -1,10 +1,13 @@
-import { injectComponents } from "./components.js";
+import {
+  injectComponents,
+  populateProjectGallery,
+  initDiarioGallery,
+} from "./components.js";
 
 // 1. Datos de entrada
 // 1) Datos de los 3 sets de galería (rellena con tus rutas y estilos exactos)
 /*issue 2: las imagenes estaran en la carpeta _portada/[númeroDelSet]/[nombreDeLaImagen]*/
 /*las imágenes podrian aprovechar el label para coplocarlas y tener titulos que expliquen su historia*/
-
 
 const shuffleBtn = document.getElementById("shuffle-btn");
 if (shuffleBtn) {
@@ -149,7 +152,12 @@ const projects = [
     status: true,
     url: "#",
   },
-  { name: "diario", category: "personal", status: true, url: "#" },
+  {
+    name: "diario",
+    category: "personal",
+    status: true,
+    url: "proyectos/diario/diario.html",
+  },
   { name: "sangre y sal", category: "album design", status: true, url: "#" },
   { name: "magical theys", category: "artist image", status: true, url: "#" },
 ];
@@ -437,7 +445,7 @@ window.addEventListener("resize", onResize);
 // 6. Inicialización al cargar el DOM
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 6.0 Inyectar los componentes “Andrea” en todas las páginas
+  // 6.0 Inyectar los componentes “Andrea” en todas las páginas
 
   injectComponents();
 
@@ -461,9 +469,10 @@ document.addEventListener("DOMContentLoaded", () => {
         firstItem.appendChild(link);
       }
     }
+    // 6.2 *** AÑADIMOS AQUÍ la función para rellenar la galería ***
+    populateProjectGallery();
   } else if (pageType === "diario") {
-    // En diario, inicializar galería del diario (si existe)
-    initDiario();
+    initDiarioGallery();
   } else if (pageType === "home") {
     // 6.1 Configurar la navegación de temas (solo en home)
     setupTemaNav();

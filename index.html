@@ -25,6 +25,14 @@
             color: inherit;
         }
 
+        a:hover {
+            text-decoration: underline;
+        }
+
+        a:active {
+            color: #000;
+        }
+
         /* móvil: dejamos que el body fluya */
         @media (max-width: 768px) {
 
@@ -183,6 +191,10 @@
             border: none;
         }
 
+        #andrea-nav button:hover {
+            text-decoration: underline;
+        }
+
         /* Popup overlay */
         #andrea-popup {
             display: none;
@@ -240,14 +252,23 @@
     <div id="andrea-popup">
         <button class="close-btn" id="close-andrea">cerrar</button>
         <div class="content">
-            <p>Graduada en Comunicación Audiovisual por la Universidad de Granada en 2019, su práctica fotográfica se articula entre la moda, el diario personal y la fotografía robada, tensionando los límites entre lo documental y lo construido. </p>
-            <p>​​Es cofundadora de la editorial de autoedición <a href="https://quiennocorrevuela.bigcartel.com/?fbclid=PAZXh0bgNhZW0CMTEAAaeD5HE7eqz3clCroc1q8Labj2UxE02BKaDYj4XjX9j3x6AG2RHXeJdkwn_DMQ_aem_cYV44I_-xAyTOest-WaJPQ ">Quien no corre, vuela</a>, desde donde ha publicado archivo en pixel y no time left for square, investigando nuevas formas de narrar, publicar y distribuir fotografía contemporánea desde los márgenes.</p>
-            <p>Su trabajo se construye desde la serialidad y la repetición: las imágenes no funcionan de forma aislada, sino que se organizan como fragmentos de una narrativa abierta. Dispara desde el impulso y el error, con una cámara que no busca certezas ni discursos cerrados, sino que reacciona ante lo que hiere, incomoda o emociona. Una mirada crítica, permeable y radicalmente encarnada en lo cotidiano.</p>
+            <p>Graduada en Comunicación Audiovisual por la Universidad de Granada en 2019, su práctica fotográfica se
+                articula entre la moda, el diario personal y la fotografía robada, tensionando los límites entre lo
+                documental y lo construido. </p>
+            <p>​​Es cofundadora de la editorial de autoedición <a
+                    href="https://quiennocorrevuela.bigcartel.com/?fbclid=PAZXh0bgNhZW0CMTEAAaeD5HE7eqz3clCroc1q8Labj2UxE02BKaDYj4XjX9j3x6AG2RHXeJdkwn_DMQ_aem_cYV44I_-xAyTOest-WaJPQ ">Quien
+                    no corre, vuela</a>, desde donde ha publicado archivo en pixel y no time left for square,
+                investigando nuevas formas de narrar, publicar y distribuir fotografía contemporánea desde los márgenes.
+            </p>
+            <p>Su trabajo se construye desde la serialidad y la repetición: las imágenes no funcionan de forma aislada,
+                sino que se organizan como fragmentos de una narrativa abierta. Dispara desde el impulso y el error, con
+                una cámara que no busca certezas ni discursos cerrados, sino que reacciona ante lo que hiere, incomoda o
+                emociona. Una mirada crítica, permeable y radicalmente encarnada en lo cotidiano.</p>
         </div>
 
         <div class="footer">
-            <a href="mailto:carillagonzalezandrea@gmail.com">correo</a>
-            <a href="https://www.instagram.com/andreacarilla/">instagram</a>
+            <a href="mailto:carillagonzalezandrea@gmail.com">carillagonzalezandrea@gmail.com</a>
+            <a href="https://www.instagram.com/andreacarilla/">@andreacarilla</a>
         </div>
     </div>
 
@@ -256,6 +277,7 @@
     <nav id="home-nav">
         <div id="tema-nav"></div>
         <div id="category-nav"></div>
+        <button class="category-btn" id="shuffle-btn">barajar</button>
     </nav>
 
     <script>
@@ -264,6 +286,11 @@
         // 1) Datos de los 3 sets de galería (rellena con tus rutas y estilos exactos)
         /*issue 2: las imagenes estaran en la carpeta _portada/[númeroDelSet]/[nombreDeLaImagen]*/
         /*las imágenes podrian aprovechar el label para coplocarlas y tener titulos que expliquen su historia*/
+
+        document.getElementById('shuffle-btn').addEventListener('click', () => {
+            renderProjects(); // simplemente vuelve a ejecutar el render
+        });
+
         const gallerySets = [
             // SET 1
             [
@@ -275,7 +302,7 @@
                 },
                 {
                     src: '_portada/1/1_2.jpg',
-                    desktopStyle: { bottom: 15, left: 40, index: 2, scale: 50 },
+                    desktopStyle: { bottom: 10, left: 45, index: 2, scale: 45 },
                     mobileStyle: { bottom: 0, left: 50, index: 1, scale: 20 },
                     url: '#'
                 },
@@ -303,7 +330,7 @@
                 },
                 {
                     src: '_portada/2/2_2.jpg',
-                    desktopStyle: { bottom: 15, left: 12, index: 1, scale: 45 },
+                    desktopStyle: { bottom: 10, left: 15, index: 1, scale: 40 },
                     mobileStyle: { bottom: 10, right: 10, index: 2, scale: 32 },
                     url: '#'
                 },
@@ -315,7 +342,7 @@
                 },
                 {
                     src: '_portada/2/2_4.jpg',
-                    desktopStyle: { bottom: 5, right: 5, index: 0, scale: 85 },
+                    desktopStyle: { bottom: 0, right: 5, index: 0, scale: 85 },
                     mobileStyle: { top: 10, right: 5, index: 0, scale: 50 },
                     url: '#'
                 }
@@ -358,16 +385,16 @@
             { name: 'st. frances', category: 'artist image', status: true, url: '#' },
             { name: '8kito', category: 'artist image', status: true, url: '#' },
             { name: 'ariezz', category: 'artist image', status: true, url: '#' },
-            { name: 'estrella fugaz - ela rea', category: 'artist image', status: true, url: '#' },
-            { name: 'high tide - crommo', category: 'fashion story', status: true, url: '#' },
-            { name: 'waiting the rain - hifas studio', category: 'fashion story', status: true, url: '#' },
+            { name: 'estrella fugaz', category: 'artist image', status: true, url: '#' },
+            { name: 'high tide', category: 'fashion story', status: true, url: '#' },
+            { name: 'waiting the rain', category: 'fashion story', status: true, url: '#' },
             { name: 'working on the periphery', category: 'fashion story', status: true, url: '#' },
             { name: 'lost letter for a tale thief', category: 'fashion story', status: true, url: '#' },
-            { name: 'spin-collection - ana albert', category: 'product', status: true, url: '#' },
-            { name: 'dear xx. are you mad at me? - hifas studio', category: 'look book', status: true, url: '#' },
+            { name: 'spin-collection', category: 'product', status: true, url: '#' },
+            { name: 'dear xx. are you mad at me?', category: 'look book', status: true, url: '#' },
             { name: 'diario', category: 'personal', status: true, url: '#' },
-            { name: 'sangre y sal - vangoura', category: 'album design', status: true, url: '#' },
-            { name: 'magical theys - ali arévalo', category: 'artist image', status: true, url: '#' },
+            { name: 'sangre y sal', category: 'album design', status: true, url: '#' },
+            { name: 'magical theys', category: 'artist image', status: true, url: '#' },
         ];
 
 
@@ -408,6 +435,7 @@
             return 1;
         }
 
+        /*
         function añadirLabelsDebug() {
             // limpia los anteriores
             document.querySelectorAll('.debug-label').forEach(e => e.remove());
@@ -440,7 +468,7 @@
                 //document.body.appendChild(label);
             });
         }
-
+*/
 
 
         // 3. funciones de renderizado
@@ -512,6 +540,10 @@
             const active = projects.filter(p => p.status);
             shuffle(active);
 
+            // 🔸 PASO 1: recoger las categorías seleccionadas
+            const selectedCategories = Array.from(document.querySelectorAll('#category-nav .category-btn.active'))
+                .map(b => b.textContent.trim());
+
             active.forEach(p => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'project-link';
@@ -523,7 +555,7 @@
                 wrapper.appendChild(a);
                 linksContainer.appendChild(wrapper);
 
-                // ahora que existe en el DOM:
+                // Posicionamiento aleatorio dentro del contenedor
                 const contRect = linksContainer.getBoundingClientRect();
                 const wrapRect = wrapper.getBoundingClientRect();
                 const maxTop = contRect.height - wrapRect.height;
@@ -531,6 +563,10 @@
 
                 wrapper.style.top = Math.random() * Math.max(0, maxTop) + 'px';
                 wrapper.style.left = Math.random() * Math.max(0, maxLeft) + 'px';
+
+                // 🔸 PASO 2: ocultar si no está en las categorías seleccionadas (si hay alguna)
+                const isVisible = selectedCategories.length === 0 || selectedCategories.includes(p.category);
+                wrapper.style.display = isVisible ? 'block' : 'none';
             });
         }
 
@@ -645,6 +681,8 @@
             // 6.5 Forzar que todos los <a> abran en nueva pestaña
             document.querySelectorAll('a').forEach(a => a.target = '_blank');
         });
+
+
     </script>
 
 </body>

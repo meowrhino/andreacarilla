@@ -35,15 +35,15 @@ export function injectComponents() {
   document.body.appendChild(popup);
 
   // Botón "home"
-  if (document.body.dataset.pageType === "proyecto") {
-    const homeBtn = document.createElement("button");
-    homeBtn.className = "home-button";
-    homeBtn.textContent = "home";
-    homeBtn.addEventListener("click", () => {
-      window.location.href = "/";
-    });
-    document.body.appendChild(homeBtn);
-  }
+  if (document.body.dataset.pageType !== "home") {
+  const homeBtn = document.createElement("button");
+  homeBtn.className = "home-button";
+  homeBtn.textContent = "home";
+  homeBtn.addEventListener("click", () => {
+    window.location.href = "/";
+  });
+  document.body.appendChild(homeBtn);
+}
 
   // Eventos de abrir/cerrar
   document.getElementById("open-andrea").addEventListener("click", (e) => {
@@ -89,7 +89,7 @@ export function populateProjectGallery() {
 
 export function initDiarioGallery() {
   const gallery = document.querySelector(".diario-gallery");
-  const currentNumberEl = document.getElementById("current-number");
+  if (!gallery) return;
 
   const imgWidth = 512;
 
@@ -105,47 +105,16 @@ export function initDiarioGallery() {
     gallery.appendChild(m);
   }
 
-  function updateCurrentImage() {
-    const images = document.querySelectorAll('.profilePic');
-    const rect = gallery.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    let closest = null, minDiff = Infinity;
-    images.forEach(img => {
-      const r2 = img.getBoundingClientRect();
-      const imgCenter = r2.left + r2.width / 2;
-      const d = Math.abs(imgCenter - centerX);
-      if (d < minDiff) {
-        minDiff = d;
-        closest = img;
-      }
-    });
-    if (closest) {
-      const match = closest.src.match(/\/(\d+)\.\w+$/);
-      currentNumberEl.textContent = match ? match[1] : '';
-    }
-  }
-
   let i = 1;
   const extensions = ['jpg', 'jpeg', 'png'];
 
   function tryLoadNext() {
     let extIndex = 0;
-    let found = false;
 
     function tryNextExtension() {
       if (extIndex >= extensions.length) {
-        // ninguna extensión funcionó → se terminó la galería
-        addScrollMargin();
-        updateCurrentImage();
-        gallery.addEventListener('scroll', updateCurrentImage);
-        window.addEventListener('resize', () => {
-          document.querySelectorAll('.galleryMargin')
-                  .forEach(m => m.style.width = `${calculateMargin()}px`);
-          updateCurrentImage();
-        });
-        document.getElementById('loader').style.display = 'none';
-        document.querySelectorAll('.diario-gallery, #current-number, #arrow')
-                .forEach(el => el.style.visibility = 'visible');
+        // No se encontró ninguna imagen → fin
+        gallery.style.visibility = 'visible';
         return;
       }
 
@@ -157,11 +126,11 @@ export function initDiarioGallery() {
         img.classList.add("profilePic");
         gallery.appendChild(img);
         i++;
-        tryLoadNext(); // siguiente imagen
+        tryLoadNext();
       };
       testImg.onerror = () => {
         extIndex++;
-        tryNextExtension(); // intenta con otra extensión
+        tryNextExtension();
       };
       testImg.src = `img/${i}.${ext}`;
     }
@@ -171,4 +140,10 @@ export function initDiarioGallery() {
 
   addScrollMargin();
   tryLoadNext();
+
+  // También activamos resize para márgenes
+  window.addEventListener('resize', () => {
+    document.querySelectorAll('.galleryMargin')
+      .forEach(m => m.style.width = `${calculateMargin()}px`);
+  });
 }

@@ -472,6 +472,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 6.2 *** AÑADIMOS AQUÍ la función para rellenar la galería ***
     populateProjectGallery();
   } else if (pageType === "diario") {
+    injectComponents();
     initDiarioGallery();
   } else if (pageType === "home") {
     // 6.1 Configurar la navegación de temas (solo en home)
@@ -498,7 +499,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderGallery();
 
     // 6.7 Configurar popup “Andrea” y forzar que <a> abra en nueva pestaña
-    setupAndreaPopup();
     document.querySelectorAll("a").forEach((a) => (a.target = "_blank"));
   }
 });

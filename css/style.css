@@ -313,20 +313,33 @@ a:active {
 }
 
 .diario-gallery {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100vw;
+  height: auto;
   display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+  gap: 50px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+.diario-gallery::-webkit-scrollbar {
+  display: none;
 }
 
 .diario-gallery img {
-  display: block;
-  width: 100%;
+  flex: 0 0 auto;
+  width: 512px;
   height: auto;
-  object-fit: contain;
-  max-width: 100%;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.galleryMargin {
+  flex: 0 0 auto;
 }
 
 /* Responsive */

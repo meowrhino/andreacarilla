@@ -205,6 +205,12 @@ const projects = [
     status: true,
     url: "proyectos/magicalTheys/magicalTheys.html",
   },
+  {
+    name: "one by one",
+    category: "fashion story",
+    status: true,
+    url: "proyectos/oneByOne/oneByOne.html",
+  },
 ];
 
 // -----------------------------------------------------------------------------

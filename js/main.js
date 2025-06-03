@@ -107,50 +107,85 @@ const projects = [
     name: "quien no corre vuela",
     category: "editorial",
     status: true,
-    url: "#",
+    url: "proyectos/quienNoCorre/quienNoCorre.html",
   },
   {
     name: "recogeteme el pelo",
     category: "investigación",
     status: true,
-    url: "#",
+    url: "proyectos/recogeteme/recogeteme.html",
   },
-  { name: "aines", category: "artist image", status: true, url: "#" },
-  { name: "testigodelpero", category: "artist image", status: true, url: "#" },
-  { name: "st. frances", category: "artist image", status: true, url: "#" },
+  {
+    name: "aines",
+    category: "artist image",
+    status: true,
+    url: "proyectos/aines/aines.html",
+  },
+  {
+    name: "testigodelpero",
+    category: "artist image",
+    status: true,
+    url: "proyectos/testigoDelPero/testigoDelPero.html",
+  },
+  {
+    name: "st. frances",
+    category: "artist image",
+    status: true,
+    url: "proyectos/stFrances/stFrances.html",
+  },
   {
     name: "8kito",
     category: "artist image",
     status: true,
     url: "proyectos/8kito/8kito.html",
   },
-  { name: "ariezz", category: "artist image", status: true, url: "#" },
-  { name: "estrella fugaz", category: "artist image", status: true, url: "#" },
-  { name: "high tide", category: "fashion story", status: true, url: "#" },
+  {
+    name: "ariezz",
+    category: "artist image",
+    status: true,
+    url: "proyectos/ariezz/ariezz.html",
+  },
+  {
+    name: "estrella fugaz",
+    category: "artist image",
+    status: true,
+    url: "proyectos/estrellaFugaz/estrellaFugaz.html",
+  },
+  {
+    name: "high tide",
+    category: "fashion story",
+    status: true,
+    url: "proyectos/highTide/highTide.html",
+  },
   {
     name: "waiting the rain",
     category: "fashion story",
     status: true,
-    url: "#",
+    url: "proyectos/waiting/waiting.html",
   },
   {
     name: "working on the periphery",
     category: "fashion story",
     status: true,
-    url: "#",
+    url: "proyectos/working/working.html",
   },
   {
     name: "lost letter for a tale thief",
     category: "fashion story",
     status: true,
-    url: "#",
+    url: "proyectos/lostLetter/lostLetter.html",
   },
-  { name: "spin-collection", category: "product", status: true, url: "#" },
+  {
+    name: "spin-collection",
+    category: "product",
+    status: true,
+    url: "proyectos/spinCol/spinCol.html",
+  },
   {
     name: "dear xx. are you mad at me?",
     category: "look book",
     status: true,
-    url: "#",
+    url: "proyectos/dearxx/dearxx.html",
   },
   {
     name: "diario",
@@ -158,8 +193,18 @@ const projects = [
     status: true,
     url: "proyectos/diario/diario.html",
   },
-  { name: "sangre y sal", category: "album design", status: true, url: "#" },
-  { name: "magical theys", category: "artist image", status: true, url: "#" },
+  {
+    name: "sangre y sal",
+    category: "album design",
+    status: true,
+    url: "proyectos/sangreYSal/sangreYSal.html",
+  },
+  {
+    name: "magical theys",
+    category: "artist image",
+    status: true,
+    url: "proyectos/magicalTheys/magicalTheys.html",
+  },
 ];
 
 // -----------------------------------------------------------------------------
@@ -472,7 +517,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // 6.2 *** AÑADIMOS AQUÍ la función para rellenar la galería ***
     populateProjectGallery();
   } else if (pageType === "diario") {
-    injectComponents();
     initDiarioGallery();
   } else if (pageType === "home") {
     // 6.1 Configurar la navegación de temas (solo en home)

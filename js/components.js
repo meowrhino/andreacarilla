@@ -36,25 +36,32 @@ export function injectComponents() {
 
   // Botón "home"
   if (document.body.dataset.pageType !== "home") {
-  const homeBtn = document.createElement("button");
-  homeBtn.className = "home-button";
-  homeBtn.textContent = "home";
-  homeBtn.addEventListener("click", () => {
-    window.location.href = "/";
-  });
-  document.body.appendChild(homeBtn);
-}
+    const homeBtn = document.createElement("button");
+    homeBtn.className = "home-button";
+    homeBtn.textContent = "home";
+    homeBtn.addEventListener("click", () => {
+      window.location.href = `${window.location.origin}/andreacarilla/index.html`;
+    });
+    document.body.appendChild(homeBtn);
+  }
 
   // Eventos de abrir/cerrar
-  document.getElementById("open-andrea").addEventListener("click", (e) => {
-    e.preventDefault();
-    popup.classList.add("visible");
-  });
+  setTimeout(() => {
+    const open = document.getElementById("open-andrea");
+    const close = document.getElementById("close-andrea");
+    const popup = document.getElementById("andrea-popup");
+    if (!open || !close || !popup) return;
 
-  document.getElementById("close-andrea").addEventListener("click", (e) => {
-    e.preventDefault();
-    popup.classList.remove("visible");
-  });
+    open.addEventListener("click", (e) => {
+      e.preventDefault();
+      popup.classList.add("visible");
+    });
+
+    close.addEventListener("click", (e) => {
+      e.preventDefault();
+      popup.classList.remove("visible");
+    });
+  }, 0);
 }
 
 // --------------------------------------------------------
@@ -84,7 +91,6 @@ export function populateProjectGallery() {
   tryLoadNext();
 }
 
-
 // scripts/diario-gallery.js
 
 export function initDiarioGallery() {
@@ -93,10 +99,15 @@ export function initDiarioGallery() {
 
   const imgWidth = 512;
 
-  function calculateMargin() {
-    const vw = document.documentElement.clientWidth;
-    return (vw - imgWidth) / 2;
-  }
+function calculateMargin() {
+  const vw = document.documentElement.clientWidth;
+  const imgWidth = 512;
+  const gap = 50;
+
+  // centrado = (viewport - imagen) / 2
+  // pero restamos medio gap para que visualmente no se desplace por el espacio entre imágenes
+  return (vw - imgWidth) / 2;
+}
 
   function addScrollMargin() {
     const m = document.createElement("div");
@@ -106,7 +117,7 @@ export function initDiarioGallery() {
   }
 
   let i = 1;
-  const extensions = ['jpg', 'jpeg', 'png'];
+  const extensions = ["jpg", "jpeg", "png"];
 
   function tryLoadNext() {
     let extIndex = 0;
@@ -114,7 +125,8 @@ export function initDiarioGallery() {
     function tryNextExtension() {
       if (extIndex >= extensions.length) {
         // No se encontró ninguna imagen → fin
-        gallery.style.visibility = 'visible';
+        addScrollMargin(); // ← ahora sí es el final
+        gallery.style.visibility = "visible";
         return;
       }
 
@@ -142,8 +154,9 @@ export function initDiarioGallery() {
   tryLoadNext();
 
   // También activamos resize para márgenes
-  window.addEventListener('resize', () => {
-    document.querySelectorAll('.galleryMargin')
-      .forEach(m => m.style.width = `${calculateMargin()}px`);
+  window.addEventListener("resize", () => {
+    document
+      .querySelectorAll(".galleryMargin")
+      .forEach((m) => (m.style.width = `${calculateMargin()}px`));
   });
 }

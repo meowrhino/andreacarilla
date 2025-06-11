@@ -21,6 +21,7 @@ body[data-page-type="proyecto"] {
 a {
   text-decoration: none;
   color: inherit;
+  target: _blank;
 }
 
 a:hover {
@@ -261,6 +262,7 @@ a:active {
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+  padding-bottom: 10vh;
 }
 
 .project-gallery img {

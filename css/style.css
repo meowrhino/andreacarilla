@@ -96,7 +96,7 @@ a:active {
 /* Media query de ejemplo para móvil: ajustar alturas si hace falta */
 @media (max-width: 768px) {
   #links-container {
-    height: 100vh;
+    height: 105vh;
     width: 75%;
   }
 }

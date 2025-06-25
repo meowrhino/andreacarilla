@@ -211,6 +211,12 @@ const projects = [
     status: true,
     url: "proyectos/oneByOne/oneByOne.html",
   },
+  {
+    name: "archivo en pixel",
+    category: "editorial",
+    status: true,
+    url: "proyectos/arcEnPix/arcEnPix.html",
+  },
 ];
 
 // -----------------------------------------------------------------------------

@@ -43,7 +43,7 @@ document.body.appendChild(popup);
     homeBtn.className = "home-button";
     homeBtn.textContent = "home";
     homeBtn.addEventListener("click", () => {
-      window.location.href = `${window.location.origin}/andreacarilla/index.html`;
+      window.location.href = `${window.location.origin}`;
     });
     document.body.appendChild(homeBtn);
   }

@@ -175,6 +175,12 @@ const projects = [
     status: true,
     url: "proyectos/vozMal/vozMal.html",
   },
+    {
+    name: "flea market",
+    category: "eventos",
+    status: true,
+    url: "proyectos/fleaMarket/fleaMarket.html",
+  },
   {
     name: "high tide",
     category: "fashion story",

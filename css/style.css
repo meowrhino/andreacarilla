@@ -380,3 +380,7 @@ span.meta {
     color: black;
   } /* acaba en rojo */
 }
+
+li:last-child {
+  margin: 0 !important;
+}

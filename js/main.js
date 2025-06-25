@@ -217,6 +217,12 @@ const projects = [
     status: true,
     url: "proyectos/arcEnPix/arcEnPix.html",
   },
+  {
+    name: "black cover",
+    category: "editorial",
+    status: true,
+    url: "proyectos/blackCover/blackCover.html",
+  },
 ];
 
 // -----------------------------------------------------------------------------

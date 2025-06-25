@@ -175,11 +175,17 @@ const projects = [
     status: true,
     url: "proyectos/vozMal/vozMal.html",
   },
-    {
+  {
     name: "flea market",
     category: "eventos",
     status: true,
     url: "proyectos/fleaMarket/fleaMarket.html",
+  },
+  {
+    name: "tawla cenitas club",
+    category: "eventos",
+    status: true,
+    url: "proyectos/tawla/tawla.html",
   },
   {
     name: "high tide",

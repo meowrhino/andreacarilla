@@ -55,7 +55,7 @@ const gallerySets = [
     },
     {
       src: "_portada/2/2_2.jpg",
-      desktopStyle: { bottom: 10, left: 15, index: 1, scale: 40 },
+      desktopStyle: { bottom: 10, left: 15, index: 2, scale: 40 },
       mobileStyle: { bottom: 10, right: 10, index: 2, scale: 32 },
       url: "proyectos/waiting/waiting.html",
     },
@@ -122,7 +122,7 @@ const projects = [
     url: "proyectos/aines/aines.html",
   },
   {
-    name: "testigodelpero",
+    name: "alejandra grillo",
     category: "artist image",
     status: true,
     url: "proyectos/testigoDelPero/testigoDelPero.html",
@@ -146,7 +146,7 @@ const projects = [
     url: "proyectos/ariezz/ariezz.html",
   },
   {
-    name: "estrella fugaz",
+    name: "ela rea",
     category: "artist image",
     status: true,
     url: "proyectos/estrellaFugaz/estrellaFugaz.html",
@@ -200,7 +200,7 @@ const projects = [
     url: "proyectos/sangreYSal/sangreYSal.html",
   },
   {
-    name: "magical theys",
+    name: "ali arévalo",
     category: "artist image",
     status: true,
     url: "proyectos/magicalTheys/magicalTheys.html",
@@ -551,4 +551,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // 6.7 Configurar popup “Andrea” y forzar que <a> abra en nueva pestaña
     document.querySelectorAll("a").forEach((a) => (a.target = "_blank"));
   }
+});
+
+document.querySelectorAll("a").forEach((a) => {
+  a.setAttribute("target", "_blank");
+  a.setAttribute("rel", "noopener noreferrer");
 });

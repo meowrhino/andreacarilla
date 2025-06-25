@@ -21,7 +21,8 @@ body[data-page-type="proyecto"] {
 a {
   text-decoration: none;
   color: inherit;
-  target: _blank;
+  /*target: _blank; !important
+  esta puesto en el js en el main abajo del todo*/
 }
 
 a:hover {
@@ -62,6 +63,8 @@ a:active {
 /* Contenedor de enlaces: ocupa el último tercio, con scroll si hace falta */
 #links-container {
   height: 30vh;
+  width: 90%; /* nuevo: solo ocupa el 90% del ancho */
+  margin-right: auto; /* deja el margen derecho libre */
   position: relative;
   overflow-y: auto;
 }
@@ -93,7 +96,8 @@ a:active {
 /* Media query de ejemplo para móvil: ajustar alturas si hace falta */
 @media (max-width: 768px) {
   #links-container {
-    height: 60vh;
+    height: 100vh;
+    width: 75%;
   }
 }
 
@@ -299,11 +303,11 @@ a:active {
 }
 
 .project-meta {
-    min-width: 150px;
-    text-transform: lowercase;
-    height: 100%;
-    display: flex;
-    align-items: end;
+  min-width: 150px;
+  text-transform: lowercase;
+  height: 100%;
+  display: flex;
+  align-items: end;
 }
 
 .project-meta ul {
@@ -359,4 +363,20 @@ a:active {
 span.meta {
   color: #c4c4c4;
   text-transform: lowercase;
+}
+
+
+/*animación T de waiting the (T)rain*/
+.animate-e {
+  /* Duración 5s, va y vuelve (alternate), y se repite infinitamente */
+  animation: colorFade 1.8s infinite alternate ease-in-out;
+}
+
+@keyframes colorFade {
+  from {
+    color: white;
+  } /* inicio en blanco */
+  to {
+    color: black;
+  } /* acaba en rojo */
 }

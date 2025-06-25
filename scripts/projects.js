@@ -16,11 +16,14 @@ export function setupCategoryNav() {
       if (b.classList.contains("active")) sel.add(cat);
       else sel.delete(cat);
 
-      document.querySelectorAll("#links-container .project-link").forEach((link) => {
-        const name = link.querySelector("a").textContent.trim();
-        const catOf = projects.find((p) => p.name === name).category;
-        link.style.display = sel.size === 0 || sel.has(catOf) ? "block" : "none";
-      });
+      document
+        .querySelectorAll("#links-container .project-link")
+        .forEach((link) => {
+          const name = link.querySelector("a").textContent.trim();
+          const catOf = projects.find((p) => p.name === name).category;
+          link.style.display =
+            sel.size === 0 || sel.has(catOf) ? "block" : "none";
+        });
     });
 
     nav.appendChild(b);
@@ -48,10 +51,19 @@ export function renderProjects() {
     wrapper.appendChild(a);
     linksContainer.appendChild(wrapper);
 
+    /*
+    const menu = document.getElementById("home-nav");
+    const menuRect = menu?.getBoundingClientRect();
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const menuMarginBottom = menuRect.height + rem; // 1rem extra
+    const menuMarginRight = menuRect.width + rem; // 1rem extra
+*/
+
     const contRect = linksContainer.getBoundingClientRect();
     const wrapRect = wrapper.getBoundingClientRect();
-    const maxTop = contRect.height - wrapRect.height;
-    const maxLeft = contRect.width - wrapRect.width;
+
+    const maxTop = contRect.height - wrapRect.height - menuMarginBottom;
+    const maxLeft = contRect.width - wrapRect.width - menuMarginRight;
 
     wrapper.style.top = Math.random() * Math.max(0, maxTop) + "px";
     wrapper.style.left = Math.random() * Math.max(0, maxLeft) + "px";

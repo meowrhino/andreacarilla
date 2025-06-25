@@ -100,32 +100,26 @@ let selectedGallery = 0;
 
 // 2) Datos de proyectos: nombre, categoría, status (on/off), url
 /* propuesta: y si cuando sean de otros artistas el título sale dentro y fuera solo se ve un número romano que equivale al proyecto?
-   Ej. si hay 2 proyectos de “hifas studio”, el primero en ingresar en el index será “I” y el 2º será “II” */
+Ej. si hay 2 proyectos de “hifas studio”, el primero en ingresar en el index será “I” y el 2º será “II” */
 
 const projects = [
   {
-    name: "quien no corre vuela",
-    category: "editorial",
+    name: "sangre y sal",
+    category: "album design",
     status: true,
-    url: "proyectos/quienNoCorre/quienNoCorre.html",
-  },
-  {
-    name: "recogeteme el pelo",
-    category: "investigación",
-    status: true,
-    url: "proyectos/recogeteme/recogeteme.html",
-  },
-  {
-    name: "aines",
-    category: "artist image",
-    status: true,
-    url: "proyectos/aines/aines.html",
+    url: "proyectos/sangreYSal/sangreYSal.html",
   },
   {
     name: "alejandra grillo",
     category: "artist image",
     status: true,
     url: "proyectos/testigoDelPero/testigoDelPero.html",
+  },
+  {
+    name: "aines",
+    category: "artist image",
+    status: true,
+    url: "proyectos/aines/aines.html",
   },
   {
     name: "st. frances",
@@ -146,10 +140,40 @@ const projects = [
     url: "proyectos/ariezz/ariezz.html",
   },
   {
+    name: "ali arévalo",
+    category: "artist image",
+    status: true,
+    url: "proyectos/magicalTheys/magicalTheys.html",
+  },
+  {
     name: "ela rea",
     category: "artist image",
     status: true,
     url: "proyectos/estrellaFugaz/estrellaFugaz.html",
+  },
+  {
+    name: "quien no corre vuela",
+    category: "editorial",
+    status: true,
+    url: "proyectos/quienNoCorre/quienNoCorre.html",
+  },
+  {
+    name: "archivo en pixel",
+    category: "editorial",
+    status: true,
+    url: "proyectos/arcEnPix/arcEnPix.html",
+  },
+  {
+    name: "black cover",
+    category: "editorial",
+    status: true,
+    url: "proyectos/blackCover/blackCover.html",
+  },
+  {
+    name: "performance jaume ferrete",
+    category: "eventos",
+    status: true,
+    url: "proyectos/vozMal/vozMal.html",
   },
   {
     name: "high tide",
@@ -176,10 +200,10 @@ const projects = [
     url: "proyectos/lostLetter/lostLetter.html",
   },
   {
-    name: "spin-collection",
-    category: "product",
+    name: "recogeteme el pelo",
+    category: "investigación",
     status: true,
-    url: "proyectos/spinCol/spinCol.html",
+    url: "proyectos/recogeteme/recogeteme.html",
   },
   {
     name: "dear xx. are you mad at me?",
@@ -194,34 +218,16 @@ const projects = [
     url: "proyectos/diario/diario.html",
   },
   {
-    name: "sangre y sal",
-    category: "album design",
+    name: "spin-collection",
+    category: "product",
     status: true,
-    url: "proyectos/sangreYSal/sangreYSal.html",
-  },
-  {
-    name: "ali arévalo",
-    category: "artist image",
-    status: true,
-    url: "proyectos/magicalTheys/magicalTheys.html",
+    url: "proyectos/spinCol/spinCol.html",
   },
   {
     name: "one by one",
     category: "fashion story",
     status: true,
     url: "proyectos/oneByOne/oneByOne.html",
-  },
-  {
-    name: "archivo en pixel",
-    category: "editorial",
-    status: true,
-    url: "proyectos/arcEnPix/arcEnPix.html",
-  },
-  {
-    name: "black cover",
-    category: "editorial",
-    status: true,
-    url: "proyectos/blackCover/blackCover.html",
   },
 ];
 

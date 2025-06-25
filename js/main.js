@@ -187,6 +187,12 @@ const projects = [
     status: true,
     url: "proyectos/tawla/tawla.html",
   },
+    {
+    name: "henshin concert",
+    category: "eventos",
+    status: true,
+    url: "proyectos/henshin/henshin.html",
+  },
   {
     name: "high tide",
     category: "fashion story",

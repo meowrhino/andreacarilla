@@ -30,7 +30,7 @@ popup.innerHTML = `
             <a href="mailto:carillagonzalezandrea@gmail.com">carillagonzalezandrea@gmail.com</a>
             <a href="https://www.instagram.com/andreacarilla/" target="_blank">@andreacarilla</a>
             <span style="position:absolute; bottom:1rem;">
-                web hecha en el marco de <a href="https://meowrhino.github.io/becasDigMeow/" target="_blank">becas digitalización meowrhino</a>
+                web: <a href="https://meowrhino.github.io/becasDigMeow/" target="_blank">meowrhino</a>
             </span>
         </div>
     </div>

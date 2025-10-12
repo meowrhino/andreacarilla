@@ -18,6 +18,7 @@ if (shuffleBtn) {
 
 const gallerySets = [
   // SET 1
+  
   [
     {
       src: "_portada/1/1_1.jpg",
@@ -549,7 +550,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const encodedCategory = encodeURIComponent(category.toLowerCase());
 
         const link = document.createElement("a");
-        link.href = `/index.html?category=${encodedCategory}`;
+        const basePath = window.location.pathname.split("/proyectos")[0];
+        link.href = `${window.location.origin}${basePath}/index.html?category=${encodedCategory}`;
         link.textContent = category;
 
         firstItem.textContent = ""; // vaciar contenido

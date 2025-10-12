@@ -43,7 +43,9 @@ document.body.appendChild(popup);
     homeBtn.className = "home-button";
     homeBtn.textContent = "home";
     homeBtn.addEventListener("click", () => {
-      window.location.href = `${window.location.origin}`;
+      const basePath = window.location.pathname.split("/proyectos")[0];
+      const base = window.location.origin + (basePath.endsWith("/") ? basePath.slice(0, -1) : basePath);
+      window.location.href = `${base}/index.html`;
     });
     document.body.appendChild(homeBtn);
   }

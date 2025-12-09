@@ -124,12 +124,15 @@ async function initHome() {
       link.href = `./proyecto.html?slug=${project.url}`;
       link.className = "project-link";
       link.textContent = project.name;
-      // Colocar cada enlace en una posición aleatoria dentro del contenedor
-      const top = Math.random() * 80; // margen para que no se corte
-      const left = Math.random() * 80;
-      link.style.top = `${top}%`;
-      link.style.left = `${left}%`;
       container.appendChild(link);
+
+      // Colocar cada enlace en una posición aleatoria dentro del contenedor usando el tamaño real
+      const maxTopPx = Math.max(0, container.clientHeight - link.offsetHeight);
+      const maxLeftPx = Math.max(0, container.clientWidth - link.offsetWidth);
+      const top = Math.random() * (maxTopPx || 1);
+      const left = Math.random() * (maxLeftPx || 1);
+      link.style.top = `${top}px`;
+      link.style.left = `${left}px`;
     });
   }
 

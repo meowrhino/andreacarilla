@@ -43,7 +43,7 @@ export function injectComponents() {
     homeBtn.className = "home-button";
     homeBtn.textContent = "home";
     homeBtn.addEventListener("click", () => {
-      window.location.href = "/index.html";
+      window.location.href = "./index.html";
     });
     document.body.appendChild(homeBtn);
   }
@@ -93,7 +93,7 @@ export async function renderProject() {
   }
   
   try {
-    const response = await fetch(`/data/${slug}/${slug}.json`);
+    const response = await fetch(`data/${slug}/${slug}.json`);
     if (!response.ok) throw new Error(`No se pudo cargar ${slug}.json`);
     
     const projectData = await response.json();
@@ -127,7 +127,7 @@ function renderStandardProject(projectData) {
     header.className = 'project-header';
     
     const img = document.createElement('img');
-    img.src = `/data/${projectData.slug}/${projectData.primera_imatge.src}`;
+    img.src = `data/${projectData.slug}/${projectData.primera_imatge.src}`;
     const titleText = projectData.titulo || projectData.slug || '';
     img.alt = `${titleText} portada`;
     
@@ -238,7 +238,7 @@ function renderStandardProject(projectData) {
       const normalized = normalizeImageEntry(imgData);
       if (!normalized) return;
       const img = document.createElement('img');
-      img.src = `/data/${projectData.slug}/${normalized.src}`;
+      img.src = `data/${projectData.slug}/${normalized.src}`;
       const titleText = projectData.titulo || projectData.slug || 'imagen';
       img.alt = `${titleText} imagen ${idx + 1}`;
       img.loading = 'lazy';
@@ -262,7 +262,7 @@ function renderDiarioProject(projectData) {
       const normalized = normalizeImageEntry(imgData);
       if (!normalized) return;
       const img = document.createElement('img');
-      img.src = `/data/${projectData.slug}/${normalized.src}`;
+      img.src = `data/${projectData.slug}/${normalized.src}`;
       const titleText = projectData.titulo || projectData.slug || 'imagen';
       img.alt = `${titleText} imagen ${idx + 1}`;
       img.loading = 'lazy';

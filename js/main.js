@@ -21,7 +21,7 @@ async function initHome() {
   injectComponents();
   
   // Cargar home.json
-  const homeData = await fetch('/data/home.json').then(r => r.json());
+  const homeData = await fetch('data/home.json').then(r => r.json());
   
   // Datos de proyectos leídos desde home.json
   const projects = (homeData.projectes_visibles || [])
@@ -75,7 +75,7 @@ async function initHome() {
       const wrapper = document.createElement("a");
       wrapper.className = "portada-wrapper";
       const slug = item.slug || item.url;
-      wrapper.href = `/proyecto.html?slug=${slug}`;
+      wrapper.href = `./proyecto.html?slug=${slug}`;
       wrapper.style.zIndex = style?.index || 0;
       container.appendChild(wrapper);
 
@@ -121,7 +121,7 @@ async function initHome() {
 
     activeProjects.forEach((project) => {
       const link = document.createElement("a");
-      link.href = `/proyecto.html?slug=${project.url}`;
+      link.href = `./proyecto.html?slug=${project.url}`;
       link.className = "project-link";
       link.textContent = project.name;
       // Colocar cada enlace en una posición aleatoria dentro del contenedor

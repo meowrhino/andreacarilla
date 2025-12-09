@@ -34,8 +34,8 @@ andreacarilla_web/
 
 ### página home (index.html)
 
-- galería de imágenes posicionadas absolutamente
-- lista de proyectos con filtros por categoría
+- galería de imágenes posicionadas absolutamente (sets definidos en `data/home.json`)
+- lista de proyectos con filtros por categoría (datos de `projectes_visibles` en `data/home.json`)
 - navegación entre 3 sets de galería
 - botón "refrescar" que mezcla aleatoriamente los proyectos
 
@@ -136,7 +136,7 @@ npx http-server -p 8000
 1. crear carpeta `data/nuevo-proyecto/`
 2. crear archivo `data/nuevo-proyecto/nuevo-proyecto.json` con los datos
 3. crear carpeta `data/nuevo-proyecto/img/` y copiar imágenes
-4. añadir entrada en `data/home.json` en `projectes_visibles`:
+4. añadir entrada en `data/home.json` en `projectes_visibles` (no hace falta tocar JS):
 ```json
 {
   "slug": "nuevo-proyecto",
@@ -145,15 +145,7 @@ npx http-server -p 8000
   "visible": true
 }
 ```
-5. añadir entrada en `js/main.js` en el array `projects`:
-```javascript
-{
-  name: "nombre del proyecto",
-  category: "categoría",
-  status: true,
-  url: "nuevo-proyecto"
-}
-```
+5. opcional: añadir una portada en alguno de los `gallerySets` de `data/home.json` (para que salga en la galería principal).
 
 ### modificar un proyecto
 
@@ -183,8 +175,8 @@ por:
 
 - los json están en `data/{slug}/` junto con sus imágenes
 - el javascript usa es6 modules (`type="module"`)
-- las rutas son absolutas desde la raíz (`/css/`, `/data/`, etc.)
-- un único `proyecto.html` para todos los proyectos
+- las rutas son relativas (`./css/`, `data/...`), funciona igual en dominio raíz o subcarpeta (GitHub Pages)
+- un único `proyecto.html` para todos los proyectos; el contenido se inyecta en cliente desde el JSON
 
 ## créditos
 

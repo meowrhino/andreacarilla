@@ -1,0 +1,41 @@
+{
+  "slug": "spinCol",
+  "titulo": "spin collection",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": ""
+  },
+  "descripcion": {
+    "titulo": "SPIN COLLECTION.",
+    "link": "https://www.instagram.com/_analbert/",
+    "texto": []
+  },
+  "tipo_proyecto": "producto",
+  "ubicacion": "Barcelona",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "creative DIRECTION, PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "ana albert",
+      "rol": "art direction",
+      "link": "https://www.instagram.com/_analbert/"
+    },
+    {
+      "nombre": "ana montejo",
+      "rol": "stylist",
+      "link": "https://www.instagram.com/_ktana/"
+    }
+  ],
+  "imatges": [
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg",
+    "./img/6.jpg",
+    "./img/7.jpg",
+    "./img/8.jpg"
+  ]
+}

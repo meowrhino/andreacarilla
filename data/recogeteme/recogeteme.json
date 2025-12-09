@@ -1,0 +1,24 @@
+{
+  "slug": "recogeteme",
+  "titulo": "recogeteme el pelo",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": ""
+  },
+  "descripcion": {
+    "titulo": "RECÓGETEME EL PELO",
+    "link": "https://exitmedia.net/portfolio/andrea-carilla/",
+    "texto": [
+      "\"Recógeteme el pelo\" es un proyecto fotográfico que explora la feminidad y la clase social a través del gesto cotidiano de recogerse el cabello. Utilizando el robado fotográfico como herramienta de despatriarcalización, se observa cómo los recogidos expuestos en el espacio público encarnan construcciones culturales y huellas de lo femenino. La serie propone nuevas representaciones que cuestionan los cánones de belleza tradicionales y visibiliza cómo estos peinados reflejan factores como clase, ideología, género, tradición o estado de ánimo.",
+      "Mediante la repetición y la serialidad, el proyecto construye una cartografía visual de cuerpos diversos atravesados por las tensiones del sistema cisheteropatriarcal. Los recogidos se revelan como actos simultáneamente de sumisión y rebeldía, donde el dolor físico de ciertos peinados simboliza la presión estética. Al apropiarse de imágenes pobres y dotarlas de sentido, la obra se opone a la lógica capitalista de la mejora técnica infinita y resignifica la fotografía como un medio crítico contemporáneo.",
+      "*Imagen pobre es una imagen de baja calidad, degradada por la compresión digital, la redistribución no oficial o la circulación masiva en internet. A pesar de su mala resolución, tiene un alto valor político y cultural porque se aleja de los estándares comerciales y elitistas del arte y el cine tradicionales."
+    ]
+  },
+  "tipo_proyecto": "investigación",
+  "imatges": [
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg"
+  ]
+}

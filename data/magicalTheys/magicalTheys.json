@@ -1,0 +1,36 @@
+{
+  "slug": "magicalTheys",
+  "titulo": "magical theys",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": ""
+  },
+  "descripcion": {
+    "titulo": "MAGICAL THEYS. ALI ARÉVALO",
+    "link": "https://www.instagram.com/arevalo_ali_/",
+    "texto": []
+  },
+  "tipo_proyecto": "Artist Image",
+  "ubicacion": "Barcelona",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "ART DIRECTION, PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "ali arévalo",
+      "rol": "artist, performer",
+      "link": "https://www.instagram.com/arevalo_ali_/"
+    }
+  ],
+  "imatges": [
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg",
+    "./img/6.jpg",
+    "./img/7.jpg",
+    "./img/8.jpg"
+  ]
+}

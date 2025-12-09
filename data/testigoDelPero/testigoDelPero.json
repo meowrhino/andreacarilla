@@ -1,0 +1,42 @@
+{
+  "slug": "testigoDelPero",
+  "titulo": "testigo del pero",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": ""
+  },
+  "descripcion": {
+    "titulo": "TESTIGO DEL PERO.",
+    "link": "https://www.instagram.com/alejandra__grillo/",
+    "texto": [
+      "ALEJANDRA GRILLO"
+    ]
+  },
+  "tipo_proyecto": "Artist Image",
+  "ubicacion": "madrid",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "creative DIRECTION, PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "juan carlos camacho",
+      "rol": "art\n            direction",
+      "link": "https://www.instagram.com/jcamher/"
+    },
+    {
+      "nombre": "alejandra grillo",
+      "rol": "stylist, model",
+      "link": "https://www.instagram.com/alejandra__grillo/"
+    }
+  ],
+  "imatges": [
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg",
+    "./img/6.jpg",
+    "./img/7.jpg"
+  ]
+}

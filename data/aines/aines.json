@@ -1,0 +1,35 @@
+{
+  "slug": "aines",
+  "titulo": "aines",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": "aines portada"
+  },
+  "descripcion": {
+    "titulo": "AINES",
+    "link": "https://www.instagram.com/ainessanjo/",
+    "texto": []
+  },
+  "tipo_proyecto": "Artist Image",
+  "ubicacion": "Barcelona",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "Wiebke",
+      "rol": "STYLIST",
+      "link": "https://www.instagram.com/wabki.sabki/"
+    }
+  ],
+  "imatges": [
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg",
+    "./img/6.jpg",
+    "./img/7.jpg"
+  ]
+}

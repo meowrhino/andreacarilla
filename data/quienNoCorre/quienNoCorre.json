@@ -1,0 +1,32 @@
+{
+  "slug": "quienNoCorre",
+  "titulo": "quien no corre, vuela",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": ""
+  },
+  "descripcion": {
+    "titulo": "QUIEN NO CORRE, VUELA",
+    "link": "https://quiennocorrevuela.bigcartel.com/?fbclid=PAZXh0bgNhZW0CMTEAAaeD5HE7eqz3clCroc1q8Labj2UxE02BKaDYj4XjX9j3x6AG2RHXeJdkwn_DMQ_aem_cYV44I_-xAyTOest-WaJPQ",
+    "texto": [
+      "Editorial fundada por <a href=\"https://www.instagram.com/sofimezaaa/\">sofia milena</a> y andrea carilla. Este proyecto nace de la necesidad de crear de forma colectiva y autoeditada, explorando lo visual como un medio de expresión y comunicación. Creemos en la fotografía y en su capacidad de resistir los cánones elitistas y técnicos que la encasillan."
+    ]
+  },
+  "tipo_proyecto": "editorial",
+  "ubicacion": "Barcelona",
+  "creditos": [
+    {
+      "nombre": "sofia milena",
+      "rol": "cofundadora",
+      "link": "https://www.instagram.com/sofimezaaa/"
+    },
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "cofundadora",
+      "link": ""
+    }
+  ],
+  "imatges": [
+    "./img/2.jpg"
+  ]
+}

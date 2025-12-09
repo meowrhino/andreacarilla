@@ -1,4 +1,4 @@
-// scripts/components.js
+// components.js - Componentes reutilizables de la web
 
 export function injectComponents() {
   // Botón "andrea carilla"
@@ -9,10 +9,10 @@ export function injectComponents() {
     `;
   document.body.appendChild(nav);
 
-// Popup bio
-const popup = document.createElement("div");
-popup.id = "andrea-popup";
-popup.innerHTML = `
+  // Popup bio
+  const popup = document.createElement("div");
+  popup.id = "andrea-popup";
+  popup.innerHTML = `
     <button class="close-btn" id="close-andrea">cerrar</button>
     <div class="content">
         <p>Graduada en Comunicación Audiovisual por la Universidad de Granada en 2019, su práctica fotográfica se
@@ -35,7 +35,7 @@ popup.innerHTML = `
         </div>
     </div>
 `;
-document.body.appendChild(popup);
+  document.body.appendChild(popup);
 
   // Botón "home"
   if (document.body.dataset.pageType !== "home") {
@@ -43,9 +43,7 @@ document.body.appendChild(popup);
     homeBtn.className = "home-button";
     homeBtn.textContent = "home";
     homeBtn.addEventListener("click", () => {
-      const basePath = window.location.pathname.split("/proyectos")[0];
-      const base = window.location.origin + (basePath.endsWith("/") ? basePath.slice(0, -1) : basePath);
-      window.location.href = `${base}/index.html`;
+      window.location.href = "/index.html";
     });
     document.body.appendChild(homeBtn);
   }
@@ -69,99 +67,209 @@ document.body.appendChild(popup);
   }, 0);
 }
 
-// --------------------------------------------------------
-// Función para poblar .project-gallery automáticamente:
-export function populateProjectGallery() {
-  const gallery = document.querySelector(".project-gallery");
-  if (!gallery) return;
-
-  let i = 2;
-  function tryLoadNext() {
-    const imgPath = `./img/${i}.jpg`;
-    const testImg = new Image();
-    testImg.onload = () => {
-      const el = document.createElement("img");
-      el.src = imgPath;
-      el.alt = `Imagen ${i}`;
-      gallery.appendChild(el);
-
-      i++;
-      tryLoadNext();
-    };
-    testImg.onerror = () => {
-      // Cuando falle, ya no hay más imágenes; paramos.
-    };
-    testImg.src = imgPath;
-  }
-  tryLoadNext();
+// Obtener slug de la URL
+function getSlugFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('slug');
 }
 
-// scripts/diario-gallery.js
-
-export function initDiarioGallery() {
-  const gallery = document.querySelector(".diario-gallery");
-  if (!gallery) return;
-
-  const imgWidth = 512;
-
-function calculateMargin() {
-  const vw = document.documentElement.clientWidth;
-  const imgWidth = 512;
-  const gap = 50;
-
-  // centrado = (viewport - imagen) / 2
-  // pero restamos medio gap para que visualmente no se desplace por el espacio entre imágenes
-  return (vw - imgWidth) / 2;
+function normalizeImageEntry(imgData) {
+  if (typeof imgData === 'string') {
+    return { src: imgData, alt: '' };
+  }
+  if (imgData && typeof imgData === 'object' && imgData.src) {
+    return { src: imgData.src, alt: imgData.alt || '' };
+  }
+  return null;
 }
 
-  function addScrollMargin() {
-    const m = document.createElement("div");
-    m.classList.add("galleryMargin");
-    m.style.width = `${calculateMargin()}px`;
-    gallery.appendChild(m);
+// Función para renderizar proyecto desde JSON
+export async function renderProject() {
+  const slug = getSlugFromURL();
+  
+  if (!slug) {
+    document.body.innerHTML = '<p style="padding: 2rem;">No se especificó ningún proyecto</p>';
+    return;
   }
+  
+  try {
+    const response = await fetch(`/data/${slug}/${slug}.json`);
+    if (!response.ok) throw new Error(`No se pudo cargar ${slug}.json`);
+    
+    const projectData = await response.json();
+    if (projectData.titulo) {
+      document.title = projectData.titulo;
+    } else if (projectData.slug) {
+      document.title = projectData.slug;
+    }
+    
+    // Verificar si es proyecto tipo diario
+    const isDiario = projectData.configuracion?.tipo_layout === 'diario';
+    
+    if (isDiario) {
+      renderDiarioProject(projectData);
+    } else {
+      renderStandardProject(projectData);
+    }
+  } catch (error) {
+    console.error('Error cargando proyecto:', error);
+    document.body.innerHTML = '<p style="padding: 2rem;">Error cargando el proyecto</p>';
+  }
+}
 
-  let i = 1;
-  const extensions = ["jpg", "jpeg", "png"];
+function renderStandardProject(projectData) {
+  const body = document.body;
+  body.innerHTML = ''; // Limpiar
+  
+  // Header con imagen principal
+  if (projectData.primera_imatge?.src) {
+    const header = document.createElement('div');
+    header.className = 'project-header';
+    
+    const img = document.createElement('img');
+    img.src = `/data/${projectData.slug}/${projectData.primera_imatge.src}`;
+    const titleText = projectData.titulo || projectData.slug || '';
+    img.alt = `${titleText} portada`;
+    
+    header.appendChild(img);
+    body.appendChild(header);
+  }
+  
+  // Project body
+  const projectBody = document.createElement('div');
+  projectBody.className = 'project-body';
+  
+  // Descripción
+  if (projectData.descripcion) {
+    const desc = document.createElement('div');
+    desc.className = 'project-description';
 
-  function tryLoadNext() {
-    let extIndex = 0;
+    const descData = projectData.descripcion;
 
-    function tryNextExtension() {
-      if (extIndex >= extensions.length) {
-        // No se encontró ninguna imagen → fin
-        addScrollMargin(); // ← ahora sí es el final
-        gallery.style.visibility = "visible";
-        return;
+    if (descData.titulo) {
+      const heading = document.createElement('h2');
+      if (descData.link) {
+        const anchor = document.createElement('a');
+        anchor.href = descData.link;
+        anchor.textContent = descData.titulo;
+        anchor.target = '_blank';
+        heading.appendChild(anchor);
+      } else {
+        heading.textContent = descData.titulo;
       }
-
-      const ext = extensions[extIndex];
-      const testImg = new Image();
-      testImg.onload = () => {
-        const img = document.createElement("img");
-        img.src = testImg.src;
-        img.classList.add("profilePic");
-        gallery.appendChild(img);
-        i++;
-        tryLoadNext();
-      };
-      testImg.onerror = () => {
-        extIndex++;
-        tryNextExtension();
-      };
-      testImg.src = `img/${i}.${ext}`;
+      desc.appendChild(heading);
     }
 
-    tryNextExtension();
+    const paragraphs = Array.isArray(descData.texto)
+      ? descData.texto
+      : Array.isArray(descData.es)
+        ? descData.es
+        : [];
+
+    paragraphs.forEach((paragraph) => {
+      const p = document.createElement('p');
+      p.innerHTML = paragraph;
+      desc.appendChild(p);
+    });
+
+    projectBody.appendChild(desc);
   }
+  
+  // Metadata
+  const showMeta = projectData.configuracion?.mostrar_meta !== false;
+  if (showMeta && (projectData.tipo_proyecto || projectData.fecha || projectData.ubicacion || projectData.creditos)) {
+    const meta = document.createElement('div');
+    meta.className = 'project-meta';
+    
+    const ul = document.createElement('ul');
+    
+    // Tipo de proyecto
+    if (projectData.tipo_proyecto) {
+      const li = document.createElement('li');
+      li.textContent = projectData.tipo_proyecto;
+      ul.appendChild(li);
+    }
+    
+    // Fecha
+    if (projectData.fecha) {
+      const li = document.createElement('li');
+      li.innerHTML = `${projectData.fecha.mes} <span class="meta">${projectData.fecha.anio}</span>`;
+      ul.appendChild(li);
+    }
+    
+    // Ubicación
+    if (projectData.ubicacion) {
+      const li = document.createElement('li');
+      li.textContent = projectData.ubicacion;
+      ul.appendChild(li);
+    }
+    
+    // Créditos
+    if (projectData.creditos) {
+      projectData.creditos.forEach(credito => {
+        const li = document.createElement('li');
+        
+        if (credito.link) {
+          li.innerHTML = `<a href="${credito.link}">${credito.nombre}</a>`;
+        } else {
+          li.textContent = credito.nombre;
+        }
+        
+        if (credito.rol) {
+          li.innerHTML += ` <span class="meta">${credito.rol}</span>`;
+        }
+        
+        ul.appendChild(li);
+      });
+    }
+    
+    meta.appendChild(ul);
+    projectBody.appendChild(meta);
+  }
+  
+  body.appendChild(projectBody);
+  
+  // Galería
+  if (projectData.imatges && projectData.imatges.length > 0) {
+    const gallery = document.createElement('div');
+    gallery.className = 'project-gallery';
+    
+    projectData.imatges.forEach((imgData, idx) => {
+      const normalized = normalizeImageEntry(imgData);
+      if (!normalized) return;
+      const img = document.createElement('img');
+      img.src = `/data/${projectData.slug}/${normalized.src}`;
+      const titleText = projectData.titulo || projectData.slug || 'imagen';
+      img.alt = `${titleText} imagen ${idx + 1}`;
+      img.loading = 'lazy';
+      
+      gallery.appendChild(img);
+    });
+    
+    body.appendChild(gallery);
+  }
+}
 
-  addScrollMargin();
-  tryLoadNext();
-
-  // También activamos resize para márgenes
-  window.addEventListener("resize", () => {
-    document
-      .querySelectorAll(".galleryMargin")
-      .forEach((m) => (m.style.width = `${calculateMargin()}px`));
-  });
+function renderDiarioProject(projectData) {
+  const body = document.body;
+  body.innerHTML = ''; // Limpiar
+  
+  const gallery = document.createElement('div');
+  gallery.className = 'diario-gallery';
+  
+  if (projectData.imatges && projectData.imatges.length > 0) {
+    projectData.imatges.forEach((imgData, idx) => {
+      const normalized = normalizeImageEntry(imgData);
+      if (!normalized) return;
+      const img = document.createElement('img');
+      img.src = `/data/${projectData.slug}/${normalized.src}`;
+      const titleText = projectData.titulo || projectData.slug || 'imagen';
+      img.alt = `${titleText} imagen ${idx + 1}`;
+      img.loading = 'lazy';
+      
+      gallery.appendChild(img);
+    });
+  }
+  
+  body.appendChild(gallery);
 }

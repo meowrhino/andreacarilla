@@ -1,0 +1,50 @@
+{
+  "slug": "dearxx",
+  "titulo": "dear xx",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": "dear xx portada"
+  },
+  "descripcion": {
+    "titulo": "DEAR XX. ARE YOU MAD AT ME? HIFAS STUDIO",
+    "link": "https://www.instagram.com/hifas.studio/",
+    "texto": []
+  },
+  "tipo_proyecto": "Look Book",
+  "ubicacion": "Barcelona",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "Ana Montejo",
+      "rol": "STYLIST",
+      "link": "https://www.instagram.com/_ktana/"
+    },
+    {
+      "nombre": "Luz Oscura",
+      "rol": "STYLIST",
+      "link": "https://www.instagram.com/luz.os.cura/"
+    },
+    {
+      "nombre": "HIFAS STUDIO",
+      "rol": "HIFAS STUDIO",
+      "link": "https://www.instagram.com/hifas.studio/"
+    }
+  ],
+  "imatges": [
+    "./img/10.jpg",
+    "./img/11.jpg",
+    "./img/12.jpg",
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg",
+    "./img/6.jpg",
+    "./img/7.jpg",
+    "./img/8.jpg",
+    "./img/9.jpg"
+  ]
+}

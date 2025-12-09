@@ -1,0 +1,222 @@
+{
+  "projectes_visibles": [
+    {
+      "slug": "sangreYSal",
+      "name": "sangre y sal",
+      "category": "album design",
+      "visible": true
+    },
+    {
+      "slug": "testigoDelPero",
+      "name": "alejandra grillo",
+      "category": "artist image",
+      "visible": true
+    },
+    {
+      "slug": "aines",
+      "name": "aines",
+      "category": "artist image",
+      "visible": true
+    },
+    {
+      "slug": "stFrances",
+      "name": "st. frances",
+      "category": "artist image",
+      "visible": true
+    },
+    {
+      "slug": "8kito",
+      "name": "8kito",
+      "category": "artist image",
+      "visible": true
+    },
+    {
+      "slug": "ariezz",
+      "name": "ariezz",
+      "category": "artist image",
+      "visible": true
+    },
+    {
+      "slug": "magicalTheys",
+      "name": "ali arévalo",
+      "category": "artist image",
+      "visible": true
+    },
+    {
+      "slug": "estrellaFugaz",
+      "name": "ela rea",
+      "category": "artist image",
+      "visible": true
+    },
+    {
+      "slug": "quienNoCorre",
+      "name": "quien no corre vuela",
+      "category": "editorial",
+      "visible": true
+    },
+    {
+      "slug": "arcEnPix",
+      "name": "archivo en pixel",
+      "category": "editorial",
+      "visible": true
+    },
+    {
+      "slug": "blackCover",
+      "name": "black cover",
+      "category": "editorial",
+      "visible": true
+    },
+    {
+      "slug": "vozMal",
+      "name": "performance jaume ferrete",
+      "category": "eventos",
+      "visible": true
+    },
+    {
+      "slug": "fleaMarket",
+      "name": "flea market",
+      "category": "eventos",
+      "visible": true
+    },
+    {
+      "slug": "tawla",
+      "name": "tawla cenitas club",
+      "category": "eventos",
+      "visible": true
+    },
+    {
+      "slug": "henshin",
+      "name": "henshin concert",
+      "category": "eventos",
+      "visible": true
+    },
+    {
+      "slug": "highTide",
+      "name": "high tide",
+      "category": "fashion story",
+      "visible": true
+    },
+    {
+      "slug": "waiting",
+      "name": "waiting the rain",
+      "category": "fashion story",
+      "visible": true
+    },
+    {
+      "slug": "working",
+      "name": "working on the periphery",
+      "category": "fashion story",
+      "visible": true
+    },
+    {
+      "slug": "lostLetter",
+      "name": "lost letter for a tale thief",
+      "category": "fashion story",
+      "visible": true
+    },
+    {
+      "slug": "recogeteme",
+      "name": "recogeteme el pelo",
+      "category": "investigación",
+      "visible": true
+    },
+    {
+      "slug": "dearxx",
+      "name": "dear xx. are you mad at me?",
+      "category": "look book",
+      "visible": true
+    },
+    {
+      "slug": "diario",
+      "name": "diario",
+      "category": "personal",
+      "visible": true
+    },
+    {
+      "slug": "spinCol",
+      "name": "spin-collection",
+      "category": "product",
+      "visible": true
+    },
+    {
+      "slug": "oneByOne",
+      "name": "one by one",
+      "category": "fashion story",
+      "visible": true
+    }
+  ],
+  "gallerySets": [
+    [
+      {
+        "src": "_portada/1/1_1.webp",
+        "desktopStyle": { "top": 10, "left": 5, "index": 1, "scale": 270 },
+        "mobileStyle": { "top": 10, "left": 5, "index": 0, "scale": 148 },
+        "url": "ariezz"
+      },
+      {
+        "src": "_portada/1/1_2.webp",
+        "desktopStyle": { "bottom": 10, "left": 45, "index": 2, "scale": 151 },
+        "mobileStyle": { "bottom": 0, "left": 50, "index": 1, "scale": 67 },
+        "url": "estrellaFugaz"
+      },
+      {
+        "src": "_portada/1/1_3.webp",
+        "desktopStyle": { "top": 5, "right": 25, "index": 2, "scale": 117 },
+        "mobileStyle": { "top": 40, "right": 5, "index": 1, "scale": 81 },
+        "url": "diario"
+      },
+      {
+        "src": "_portada/1/1_4.webp",
+        "desktopStyle": { "top": 25, "right": 2, "index": 1, "scale": 181 },
+        "mobileStyle": { "bottom": 5, "left": 12, "index": 0, "scale": 115 },
+        "url": "lostLetter"
+      }
+    ],
+    [
+      {
+        "src": "_portada/2/2_1.webp",
+        "desktopStyle": { "top": 30, "left": 5,  "index": 2, "scale": 113 },
+        "mobileStyle":  { "bottom": 0, "left": 20, "index": 0, "scale": 63 },
+        "url": "working"
+      },
+      {
+        "src": "_portada/2/2_2.webp",
+        "desktopStyle": { "bottom": 10, "left": 15, "index": 2, "scale": 119 },
+        "mobileStyle":  { "bottom": 10, "right": 10, "index": 2, "scale": 95 },
+        "url": "waiting"
+      },
+      {
+        "src": "_portada/2/2_3.webp",
+        "desktopStyle": { "top": 5, "left": 20, "index": 1, "scale": 204 },
+        "mobileStyle":  { "top": 45, "left": 5, "index": 1, "scale": 79 },
+        "url": "lostLetter"
+      },
+      {
+        "src": "_portada/2/2_4.webp",
+        "desktopStyle": { "bottom": 0, "right": 5, "index": 0, "scale": 280 },
+        "mobileStyle":  { "top": 10, "right": 5, "index": 0, "scale": 165 },
+        "url": "8kito"
+      }
+    ],  
+    [
+      {
+        "src": "_portada/3/3_1.webp",
+        "desktopStyle": { "top": 5, "left": 5,  "index": 2, "scale": 235 },
+        "mobileStyle":  { "top": 5, "left": 10, "index": 1, "scale": 117 },
+        "url": "magicalTheys"
+      },
+      {
+        "src": "_portada/3/3_2.webp",
+        "desktopStyle": { "bottom": 10, "right": 20, "index": 1, "scale": 178 },
+        "mobileStyle":  { "top": 50, "right": 5,  "index": 0, "scale": 96 },
+        "url": "diario"
+      },
+      {
+        "src": "_portada/3/3_3.webp",
+        "desktopStyle": { "top": 20, "right": 10, "index": 2, "scale": 107 },
+        "mobileStyle":  { "bottom": 5, "left": 20, "index": 0, "scale": 64 },
+        "url": "stFrances"
+      }
+    ]
+  ]
+}

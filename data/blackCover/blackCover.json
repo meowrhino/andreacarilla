@@ -1,0 +1,33 @@
+{
+  "slug": "blackCover",
+  "titulo": "black cover",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": ""
+  },
+  "descripcion": {
+    "titulo": "BLACK COVER.",
+    "link": "",
+    "texto": []
+  },
+  "tipo_proyecto": "EDITORIAL",
+  "ubicacion": "Barcelona",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "maquetación, PHOTOGRAPHY",
+      "link": ""
+    },
+    {
+      "nombre": "quien no corre, vuela",
+      "rol": "editorial",
+      "link": "https://www.instagram.com/quien.nocorrevuela"
+    }
+  ],
+  "imatges": [
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "slug": "arcEnPix",
+  "titulo": "archivo en pixel",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": ""
+  },
+  "descripcion": {
+    "titulo": "ARCHIVO EN PIXEL",
+    "link": "https://quiennocorrevuela.bigcartel.com/product/archivo-en-pixel",
+    "texto": [
+      "\"Archivo en Pixel\" es un fanzine que recopila el rastro fotográfico almacenado en el móvil de Andrea durante 2019. Imágenes capturadas, enviadas, reenviadas, recortadas, ampliadas y descargadas, la única copia que conserva, todas en baja resolución. A partir de este archivo digital efímero, la autora da forma a una narrativa visual que reconstruye sus vivencias de aquel año, en un proceso de autoconocimiento y revalorización de la imagen pobre. Un gesto que otorga validez a lo pixelado, reivindicándolo como parte del lenguaje fotográfico.",
+      "Una memoria difusa, como estas imágenes: fragmentadas y borrosas."
+    ]
+  },
+  "tipo_proyecto": "editorial",
+  "ubicacion": "Barcelona",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "PHOTOGRAPHY, MAQUETACIÓN",
+      "link": ""
+    },
+    {
+      "nombre": "quien no corre, vuela",
+      "rol": "editorial",
+      "link": "https://quiennocorrevuela.bigcartel.com/"
+    }
+  ],
+  "imatges": [
+    "./img/10.jpg",
+    "./img/11.jpg",
+    "./img/12.jpg",
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg",
+    "./img/6.jpg",
+    "./img/7.jpg",
+    "./img/8.jpg",
+    "./img/9.jpg"
+  ]
+}

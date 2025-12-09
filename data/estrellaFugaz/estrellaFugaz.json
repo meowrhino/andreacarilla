@@ -1,0 +1,33 @@
+{
+  "slug": "estrellaFugaz",
+  "titulo": "estrella fugaz",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": "estrella fugaz portada"
+  },
+  "descripcion": {
+    "titulo": "ESTRELLA FUGAZ. ELA REA",
+    "link": "https://www.instagram.com/elaxrea/",
+    "texto": []
+  },
+  "tipo_proyecto": "Artist Image",
+  "ubicacion": "Barcelona",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "ElaRea",
+      "rol": "creative direction stylist",
+      "link": "https://www.instagram.com/elaxrea/"
+    }
+  ],
+  "imatges": [
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "slug": "sangreYSal",
+  "titulo": "sangre y sal",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": ""
+  },
+  "descripcion": {
+    "titulo": "SANGRE Y SAL.",
+    "link": "https://www.instagram.com/vangoura_/",
+    "texto": []
+  },
+  "tipo_proyecto": "album design",
+  "ubicacion": "Barcelona",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "PHOTOGRAPHY, CREATIVE DIRECTION, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "Marta Coder",
+      "rol": "ART DIRECTION",
+      "link": "https://www.instagram.com/martacoder/"
+    },
+    {
+      "nombre": "Adrian Lorca",
+      "rol": "STYLIST",
+      "link": "https://www.instagram.com/_adrianlorca/"
+    },
+    {
+      "nombre": "Sofia Milena",
+      "rol": "PHOTO ASISTANT",
+      "link": "https://www.instagram.com/sofimezaaa/"
+    }
+  ],
+  "imatges": [
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg"
+  ]
+}

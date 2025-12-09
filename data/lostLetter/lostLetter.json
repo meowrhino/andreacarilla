@@ -1,0 +1,53 @@
+{
+  "slug": "lostLetter",
+  "titulo": "lost letter for a tale thief",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": ""
+  },
+  "descripcion": {
+    "titulo": "LOST LETTER FOR A TALE THIEF. INDIANA PUMAR",
+    "link": "https://www.instagram.com/indianapumar",
+    "texto": []
+  },
+  "tipo_proyecto": "FASHION story",
+  "ubicacion": "Barcelona",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "INDIANA PUMAR",
+      "rol": "fashion design",
+      "link": "https://www.instagram.com/indianapumar"
+    },
+    {
+      "nombre": "Tobias Kisielnicki",
+      "rol": "STYLIST",
+      "link": "https://www.instagram.com/tobias.kisielnicki/"
+    },
+    {
+      "nombre": "DANI ARIAS",
+      "rol": "MAKE UP & HAIR",
+      "link": "https://www.instagram.com/dani.ariasmk/"
+    },
+    {
+      "nombre": "georgina zab",
+      "rol": "model",
+      "link": "https://www.instagram.com/georginazab/"
+    }
+  ],
+  "imatges": [
+    "./img/10.jpg",
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg",
+    "./img/6.jpg",
+    "./img/7.jpg",
+    "./img/8.jpg",
+    "./img/9.jpg"
+  ]
+}

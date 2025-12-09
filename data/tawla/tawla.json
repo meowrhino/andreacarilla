@@ -1,0 +1,45 @@
+{
+  "slug": "tawla",
+  "titulo": "tawla",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": "aines portada"
+  },
+  "descripcion": {
+    "titulo": "TAWLA CENITAS CLUB",
+    "link": "https://www.instagram.com/tawla.cenitasclub/",
+    "texto": []
+  },
+  "tipo_proyecto": "eventos",
+  "ubicacion": "granada",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "nuryn salem",
+      "rol": "founder, producción",
+      "link": "https://www.instagram.com/nurynsalem/"
+    }
+  ],
+  "imatges": [
+    "./img/10.jpg",
+    "./img/11.jpg",
+    "./img/12.jpg",
+    "./img/13.jpg",
+    "./img/14.jpg",
+    "./img/15.jpg",
+    "./img/16.jpg",
+    "./img/17.jpg",
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg",
+    "./img/6.jpg",
+    "./img/7.jpg",
+    "./img/8.jpg",
+    "./img/9.jpg"
+  ]
+}

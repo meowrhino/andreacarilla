@@ -1,0 +1,32 @@
+{
+  "slug": "stFrances",
+  "titulo": "st frances",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": ""
+  },
+  "descripcion": {
+    "titulo": "ST. FRANCES. FRANCES RIBES RENSHAW",
+    "link": "https://www.instagram.com/__st.frances/?hl=es",
+    "texto": []
+  },
+  "tipo_proyecto": "Artist Image",
+  "ubicacion": "bristol",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "st. frances",
+      "rol": "creative direction, artist, musician",
+      "link": "https://www.instagram.com/__st.frances/"
+    }
+  ],
+  "imatges": [
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg"
+  ]
+}

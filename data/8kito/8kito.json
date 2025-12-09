@@ -1,0 +1,30 @@
+{
+  "slug": "8kito",
+  "titulo": "8kito",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": "8kito portada"
+  },
+  "descripcion": {
+    "titulo": "8KITO",
+    "link": "https://www.instagram.com/8ki.lat/",
+    "texto": []
+  },
+  "tipo_proyecto": "Artist Image",
+  "ubicacion": "Barcelona",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "ART DIRECTION, PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "Sol Ruiz",
+      "rol": "STYLIST",
+      "link": "https://www.instagram.com/solruizbastida"
+    }
+  ],
+  "imatges": [
+    "./img/2.jpg"
+  ]
+}

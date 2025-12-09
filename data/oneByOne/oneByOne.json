@@ -1,0 +1,46 @@
+{
+  "slug": "oneByOne",
+  "titulo": "one by one",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": ""
+  },
+  "descripcion": {
+    "titulo": "ONE BY ONE. HIFAS STUDIO",
+    "link": "https://www.instagram.com/hifas.studio/",
+    "texto": []
+  },
+  "tipo_proyecto": "fashion story",
+  "ubicacion": "Barcelona",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "Ana Montejo",
+      "rol": "STYLIST",
+      "link": "https://www.instagram.com/_ktana/"
+    },
+    {
+      "nombre": "Ali Arévalo",
+      "rol": "MODEL",
+      "link": "https://www.instagram.com/arevalo_ali_/"
+    },
+    {
+      "nombre": "HIFAS STUDIO",
+      "rol": "HIFAS STUDIO",
+      "link": "https://www.instagram.com/hifas.studio/"
+    }
+  ],
+  "imatges": [
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg",
+    "./img/6.jpg",
+    "./img/7.jpg",
+    "./img/8.jpg"
+  ]
+}

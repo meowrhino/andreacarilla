@@ -1,140 +1,193 @@
-# Portfolio de Andrea Carilla — Guía de mantenimiento
+# andrea carilla - web con estructura json
 
-Sitio **estático**, fácil de mantener y extender. HTML + CSS + **JS vanilla**. Un pequeño “builder” inyecta navegación, bio y galerías por convención de carpetas. Este documento explica **cómo está formada la web** y **cómo añadir proyectos**.
+## descripción
 
----
+web de andrea carilla con estructura basada en json. los proyectos se cargan dinámicamente desde archivos json mediante javascript.
 
-## 1. Resumen
-- **Stack:** HTML, CSS, JavaScript puro (sin React, sin bundlers).
-- **Arquitectura:** `index.html` (home), páginas de proyecto en `proyectos/<slug>/<slug>.html`.
-- **Builder:** `js/components.js` y utilidades en `scripts/*.js` (inyectan nav, bio, botón Home y gestionan galerías).
-- **Galerías:** imágenes numeradas; se **autodetectan** extensiones y fin de secuencia para evitar parpadeos.
-
----
-
-## 2. Estructura de carpetas
+## estructura
 
 ```
-/ (raíz del proyecto)
-├─ index.html                    # Home
-├─ css/
-│  └─ style.css
-├─ js/
-│  ├─ components.js             # Inyección de nav, popup bio, helpers de galería
-│  └─ main.js                   # Inicializaciones generales
-├─ scripts/                     # (opcional) homeBtn.js, gallery.js, etc.
-└─ proyectos/
-   ├─ diario/
-   │  ├─ diario.html            # Página del proyecto
-   │  └─ img/                   # Imágenes numeradas (1.jpg, 2.jpg, ...)
-   ├─ blackCover/
-   │  ├─ blackCover.html
-   │  └─ img/
-   └─ ...
+andreacarilla_web/
+├── index.html              # página principal (home)
+├── proyecto.html           # página única para todos los proyectos
+├── css/
+│   └── style.css           # estilos de la web
+├── js/
+│   ├── main.js             # javascript principal
+│   └── components.js       # componentes y renderizado
+├── _portada/               # imágenes de la galería home
+│   ├── 1/
+│   ├── 2/
+│   └── 3/
+└── data/
+    ├── home.json           # configuración global
+    ├── 8kito/
+    │   ├── 8kito.json      # datos del proyecto
+    │   └── img/            # imágenes del proyecto
+    ├── aines/
+    │   ├── aines.json
+    │   └── img/
+    └── ...                 # 24 proyectos en total
 ```
 
-> Puede existir `/_portada/<slug>/…` para imágenes de portada que se muestran en la home.
+## funcionamiento
 
----
+### página home (index.html)
 
-## 3. Plantilla de página de proyecto
+- galería de imágenes posicionadas absolutamente
+- lista de proyectos con filtros por categoría
+- navegación entre 3 sets de galería
+- botón "refrescar" que mezcla aleatoriamente los proyectos
 
-Crea un HTML por proyecto en `proyectos/<slug>/<slug>.html`. Cambia `data-slug` al nombre de la carpeta.
+### página de proyecto (proyecto.html)
 
-```html
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <title>Andrea Carilla — Proyecto</title>
-  <link rel="stylesheet" href="/css/style.css" />
-</head>
-<body data-page-type="project" data-slug="miProyecto">
-  <main id="project-root">
-    <h1 id="project-title"></h1>
-    <div id="gallery" class="gallery hidden"></div>
-  </main>
+un único archivo html que:
+1. lee el parámetro `slug` de la url: `proyecto.html?slug=8kito`
+2. carga el json desde `/data/{slug}/{slug}.json`
+3. renderiza dinámicamente el contenido según los campos presentes
+4. soporta dos tipos de layout:
+   - **proyecto**: con header, descripción, metadata y galería
+   - **diario**: solo galería de imágenes
 
-  <script src="/js/components.js"></script>
-  <script src="/js/projects.js"></script> <!-- opcional, si usas JSON -->
-  <script src="/js/main.js"></script>
-</body>
-</html>
-```
+### estructura json de proyectos
 
----
+todos los campos son opcionales excepto `slug`:
 
-## 4. Cómo funciona la galería
-
-- El builder carga imágenes numeradas: `proyectos/<slug>/img/1.jpg`, `2.jpg`, … (también `.png`/`.jpeg`).
-- Prueba extensiones en orden (`.jpg`, `.png`, …) y detiene al no encontrar la siguiente.
-- Muestra el contenedor de galería **después** de resolver la secuencia (sin parpadeos).
-- Portadas opcionales en `/_portada/<slug>/1.jpg`.
-
----
-
-## 5. Añadir un proyecto nuevo (modo simple)
-
-1. Crear carpeta `proyectos/<slug>/`.
-2. Crear `proyectos/<slug>/<slug>.html` usando la plantilla (poner `data-slug="<slug>"`).
-3. Subir las fotos en `proyectos/<slug>/img/` como `1.jpg`, `2.jpg`, `3.jpg`, …
-4. (Opcional) añadir portada en `/_portada/<slug>/1.jpg`.
-5. Subir cambios. **Listo.** No hace falta tocar JS.
-
----
-
-## 6. (Opcional) JSON para autogenerar la home
-
-Si quieres que la home muestre tarjetas automáticamente, añade:
-
-- `data/projects.json`
-- `js/projects.js` (incluido de ejemplo en este paquete)
-
-### `data/projects.json` (ejemplo)
 ```json
 {
-  "projects": [
+  "slug": "8kito",
+  "titulo": "8kito",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "size": 100,
+    "alt": "texto alternativo"
+  },
+  "descripcion": {
+    "es": ["párrafo 1", "párrafo 2"]
+  },
+  "tipo_proyecto": "artist image",
+  "fecha": {
+    "mes": "diciembre",
+    "anio": "2024"
+  },
+  "ubicacion": "barcelona",
+  "creditos": [
     {
-      "slug": "diario",
-      "title": "Diario",
-      "summary": "Serie documental",
-      "cover": "/_portada/diario/1.jpg"
-    },
-    {
-      "slug": "blackCover",
-      "title": "Black Cover",
-      "cover": "/_portada/blackCover/1.jpg"
+      "nombre": "andrea carilla",
+      "rol": "photography, retouch",
+      "link": ""
     }
-  ]
+  ],
+  "imatges": [
+    "./img/2.jpg"
+  ],
+  "configuracion": {
+    "mostrar_header": true,
+    "mostrar_meta": true,
+    "tipo_layout": "proyecto"
+  }
 }
 ```
 
-### Hook en `index.html`
-```html
-<section id="projects-list" class="grid"></section>
-<script src="/js/projects.js"></script>
+las entradas de `imatges` se pasan solo como rutas (strings); los campos antiguos `size` y `alt` no se usan en la galería (el `alt` queda vacío).
+
+## características
+
+### renderizado dinámico
+
+el javascript (`components.js`) lee el json y renderiza:
+- imagen principal (si existe)
+- descripción con html (si existe)
+- metadata estructurada (tipo, fecha, ubicación, créditos)
+- galería de imágenes
+
+### casos especiales
+
+- **proyecto "diario"**: sin header ni metadata, solo galería
+- **descripciones con html**: soporta enlaces, párrafos con estilos
+- **múltiples colaboradores**: array flexible de créditos
+
+### ventajas
+
+1. **mantenimiento fácil**: editar un json es más simple que html
+2. **consistencia**: todos los proyectos siguen la misma estructura
+3. **flexibilidad**: campos opcionales permiten diferentes tipos de proyectos
+4. **escalabilidad**: fácil añadir nuevos campos sin romper proyectos existentes
+5. **organización**: cada proyecto tiene su carpeta con json e imágenes
+
+## cómo usar
+
+### servidor local
+
+para probar la web localmente, necesitas un servidor http:
+
+```bash
+# con python 3
+python3 -m http.server 8000
+
+# con node.js
+npx http-server -p 8000
+
+# luego abrir: http://localhost:8000
 ```
 
----
+### añadir un nuevo proyecto
 
-## 7. Reglas y buenas prácticas
-- Cargar imágenes con `loading="lazy"` y `decoding="async"`.
-- Botón “home” visible solo fuera de la home (`data-page-type !== "home"`).
-- Mantener nombres de carpetas/archivos limpios y consistentes con el `slug`.
-- Evitar parpadeos ocultando la galería hasta que esté montada.
+1. crear carpeta `data/nuevo-proyecto/`
+2. crear archivo `data/nuevo-proyecto/nuevo-proyecto.json` con los datos
+3. crear carpeta `data/nuevo-proyecto/img/` y copiar imágenes
+4. añadir entrada en `data/home.json` en `projectes_visibles`:
+```json
+{
+  "slug": "nuevo-proyecto",
+  "name": "nombre legible",
+  "category": "categoría",
+  "visible": true
+}
+```
+5. añadir entrada en `js/main.js` en el array `projects`:
+```javascript
+{
+  name: "nombre del proyecto",
+  category: "categoría",
+  status: true,
+  url: "nuevo-proyecto"
+}
+```
 
----
+### modificar un proyecto
 
-## 8. Checklist para Andrea
-- [ ] Carpeta creada en `proyectos/<slug>/`
-- [ ] HTML principal en `proyectos/<slug>/<slug>.html` con `data-slug`
-- [ ] Fotos numeradas en `proyectos/<slug>/img/`
-- [ ] (Opcional) portada en `/_portada/<slug>/1.jpg`
-- [ ] (Opcional) entrada en `data/projects.json` si usas la home automática
+1. editar el archivo json en `data/{slug}/{slug}.json`
+2. reemplazar imágenes en `data/{slug}/img/` si es necesario
+3. recargar la página
 
----
+### ocultar un proyecto
 
-## 9. Solución de problemas
-- **No aparece la galería:** revisa `data-slug` y que exista `img/1.jpg`.
-- **Portada rota:** revisa la ruta de `/_portada/<slug>/1.jpg`.
-- **Home vacía (usando JSON):** valida `data/projects.json` (puedes usar jsonlint.com) y que se sirva desde `/data/`.
+en `data/home.json`, cambiar:
+```json
+"visible": true
+```
+por:
+```json
+"visible": false
+```
+
+## compatibilidad
+
+- funciona igual que la versión html original
+- mantiene todos los estilos css existentes
+- preserva la funcionalidad de navegación y filtros
+- compatible con todos los navegadores modernos
+
+## notas técnicas
+
+- los json están en `data/{slug}/` junto con sus imágenes
+- el javascript usa es6 modules (`type="module"`)
+- las rutas son absolutas desde la raíz (`/css/`, `/data/`, etc.)
+- un único `proyecto.html` para todos los proyectos
+
+## créditos
+
+- **fotografía y dirección creativa**: andrea carilla
+- **desarrollo web**: meowrhino
+- **estructura json**: basada en el sistema de miranda perez hita

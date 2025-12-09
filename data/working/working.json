@@ -1,0 +1,41 @@
+{
+  "slug": "working",
+  "titulo": "working on the periphery",
+  "primera_imatge": {
+    "src": "./img/1.jpg",
+    "alt": ""
+  },
+  "descripcion": {
+    "titulo": "WORKING ON THE PERIPHERY.",
+    "link": "",
+    "texto": []
+  },
+  "tipo_proyecto": "fashion story",
+  "ubicacion": "granada",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "ART DIRECTION, PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "anna hope",
+      "rol": "stylist",
+      "link": "https://www.instagram.com/annahope._/"
+    },
+    {
+      "nombre": "isra",
+      "rol": "model",
+      "link": "https://www.instagram.com/amanda.huevos/"
+    },
+    {
+      "nombre": "Yanna Chach",
+      "rol": "makeup, hair",
+      "link": ""
+    }
+  ],
+  "imatges": [
+    "./img/2.jpg",
+    "./img/3.jpg"
+  ]
+}

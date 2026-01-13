@@ -19,7 +19,7 @@ export function injectComponents() {
             articula entre la moda, el diario personal y la fotografía robada, tensionando los límites entre lo
             documental y lo construido. </p>
         <p>​​Es cofundadora de la editorial de autoedición <a
-            href="https://quiennocorrevuela.bigcartel.com/" target="_blank">Quien no corre, vuela</a>, desde donde ha publicado
+            href="https://quiennocorrevuela.bigcartel.com/" target="_blank" rel="noopener noreferrer">Quien no corre, vuela</a>, desde donde ha publicado
             <i>archivo en pixel</i> y <i>no time left for square</i>, investigando nuevas formas de narrar, publicar y distribuir
             fotografía contemporánea desde los márgenes.</p>
         <p>Su trabajo se construye desde la serialidad y la repetición: las imágenes no funcionan de forma aislada,
@@ -28,9 +28,9 @@ export function injectComponents() {
             emociona. Una mirada crítica, permeable y radicalmente encarnada en lo cotidiano.</p>
         <div class="footer">
             <a href="mailto:carillagonzalezandrea@gmail.com">carillagonzalezandrea@gmail.com</a>
-            <a href="https://www.instagram.com/andreacarilla/" target="_blank">@andreacarilla</a>
+            <a href="https://www.instagram.com/andreacarilla/" target="_blank" rel="noopener noreferrer">@andreacarilla</a>
             <span style="position:absolute; bottom:1rem;">
-                web: <a href="https://meowrhino.github.io/becasDigMeow/" target="_blank">meowrhino</a>
+                web: <a href="https://meowrhino.github.io/becasDigMeow/" target="_blank" rel="noopener noreferrer">meowrhino</a>
             </span>
         </div>
     </div>
@@ -67,6 +67,130 @@ export function injectComponents() {
   }, 0);
 }
 
+export function normalizeCategory(value) {
+  if (!value) return '';
+  const normalized = value.trim().replace(/\s+/g, ' ').toLowerCase();
+  if (normalized === 'evento') return 'eventos';
+  if (normalized === 'producto') return 'product';
+  if (normalized === 'investigacion') return 'investigación';
+  return normalized;
+}
+
+function normalizeWhitespace(value) {
+  return value.replace(/\s+/g, ' ').trim();
+}
+
+function stripHtml(value) {
+  return value.replace(/<[^>]*>/g, '');
+}
+
+function truncate(value, maxLength) {
+  if (value.length <= maxLength) return value;
+  return value.slice(0, maxLength - 3).trimEnd() + '...';
+}
+
+function setMetaTag(attr, key, content) {
+  if (!content) return;
+  let tag = document.querySelector(`meta[${attr}="${key}"]`);
+  if (!tag) {
+    tag = document.createElement('meta');
+    tag.setAttribute(attr, key);
+    document.head.appendChild(tag);
+  }
+  tag.setAttribute('content', content);
+}
+
+function setLinkTag(rel, href) {
+  if (!href) return;
+  let tag = document.querySelector(`link[rel="${rel}"]`);
+  if (!tag) {
+    tag = document.createElement('link');
+    tag.setAttribute('rel', rel);
+    document.head.appendChild(tag);
+  }
+  tag.setAttribute('href', href);
+}
+
+function applyMeta({ title, description, url, imageUrl, type }) {
+  if (title) document.title = title;
+
+  setMetaTag('name', 'description', description);
+  setMetaTag('property', 'og:title', title);
+  setMetaTag('property', 'og:description', description);
+  setMetaTag('property', 'og:type', type);
+  setMetaTag('property', 'og:url', url);
+  if (imageUrl) setMetaTag('property', 'og:image', imageUrl);
+
+  setMetaTag('name', 'twitter:card', imageUrl ? 'summary_large_image' : 'summary');
+  setMetaTag('name', 'twitter:title', title);
+  setMetaTag('name', 'twitter:description', description);
+  if (imageUrl) setMetaTag('name', 'twitter:image', imageUrl);
+
+  setLinkTag('canonical', url);
+}
+
+export function applyHomeMeta({ title, description, imageUrl }) {
+  const url = window.location.origin + window.location.pathname;
+  applyMeta({
+    title,
+    description,
+    url,
+    imageUrl,
+    type: 'website',
+  });
+}
+
+function buildProjectDescription(projectData) {
+  const descData = projectData.descripcion;
+  let candidate = '';
+
+  if (descData) {
+    const paragraphs = Array.isArray(descData.texto)
+      ? descData.texto
+      : Array.isArray(descData.es)
+        ? descData.es
+        : [];
+    if (paragraphs.length > 0) {
+      candidate = paragraphs[0];
+    } else if (descData.titulo) {
+      candidate = descData.titulo;
+    }
+  }
+
+  if (!candidate) {
+    candidate = projectData.titulo || projectData.slug || 'Proyecto';
+  }
+
+  const cleaned = normalizeWhitespace(stripHtml(candidate));
+  return truncate(cleaned, 160);
+}
+
+function resolveAssetUrl(path) {
+  if (!path) return '';
+  return new URL(path, window.location.href).href;
+}
+
+function applyProjectMeta(projectData, titleText) {
+  const description = buildProjectDescription(projectData);
+  const base = `data/${projectData.slug}/`;
+  let imagePath = projectData.primera_imatge?.src || '';
+
+  if (!imagePath && Array.isArray(projectData.imatges) && projectData.imatges.length > 0) {
+    const normalized = normalizeImageEntry(projectData.imatges[0]);
+    if (normalized?.src) imagePath = normalized.src;
+  }
+
+  const imageUrl = imagePath ? resolveAssetUrl(`${base}${imagePath}`) : '';
+
+  applyMeta({
+    title: titleText,
+    description,
+    url: window.location.href,
+    imageUrl,
+    type: 'website',
+  });
+}
+
 // Obtener slug de la URL
 function getSlugFromURL() {
   const params = new URLSearchParams(window.location.search);
@@ -97,19 +221,17 @@ export async function renderProject() {
     if (!response.ok) throw new Error(`No se pudo cargar ${slug}.json`);
     
     const projectData = await response.json();
-    if (projectData.titulo) {
-      document.title = projectData.titulo;
-    } else if (projectData.slug) {
-      document.title = projectData.slug;
-    }
+    const titleText = projectData.titulo || projectData.slug || 'proyecto';
+    document.title = titleText;
+    applyProjectMeta(projectData, titleText);
     
     // Verificar si es proyecto tipo diario
     const isDiario = projectData.configuracion?.tipo_layout === 'diario';
     
     if (isDiario) {
-      renderDiarioProject(projectData);
+      renderDiarioProject(projectData, titleText);
     } else {
-      renderStandardProject(projectData);
+      renderStandardProject(projectData, titleText);
     }
   } catch (error) {
     console.error('Error cargando proyecto:', error);
@@ -117,9 +239,17 @@ export async function renderProject() {
   }
 }
 
-function renderStandardProject(projectData) {
+function renderStandardProject(projectData, titleText) {
   const body = document.body;
   body.innerHTML = ''; // Limpiar
+
+  const projectTitle = titleText || projectData.titulo || projectData.slug || 'proyecto';
+  if (projectTitle) {
+    const h1 = document.createElement('h1');
+    h1.className = 'visually-hidden';
+    h1.textContent = projectTitle;
+    body.appendChild(h1);
+  }
   
   // Header con imagen principal
   if (projectData.primera_imatge?.src) {
@@ -128,8 +258,8 @@ function renderStandardProject(projectData) {
     
     const img = document.createElement('img');
     img.src = `data/${projectData.slug}/${projectData.primera_imatge.src}`;
-    const titleText = projectData.titulo || projectData.slug || '';
-    img.alt = `${titleText} portada`;
+    const headerAlt = projectData.primera_imatge.alt?.trim() || `Portada del proyecto ${projectTitle}`;
+    img.alt = headerAlt;
     
     header.appendChild(img);
     body.appendChild(header);
@@ -153,6 +283,7 @@ function renderStandardProject(projectData) {
         anchor.href = descData.link;
         anchor.textContent = descData.titulo;
         anchor.target = '_blank';
+        anchor.rel = 'noopener noreferrer';
         heading.appendChild(anchor);
       } else {
         heading.textContent = descData.titulo;
@@ -172,6 +303,10 @@ function renderStandardProject(projectData) {
       desc.appendChild(p);
     });
 
+    desc.querySelectorAll('a[target="_blank"]').forEach((anchor) => {
+      anchor.rel = 'noopener noreferrer';
+    });
+
     projectBody.appendChild(desc);
   }
   
@@ -186,7 +321,15 @@ function renderStandardProject(projectData) {
     // Tipo de proyecto
     if (projectData.tipo_proyecto) {
       const li = document.createElement('li');
-      li.textContent = projectData.tipo_proyecto;
+      const normalizedCategory = normalizeCategory(projectData.tipo_proyecto);
+      if (normalizedCategory) {
+        const link = document.createElement('a');
+        link.href = `./index.html?categoria=${encodeURIComponent(normalizedCategory)}`;
+        link.textContent = projectData.tipo_proyecto;
+        li.appendChild(link);
+      } else {
+        li.textContent = projectData.tipo_proyecto;
+      }
       ul.appendChild(li);
     }
     
@@ -210,13 +353,22 @@ function renderStandardProject(projectData) {
         const li = document.createElement('li');
         
         if (credito.link) {
-          li.innerHTML = `<a href="${credito.link}">${credito.nombre}</a>`;
+          const link = document.createElement('a');
+          link.href = credito.link;
+          link.textContent = credito.nombre;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          li.appendChild(link);
         } else {
           li.textContent = credito.nombre;
         }
         
         if (credito.rol) {
-          li.innerHTML += ` <span class="meta">${credito.rol}</span>`;
+          const role = document.createElement('span');
+          role.className = 'meta';
+          role.textContent = credito.rol;
+          li.appendChild(document.createTextNode(' '));
+          li.appendChild(role);
         }
         
         ul.appendChild(li);
@@ -239,8 +391,8 @@ function renderStandardProject(projectData) {
       if (!normalized) return;
       const img = document.createElement('img');
       img.src = `data/${projectData.slug}/${normalized.src}`;
-      const titleText = projectData.titulo || projectData.slug || 'imagen';
-      img.alt = `${titleText} imagen ${idx + 1}`;
+      const imageAlt = normalized.alt?.trim() || `Imagen ${idx + 1} del proyecto ${projectTitle}`;
+      img.alt = imageAlt;
       img.loading = 'lazy';
       
       gallery.appendChild(img);
@@ -250,9 +402,17 @@ function renderStandardProject(projectData) {
   }
 }
 
-function renderDiarioProject(projectData) {
+function renderDiarioProject(projectData, titleText) {
   const body = document.body;
   body.innerHTML = ''; // Limpiar
+
+  const projectTitle = titleText || projectData.titulo || projectData.slug || 'diario';
+  if (projectTitle) {
+    const h1 = document.createElement('h1');
+    h1.className = 'visually-hidden';
+    h1.textContent = projectTitle;
+    body.appendChild(h1);
+  }
   
   const gallery = document.createElement('div');
   gallery.className = 'diario-gallery';
@@ -263,8 +423,8 @@ function renderDiarioProject(projectData) {
       if (!normalized) return;
       const img = document.createElement('img');
       img.src = `data/${projectData.slug}/${normalized.src}`;
-      const titleText = projectData.titulo || projectData.slug || 'imagen';
-      img.alt = `${titleText} imagen ${idx + 1}`;
+      const imageAlt = normalized.alt?.trim() || `Imagen ${idx + 1} del diario ${projectTitle}`;
+      img.alt = imageAlt;
       img.loading = 'lazy';
       
       gallery.appendChild(img);

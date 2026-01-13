@@ -1,4 +1,4 @@
-import { injectComponents, renderProject } from "./components.js";
+import { injectComponents, renderProject, applyHomeMeta, normalizeCategory } from "./components.js";
 
 // Detectar si estamos en página de proyecto
 const pageType = document.body.dataset.pageType;
@@ -28,15 +28,33 @@ async function initHome() {
     .filter((p) => p.visible !== false)
     .map((p) => ({
       name: p.name || p.slug,
-      category: p.category || "otros",
+      category: normalizeCategory(p.category || "otros"),
       status: true,
       url: p.slug,
     }));
+
+  const nameBySlug = new Map(projects.map((project) => [project.url, project.name]));
+  const knownCategories = new Set(projects.map((project) => project.category));
   
   // Datos de galería leídos desde home.json
   const gallerySets = Array.isArray(homeData.gallerySets) ? homeData.gallerySets : [];
   const activeCategories = new Set();
   let selectedGallery = 0;
+
+  const params = new URLSearchParams(window.location.search);
+  const initialCategory = normalizeCategory(params.get('categoria'));
+  if (initialCategory && knownCategories.has(initialCategory)) {
+    activeCategories.add(initialCategory);
+  }
+
+  const homeDescription = 'Portfolio de fotografia de Andrea Carilla. Proyectos de moda, editorial y diario personal.';
+  const homeImagePath = gallerySets?.[0]?.[0]?.src || '';
+  const homeImageUrl = homeImagePath ? new URL(homeImagePath, window.location.href).href : '';
+  applyHomeMeta({
+    title: document.title || 'andrea carilla',
+    description: homeDescription,
+    imageUrl: homeImageUrl,
+  });
 
   // Utilidades
   function shuffle(arr) {
@@ -82,7 +100,9 @@ async function initHome() {
       const img = document.createElement("img");
       img.className = "portada";
       img.src = item.src;
-      img.alt = "";
+      const projectName = nameBySlug.get(slug) || slug || 'proyecto';
+      const imageAlt = item.alt?.trim() || `Portada del proyecto ${projectName}`;
+      img.alt = imageAlt;
       wrapper.appendChild(img);
 
       function resizeWrapper() {
@@ -158,6 +178,9 @@ async function initHome() {
       const btn = document.createElement("button");
       btn.className = "category-btn";
       btn.textContent = cat;
+      if (activeCategories.has(cat)) {
+        btn.classList.add("active");
+      }
       btn.addEventListener("click", () => {
         if (activeCategories.has(cat)) {
           activeCategories.delete(cat);
@@ -207,8 +230,8 @@ async function initHome() {
 
   // Inicializar
   renderGallery();
-  renderProjects();
   renderCategoryNav();
+  applyCategoryFilter();
   renderTemaNav();
 
   // Responsive

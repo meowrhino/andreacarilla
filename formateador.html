@@ -289,7 +289,7 @@
         <div class="field">
           <label for="slug">slug (nombre único del proyecto, sin espacios)</label>
           <input type="text" id="slug" placeholder="nombre-proyecto">
-          <div class="helper-text">solo minúsculas, números y guiones</div>
+          <div class="helper-text">solo letras, números y guiones</div>
         </div>
 
         <div class="field">
@@ -419,7 +419,7 @@ Párrafo 3"></textarea>
     }
 
     function validateSlug(value) {
-      return /^[a-z0-9-]*$/.test(value);
+      return /^[A-Za-z0-9-]*$/.test(value);
     }
 
     function showFeedback(element, message, isError = false) {

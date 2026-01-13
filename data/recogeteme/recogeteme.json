@@ -14,6 +14,8 @@
     ]
   },
   "tipo_proyecto": "investigación",
+  "ubicacion": "",
+  "creditos": [],
   "imatges": [
     "./img/2.jpg",
     "./img/3.jpg",

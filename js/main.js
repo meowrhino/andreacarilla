@@ -21,7 +21,17 @@ async function initHome() {
   injectComponents();
   
   // Cargar home.json
-  const homeData = await fetch('data/home.json').then(r => r.json());
+  let homeData;
+  try {
+    const response = await fetch('data/home.json');
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    homeData = await response.json();
+  } catch (error) {
+    console.error('[home] No se pudo cargar data/home.json:', error);
+    return;
+  }
   
   // Datos de proyectos leídos desde home.json
   const projects = (homeData.projectes_visibles || [])
@@ -103,6 +113,9 @@ async function initHome() {
       const projectName = nameBySlug.get(slug) || slug || 'proyecto';
       const imageAlt = item.alt?.trim() || `Portada del proyecto ${projectName}`;
       img.alt = imageAlt;
+      img.addEventListener("error", () => {
+        console.error(`[home] No se pudo cargar imagen de portada: ${img.src} (slug: ${slug || 'desconocido'})`);
+      });
       wrapper.appendChild(img);
 
       function resizeWrapper() {

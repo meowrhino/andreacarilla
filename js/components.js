@@ -70,10 +70,12 @@ export function injectComponents() {
 export function normalizeCategory(value) {
   if (!value) return '';
   const normalized = value.trim().replace(/\s+/g, ' ').toLowerCase();
-  if (normalized === 'evento') return 'eventos';
-  if (normalized === 'producto') return 'product';
-  if (normalized === 'investigacion') return 'investigación';
-  return normalized;
+  const aliases = {
+    evento: 'eventos',
+    producto: 'product',
+    investigacion: 'investigación',
+  };
+  return aliases[normalized] || normalized;
 }
 
 function getProjectTitle(projectData, fallback = 'proyecto') {
@@ -248,6 +250,16 @@ export async function renderProject() {
     if (!response.ok) throw new Error(`No se pudo cargar ${slug}.json`);
     
     const projectData = await response.json();
+    const dataSlug = typeof projectData.slug === 'string' ? projectData.slug.trim() : '';
+    if (!dataSlug) {
+      console.warn(`[proyecto] JSON sin "slug" para ${slug}. Se usa el slug de la URL.`);
+      projectData.slug = slug;
+    } else if (dataSlug !== slug) {
+      console.warn(`[proyecto] slug URL (${slug}) no coincide con JSON (${dataSlug}). Se usa el slug de la URL para rutas.`);
+      projectData.slug = slug;
+    } else {
+      projectData.slug = dataSlug;
+    }
     const titleText = getProjectTitle(projectData);
     applyProjectMeta(projectData, titleText);
     
@@ -281,6 +293,9 @@ function renderStandardProject(projectData, titleText) {
     img.src = `data/${projectData.slug}/${projectData.primera_imatge.src}`;
     const headerAlt = `Portada del proyecto ${projectTitle}`;
     img.alt = headerAlt;
+    img.addEventListener('error', () => {
+      console.error(`[proyecto] No se pudo cargar portada: ${img.src} (slug: ${projectData.slug})`);
+    });
     
     header.appendChild(img);
     body.appendChild(header);
@@ -403,6 +418,9 @@ function renderStandardProject(projectData, titleText) {
       const imageAlt = normalized.alt?.trim() || `Imagen ${idx + 1} del proyecto ${projectTitle}`;
       img.alt = imageAlt;
       img.loading = 'lazy';
+      img.addEventListener('error', () => {
+        console.error(`[proyecto] No se pudo cargar imagen ${idx + 1}: ${img.src} (slug: ${projectData.slug})`);
+      });
       
       gallery.appendChild(img);
     });
@@ -430,6 +448,9 @@ function renderDiarioProject(projectData, titleText) {
       const imageAlt = normalized.alt?.trim() || `Imagen ${idx + 1} del diario ${projectTitle}`;
       img.alt = imageAlt;
       img.loading = 'lazy';
+      img.addEventListener('error', () => {
+        console.error(`[diario] No se pudo cargar imagen ${idx + 1}: ${img.src} (slug: ${projectData.slug})`);
+      });
       
       gallery.appendChild(img);
     });

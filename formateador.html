@@ -334,6 +334,11 @@ Párrafo 2
 
 Párrafo 3"></textarea>
           <div class="helper-text">puedes usar markdown: **negrita**, *cursiva*, [link](url)</div>
+          <div class="button-group" style="margin-top: 0.5rem;">
+            <button id="btn-bold" type="button">negrita</button>
+            <button id="btn-italic" type="button">cursiva</button>
+            <button id="btn-link" type="button">añadir link</button>
+          </div>
         </div>
 
         <!-- Créditos -->
@@ -391,6 +396,9 @@ Párrafo 3"></textarea>
     const descripcionTitulo = document.getElementById('descripcion_titulo');
     const descripcionLink = document.getElementById('descripcion_link');
     const descripcionTexto = document.getElementById('descripcion_texto');
+    const btnBold = document.getElementById('btn-bold');
+    const btnItalic = document.getElementById('btn-italic');
+    const btnLink = document.getElementById('btn-link');
 
     const creditosContainer = document.getElementById('creditos-container');
     const btnAddCredito = document.getElementById('btn-add-credito');
@@ -628,6 +636,54 @@ Párrafo 3"></textarea>
       }
       updateProjectData();
     });
+
+    // Funciones de formato de texto
+    function wrapTextSelection(before, after) {
+      const start = descripcionTexto.selectionStart;
+      const end = descripcionTexto.selectionEnd;
+      const value = descripcionTexto.value;
+      const selectedText = value.slice(start, end);
+      
+      const newText = value.slice(0, start) + before + selectedText + after + value.slice(end);
+      descripcionTexto.value = newText;
+      
+      // Mantener el foco y ajustar la selección
+      descripcionTexto.focus();
+      const newStart = start + before.length;
+      const newEnd = newStart + selectedText.length;
+      descripcionTexto.setSelectionRange(newStart, newEnd);
+      
+      updateProjectData();
+    }
+
+    function addLinkToSelection() {
+      const start = descripcionTexto.selectionStart;
+      const end = descripcionTexto.selectionEnd;
+      const value = descripcionTexto.value;
+      const selectedText = value.slice(start, end);
+      
+      // Pedir la URL al usuario
+      const url = prompt('Introduce la URL del enlace:', 'https://');
+      if (!url) return; // Usuario canceló
+      
+      const linkText = selectedText || 'texto del enlace';
+      const markdownLink = `[${linkText}](${url})`;
+      
+      const newText = value.slice(0, start) + markdownLink + value.slice(end);
+      descripcionTexto.value = newText;
+      
+      // Mantener el foco
+      descripcionTexto.focus();
+      const newPos = start + markdownLink.length;
+      descripcionTexto.setSelectionRange(newPos, newPos);
+      
+      updateProjectData();
+    }
+
+    // Event listeners para botones de formato
+    btnBold.addEventListener('click', () => wrapTextSelection('**', '**'));
+    btnItalic.addEventListener('click', () => wrapTextSelection('*', '*'));
+    btnLink.addEventListener('click', addLinkToSelection);
 
     // Event listeners para actualización en tiempo real
     [titulo, tipoProyecto, ubicacion, primeraImatgeSrc, descripcionTitulo, descripcionLink, descripcionTexto].forEach(el => {

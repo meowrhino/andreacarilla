@@ -2,8 +2,7 @@
   "slug": "blackCover",
   "titulo": "black cover",
   "primera_imatge": {
-    "src": "./img/1.jpg",
-    "alt": ""
+    "src": "./img/1.jpg"
   },
   "descripcion": {
     "titulo": "BLACK COVER.",

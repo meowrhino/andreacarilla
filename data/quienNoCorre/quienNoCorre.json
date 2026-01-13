@@ -2,8 +2,7 @@
   "slug": "quienNoCorre",
   "titulo": "quien no corre, vuela",
   "primera_imatge": {
-    "src": "./img/1.jpg",
-    "alt": ""
+    "src": "./img/1.jpg"
   },
   "descripcion": {
     "titulo": "QUIEN NO CORRE, VUELA",

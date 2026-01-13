@@ -2,8 +2,7 @@
   "slug": "estrellaFugaz",
   "titulo": "estrella fugaz",
   "primera_imatge": {
-    "src": "./img/1.jpg",
-    "alt": "estrella fugaz portada"
+    "src": "./img/1.jpg"
   },
   "descripcion": {
     "titulo": "ESTRELLA FUGAZ. ELA REA",

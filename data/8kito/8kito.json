@@ -2,8 +2,7 @@
   "slug": "8kito",
   "titulo": "8kito",
   "primera_imatge": {
-    "src": "./img/1.jpg",
-    "alt": "8kito portada"
+    "src": "./img/1.jpg"
   },
   "descripcion": {
     "titulo": "8KITO",

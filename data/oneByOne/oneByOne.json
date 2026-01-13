@@ -2,8 +2,7 @@
   "slug": "oneByOne",
   "titulo": "one by one",
   "primera_imatge": {
-    "src": "./img/1.jpg",
-    "alt": ""
+    "src": "./img/1.jpg"
   },
   "descripcion": {
     "titulo": "ONE BY ONE. HIFAS STUDIO",

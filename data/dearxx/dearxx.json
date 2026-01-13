@@ -2,8 +2,7 @@
   "slug": "dearxx",
   "titulo": "dear xx",
   "primera_imatge": {
-    "src": "./img/1.jpg",
-    "alt": "dear xx portada"
+    "src": "./img/1.jpg"
   },
   "descripcion": {
     "titulo": "DEAR XX. ARE YOU MAD AT ME? HIFAS STUDIO",

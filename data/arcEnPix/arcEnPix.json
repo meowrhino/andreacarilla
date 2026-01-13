@@ -2,8 +2,7 @@
   "slug": "arcEnPix",
   "titulo": "archivo en pixel",
   "primera_imatge": {
-    "src": "./img/1.jpg",
-    "alt": ""
+    "src": "./img/1.jpg"
   },
   "descripcion": {
     "titulo": "ARCHIVO EN PIXEL",

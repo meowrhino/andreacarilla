@@ -76,6 +76,33 @@ export function normalizeCategory(value) {
   return normalized;
 }
 
+function getProjectTitle(projectData, fallback = 'proyecto') {
+  return projectData?.titulo || projectData?.slug || fallback;
+}
+
+function appendVisuallyHiddenTitle(container, title) {
+  if (!title) return;
+  const h1 = document.createElement('h1');
+  h1.className = 'visually-hidden';
+  h1.textContent = title;
+  container.appendChild(h1);
+}
+
+function createExternalLink(href, text) {
+  const link = document.createElement('a');
+  link.href = href;
+  link.textContent = text;
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  return link;
+}
+
+function ensureExternalRel(container) {
+  container.querySelectorAll('a[target="_blank"]').forEach((anchor) => {
+    anchor.rel = 'noopener noreferrer';
+  });
+}
+
 function normalizeWhitespace(value) {
   return value.replace(/\s+/g, ' ').trim();
 }
@@ -158,7 +185,7 @@ function buildProjectDescription(projectData) {
   }
 
   if (!candidate) {
-    candidate = projectData.titulo || projectData.slug || 'Proyecto';
+    candidate = getProjectTitle(projectData, 'Proyecto');
   }
 
   const cleaned = normalizeWhitespace(stripHtml(candidate));
@@ -221,8 +248,7 @@ export async function renderProject() {
     if (!response.ok) throw new Error(`No se pudo cargar ${slug}.json`);
     
     const projectData = await response.json();
-    const titleText = projectData.titulo || projectData.slug || 'proyecto';
-    document.title = titleText;
+    const titleText = getProjectTitle(projectData);
     applyProjectMeta(projectData, titleText);
     
     // Verificar si es proyecto tipo diario
@@ -243,13 +269,8 @@ function renderStandardProject(projectData, titleText) {
   const body = document.body;
   body.innerHTML = ''; // Limpiar
 
-  const projectTitle = titleText || projectData.titulo || projectData.slug || 'proyecto';
-  if (projectTitle) {
-    const h1 = document.createElement('h1');
-    h1.className = 'visually-hidden';
-    h1.textContent = projectTitle;
-    body.appendChild(h1);
-  }
+  const projectTitle = titleText || getProjectTitle(projectData);
+  appendVisuallyHiddenTitle(body, projectTitle);
   
   // Header con imagen principal
   if (projectData.primera_imatge?.src) {
@@ -258,7 +279,7 @@ function renderStandardProject(projectData, titleText) {
     
     const img = document.createElement('img');
     img.src = `data/${projectData.slug}/${projectData.primera_imatge.src}`;
-    const headerAlt = projectData.primera_imatge.alt?.trim() || `Portada del proyecto ${projectTitle}`;
+    const headerAlt = `Portada del proyecto ${projectTitle}`;
     img.alt = headerAlt;
     
     header.appendChild(img);
@@ -279,12 +300,7 @@ function renderStandardProject(projectData, titleText) {
     if (descData.titulo) {
       const heading = document.createElement('h2');
       if (descData.link) {
-        const anchor = document.createElement('a');
-        anchor.href = descData.link;
-        anchor.textContent = descData.titulo;
-        anchor.target = '_blank';
-        anchor.rel = 'noopener noreferrer';
-        heading.appendChild(anchor);
+        heading.appendChild(createExternalLink(descData.link, descData.titulo));
       } else {
         heading.textContent = descData.titulo;
       }
@@ -303,9 +319,7 @@ function renderStandardProject(projectData, titleText) {
       desc.appendChild(p);
     });
 
-    desc.querySelectorAll('a[target="_blank"]').forEach((anchor) => {
-      anchor.rel = 'noopener noreferrer';
-    });
+    ensureExternalRel(desc);
 
     projectBody.appendChild(desc);
   }
@@ -353,12 +367,7 @@ function renderStandardProject(projectData, titleText) {
         const li = document.createElement('li');
         
         if (credito.link) {
-          const link = document.createElement('a');
-          link.href = credito.link;
-          link.textContent = credito.nombre;
-          link.target = '_blank';
-          link.rel = 'noopener noreferrer';
-          li.appendChild(link);
+          li.appendChild(createExternalLink(credito.link, credito.nombre));
         } else {
           li.textContent = credito.nombre;
         }
@@ -406,13 +415,8 @@ function renderDiarioProject(projectData, titleText) {
   const body = document.body;
   body.innerHTML = ''; // Limpiar
 
-  const projectTitle = titleText || projectData.titulo || projectData.slug || 'diario';
-  if (projectTitle) {
-    const h1 = document.createElement('h1');
-    h1.className = 'visually-hidden';
-    h1.textContent = projectTitle;
-    body.appendChild(h1);
-  }
+  const projectTitle = titleText || getProjectTitle(projectData, 'diario');
+  appendVisuallyHiddenTitle(body, projectTitle);
   
   const gallery = document.createElement('div');
   gallery.className = 'diario-gallery';

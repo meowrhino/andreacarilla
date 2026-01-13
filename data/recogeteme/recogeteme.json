@@ -2,8 +2,7 @@
   "slug": "recogeteme",
   "titulo": "recogeteme el pelo",
   "primera_imatge": {
-    "src": "./img/1.jpg",
-    "alt": ""
+    "src": "./img/1.jpg"
   },
   "descripcion": {
     "titulo": "RECÓGETEME EL PELO",

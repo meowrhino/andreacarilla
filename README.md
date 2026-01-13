@@ -58,9 +58,7 @@ todos los campos son opcionales excepto `slug`:
   "slug": "8kito",
   "titulo": "8kito",
   "primera_imatge": {
-    "src": "./img/1.jpg",
-    "size": 100,
-    "alt": "texto alternativo"
+    "src": "./img/1.jpg"
   },
   "descripcion": {
     "es": ["párrafo 1", "párrafo 2"]
@@ -89,7 +87,7 @@ todos los campos son opcionales excepto `slug`:
 }
 ```
 
-las entradas de `imatges` se pasan solo como rutas (strings); los campos antiguos `size` y `alt` no se usan en la galería (el `alt` queda vacío).
+las entradas de `imatges` suelen ser rutas (strings); si necesitas un `alt` específico en la galería, puedes usar objetos con `src` y `alt`. El `alt` se genera automáticamente cuando no se define. En la portada, el `alt` también se genera automáticamente.
 
 ## características
 

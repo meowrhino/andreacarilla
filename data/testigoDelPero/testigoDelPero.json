@@ -2,8 +2,7 @@
   "slug": "testigoDelPero",
   "titulo": "testigo del pero",
   "primera_imatge": {
-    "src": "./img/1.jpg",
-    "alt": ""
+    "src": "./img/1.jpg"
   },
   "descripcion": {
     "titulo": "TESTIGO DEL PERO.",

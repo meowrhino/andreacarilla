@@ -2,8 +2,7 @@
   "slug": "vozMal",
   "titulo": "voz mal",
   "primera_imatge": {
-    "src": "./img/1.jpg",
-    "alt": ""
+    "src": "./img/1.jpg"
   },
   "descripcion": {
     "titulo": "VOZ MAL. JAUME FERRETE VÁZQUEZ",

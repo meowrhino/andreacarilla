@@ -2,8 +2,7 @@
   "slug": "tawla",
   "titulo": "tawla",
   "primera_imatge": {
-    "src": "./img/1.jpg",
-    "alt": "aines portada"
+    "src": "./img/1.jpg"
   },
   "descripcion": {
     "titulo": "TAWLA CENITAS CLUB",

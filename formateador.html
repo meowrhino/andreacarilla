@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>formateador — andreacarilla</title>
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      font-family: sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #000;
+      background: #fff;
+    }
+
+    body {
+      padding: 2rem 1rem;
+      overflow-y: auto;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    h1 {
+      font-size: 1.2rem;
+      font-weight: normal;
+      text-align: center;
+      margin-bottom: 1rem;
+      text-transform: lowercase;
+    }
+
+    /* Paneles */
+    .panel {
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .panel-title {
+      font-size: 1rem;
+      font-weight: bold;
+      text-transform: lowercase;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Inputs y textareas */
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #e5e5e5;
+      background: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: #000;
+    }
+
+    input[type="text"].error {
+      border-color: #b00020;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    textarea.json-input {
+      min-height: 180px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      color: #666;
+      text-transform: lowercase;
+      font-size: 13px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Botones */
+    button {
+      background: none;
+      border: 1px solid #e5e5e5;
+      padding: 0.5rem 1rem;
+      font-family: inherit;
+      font-size: 14px;
+      text-transform: lowercase;
+      cursor: pointer;
+      color: #000;
+      transition: font-weight 0.1s;
+    }
+
+    button:hover {
+      font-weight: bold;
+    }
+
+    button:active {
+      background: #f0f0f0;
+    }
+
+    button.primary {
+      background: #000;
+      color: #fff;
+      border-color: #000;
+    }
+
+    button.primary:hover {
+      background: #333;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .button-group.center {
+      justify-content: center;
+    }
+
+    /* Sección de créditos */
+    .creditos-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .credito-item {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      position: relative;
+    }
+
+    .credito-item .remove-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      padding: 0.2rem 0.5rem;
+      font-size: 12px;
+      border: none;
+      background: transparent;
+      color: #999;
+    }
+
+    .credito-item .remove-btn:hover {
+      color: #b00020;
+    }
+
+    /* Sección de imágenes */
+    .imagenes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .imagen-item {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .imagen-item input {
+      flex: 1;
+    }
+
+    .imagen-item button {
+      padding: 0.4rem 0.8rem;
+      font-size: 12px;
+    }
+
+    /* Output */
+    pre {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      padding: 1rem;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      min-height: 200px;
+      white-space: pre;
+    }
+
+    .helper-text {
+      font-size: 12px;
+      color: #999;
+      margin-top: 0.2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
+
+      .panel {
+        padding: 1rem;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+
+    /* Feedback visual */
+    .success-feedback {
+      color: #2e7d32;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .error-feedback {
+      color: #b00020;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>formateador de proyectos — andreacarilla</h1>
+
+    <!-- Panel de importación -->
+    <section class="panel import-panel">
+      <div class="panel-title">1. importar json existente</div>
+      <div class="field">
+        <textarea id="json-import" class="json-input" placeholder='pega aquí el json completo del proyecto...'></textarea>
+        <div class="helper-text">pega el json de un proyecto existente para cargarlo en el editor</div>
+      </div>
+      <div class="button-group center">
+        <button id="btn-import">cargar en editor</button>
+        <button id="btn-clear-import">limpiar</button>
+      </div>
+      <div id="import-feedback"></div>
+    </section>
+
+    <!-- Panel de edición -->
+    <section class="panel edit-panel">
+      <div class="panel-title">2. editar proyecto</div>
+
+      <div class="field-group">
+        <!-- Información básica -->
+        <div class="field">
+          <label for="slug">slug (nombre único del proyecto, sin espacios)</label>
+          <input type="text" id="slug" placeholder="nombre-proyecto">
+          <div class="helper-text">solo minúsculas, números y guiones</div>
+        </div>
+
+        <div class="field">
+          <label for="titulo">título</label>
+          <input type="text" id="titulo" placeholder="Título del Proyecto">
+        </div>
+
+        <div class="field">
+          <label for="tipo_proyecto">tipo de proyecto</label>
+          <input type="text" id="tipo_proyecto" placeholder="artist image">
+        </div>
+
+        <div class="field">
+          <label for="ubicacion">ubicación</label>
+          <input type="text" id="ubicacion" placeholder="Barcelona">
+        </div>
+
+        <!-- Primera imagen -->
+        <div class="field">
+          <label for="primera_imatge_src">primera imagen (ruta)</label>
+          <input type="text" id="primera_imatge_src" placeholder="./img/1.jpg">
+        </div>
+
+        <!-- Descripción -->
+        <div class="panel-title" style="margin-top: 1rem;">descripción</div>
+
+        <div class="field">
+          <label for="descripcion_titulo">título de la descripción</label>
+          <input type="text" id="descripcion_titulo" placeholder="TÍTULO EN MAYÚSCULAS">
+        </div>
+
+        <div class="field">
+          <label for="descripcion_link">link (opcional)</label>
+          <input type="text" id="descripcion_link" placeholder="https://ejemplo.com">
+        </div>
+
+        <div class="field">
+          <label for="descripcion_texto">texto (cada párrafo separado por línea en blanco)</label>
+          <textarea id="descripcion_texto" placeholder="Párrafo 1
+
+Párrafo 2
+
+Párrafo 3"></textarea>
+          <div class="helper-text">puedes usar markdown: **negrita**, *cursiva*, [link](url)</div>
+        </div>
+
+        <!-- Créditos -->
+        <div class="panel-title" style="margin-top: 1rem;">créditos</div>
+        <div id="creditos-container" class="creditos-list"></div>
+        <div class="button-group">
+          <button id="btn-add-credito">+ añadir crédito</button>
+        </div>
+
+        <!-- Imágenes de galería -->
+        <div class="panel-title" style="margin-top: 1rem;">galería de imágenes</div>
+        <div id="imagenes-container" class="imagenes-list"></div>
+        <div class="button-group">
+          <button id="btn-add-imagen">+ añadir imagen</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel de salida -->
+    <section class="panel output-panel">
+      <div class="panel-title">3. exportar json</div>
+      <pre id="json-output">{}</pre>
+      <div class="button-group">
+        <button id="btn-copy" class="primary">copiar al portapapeles</button>
+        <button id="btn-download">descargar .json</button>
+      </div>
+      <div id="output-feedback"></div>
+    </section>
+  </main>
+
+  <script>
+    // Estado global
+    let projectData = {
+      slug: '',
+      titulo: '',
+      primera_imatge: { src: '' },
+      descripcion: { titulo: '', link: '', texto: [] },
+      tipo_proyecto: '',
+      ubicacion: '',
+      creditos: [],
+      imatges: []
+    };
+
+    // Referencias a elementos
+    const jsonImport = document.getElementById('json-import');
+    const btnImport = document.getElementById('btn-import');
+    const btnClearImport = document.getElementById('btn-clear-import');
+    const importFeedback = document.getElementById('import-feedback');
+
+    const slug = document.getElementById('slug');
+    const titulo = document.getElementById('titulo');
+    const tipoProyecto = document.getElementById('tipo_proyecto');
+    const ubicacion = document.getElementById('ubicacion');
+    const primeraImatgeSrc = document.getElementById('primera_imatge_src');
+    const descripcionTitulo = document.getElementById('descripcion_titulo');
+    const descripcionLink = document.getElementById('descripcion_link');
+    const descripcionTexto = document.getElementById('descripcion_texto');
+
+    const creditosContainer = document.getElementById('creditos-container');
+    const btnAddCredito = document.getElementById('btn-add-credito');
+
+    const imagenesContainer = document.getElementById('imagenes-container');
+    const btnAddImagen = document.getElementById('btn-add-imagen');
+
+    const jsonOutput = document.getElementById('json-output');
+    const btnCopy = document.getElementById('btn-copy');
+    const btnDownload = document.getElementById('btn-download');
+    const outputFeedback = document.getElementById('output-feedback');
+
+    // Funciones de utilidad
+    function normalizeText(text) {
+      return text.replace(/\r\n?/g, '\n').trim();
+    }
+
+    function textToParagraphs(text) {
+      const normalized = normalizeText(text);
+      if (!normalized) return [];
+      return normalized.split(/\n\s*\n+/).map(p => p.replace(/\n/g, ' ').trim()).filter(Boolean);
+    }
+
+    function paragraphsToText(paragraphs) {
+      return paragraphs.join('\n\n');
+    }
+
+    function validateSlug(value) {
+      return /^[a-z0-9-]*$/.test(value);
+    }
+
+    function showFeedback(element, message, isError = false) {
+      element.innerHTML = `<div class="${isError ? 'error-feedback' : 'success-feedback'}">${message}</div>`;
+      setTimeout(() => { element.innerHTML = ''; }, 3000);
+    }
+
+    // Actualizar datos del proyecto
+    function updateProjectData() {
+      projectData.slug = slug.value.trim();
+      projectData.titulo = titulo.value.trim();
+      projectData.tipo_proyecto = tipoProyecto.value.trim();
+      projectData.ubicacion = ubicacion.value.trim();
+      projectData.primera_imatge.src = primeraImatgeSrc.value.trim();
+      projectData.descripcion.titulo = descripcionTitulo.value.trim();
+      projectData.descripcion.link = descripcionLink.value.trim();
+      projectData.descripcion.texto = textToParagraphs(descripcionTexto.value);
+
+      // Actualizar créditos
+      projectData.creditos = [];
+      const creditoItems = creditosContainer.querySelectorAll('.credito-item');
+      creditoItems.forEach(item => {
+        const nombre = item.querySelector('.credito-nombre').value.trim();
+        const rol = item.querySelector('.credito-rol').value.trim();
+        const link = item.querySelector('.credito-link').value.trim();
+        if (nombre || rol) {
+          projectData.creditos.push({ nombre, rol, link });
+        }
+      });
+
+      // Actualizar imágenes
+      projectData.imatges = [];
+      const imagenItems = imagenesContainer.querySelectorAll('.imagen-item input');
+      imagenItems.forEach(input => {
+        const value = input.value.trim();
+        if (value) {
+          projectData.imatges.push(value);
+        }
+      });
+
+      updateOutput();
+    }
+
+    // Actualizar output JSON
+    function updateOutput() {
+      const json = JSON.stringify(projectData, null, 2);
+      jsonOutput.textContent = json;
+    }
+
+    // Cargar datos en el formulario
+    function loadDataToForm(data) {
+      slug.value = data.slug || '';
+      titulo.value = data.titulo || '';
+      tipoProyecto.value = data.tipo_proyecto || '';
+      ubicacion.value = data.ubicacion || '';
+      primeraImatgeSrc.value = data.primera_imatge?.src || '';
+      descripcionTitulo.value = data.descripcion?.titulo || '';
+      descripcionLink.value = data.descripcion?.link || '';
+      descripcionTexto.value = paragraphsToText(data.descripcion?.texto || []);
+
+      // Cargar créditos
+      creditosContainer.innerHTML = '';
+      if (data.creditos && data.creditos.length > 0) {
+        data.creditos.forEach(credito => {
+          addCreditoItem(credito);
+        });
+      }
+
+      // Cargar imágenes
+      imagenesContainer.innerHTML = '';
+      if (data.imatges && data.imatges.length > 0) {
+        data.imatges.forEach(img => {
+          addImagenItem(img);
+        });
+      }
+
+      updateProjectData();
+    }
+
+    // Importar JSON
+    btnImport.addEventListener('click', () => {
+      const raw = jsonImport.value.trim();
+      if (!raw) {
+        showFeedback(importFeedback, 'no hay nada que importar', true);
+        return;
+      }
+
+      try {
+        const data = JSON.parse(raw);
+        loadDataToForm(data);
+        showFeedback(importFeedback, '¡json cargado correctamente!');
+        console.log('JSON importado:', data);
+      } catch (err) {
+        showFeedback(importFeedback, 'error: json no válido', true);
+        console.error('Error al parsear JSON:', err);
+      }
+    });
+
+    btnClearImport.addEventListener('click', () => {
+      jsonImport.value = '';
+      importFeedback.innerHTML = '';
+    });
+
+    // Añadir crédito
+    function addCreditoItem(credito = { nombre: '', rol: '', link: '' }) {
+      const item = document.createElement('div');
+      item.className = 'credito-item';
+      item.innerHTML = `
+        <button class="remove-btn" type="button">✕</button>
+        <div class="field">
+          <label>nombre</label>
+          <input type="text" class="credito-nombre" value="${credito.nombre}" placeholder="Nombre Persona">
+        </div>
+        <div class="field">
+          <label>rol</label>
+          <input type="text" class="credito-rol" value="${credito.rol}" placeholder="ROL EN MAYÚSCULAS">
+        </div>
+        <div class="field">
+          <label>link (opcional)</label>
+          <input type="text" class="credito-link" value="${credito.link}" placeholder="https://instagram.com/usuario">
+        </div>
+      `;
+
+      const removeBtn = item.querySelector('.remove-btn');
+      removeBtn.addEventListener('click', () => {
+        item.remove();
+        updateProjectData();
+      });
+
+      const inputs = item.querySelectorAll('input');
+      inputs.forEach(input => {
+        input.addEventListener('input', updateProjectData);
+      });
+
+      creditosContainer.appendChild(item);
+    }
+
+    btnAddCredito.addEventListener('click', () => {
+      addCreditoItem();
+      updateProjectData();
+    });
+
+    // Añadir imagen
+    function addImagenItem(src = '') {
+      const item = document.createElement('div');
+      item.className = 'imagen-item';
+      item.innerHTML = `
+        <input type="text" value="${src}" placeholder="./img/2.jpg">
+        <button type="button" class="remove-imagen-btn">eliminar</button>
+      `;
+
+      const input = item.querySelector('input');
+      input.addEventListener('input', updateProjectData);
+
+      const removeBtn = item.querySelector('.remove-imagen-btn');
+      removeBtn.addEventListener('click', () => {
+        item.remove();
+        updateProjectData();
+      });
+
+      imagenesContainer.appendChild(item);
+    }
+
+    btnAddImagen.addEventListener('click', () => {
+      addImagenItem();
+      updateProjectData();
+    });
+
+    // Copiar al portapapeles
+    btnCopy.addEventListener('click', async () => {
+      const text = jsonOutput.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        showFeedback(outputFeedback, '¡copiado al portapapeles!');
+        console.log('JSON copiado al portapapeles');
+      } catch (err) {
+        showFeedback(outputFeedback, 'error al copiar', true);
+        console.error('Error al copiar:', err);
+      }
+    });
+
+    // Descargar archivo
+    btnDownload.addEventListener('click', () => {
+      const text = jsonOutput.textContent;
+      const filename = projectData.slug || 'proyecto';
+      const blob = new Blob([text], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${filename}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showFeedback(outputFeedback, `descargado como ${filename}.json`);
+      console.log('JSON descargado:', filename);
+    });
+
+    // Validación de slug
+    slug.addEventListener('input', (e) => {
+      const value = e.target.value;
+      if (!validateSlug(value)) {
+        e.target.classList.add('error');
+      } else {
+        e.target.classList.remove('error');
+      }
+      updateProjectData();
+    });
+
+    // Event listeners para actualización en tiempo real
+    [titulo, tipoProyecto, ubicacion, primeraImatgeSrc, descripcionTitulo, descripcionLink, descripcionTexto].forEach(el => {
+      el.addEventListener('input', updateProjectData);
+    });
+
+    // Inicializar
+    updateProjectData();
+    console.log('Formateador inicializado');
+  </script>
+</body>
+
+</html>

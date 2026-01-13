@@ -1,6 +1,18 @@
 {
   "projectes_visibles": [
     {
+      "slug": "mercurySplash",
+      "name": "mercury splash",
+      "category": "eventos",
+      "visible": true
+    },
+    {
+      "slug": "tresor",
+      "name": "<3sor",
+      "category": "eventos",
+      "visible": true
+    },
+    {
       "slug": "sangreYSal",
       "name": "sangre y sal",
       "category": "album design",

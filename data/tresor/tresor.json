@@ -1,0 +1,57 @@
+{
+  "slug": "tresor",
+  "titulo": "<3sor",
+  "primera_imatge": {
+    "src": "./img/1.jpg"
+  },
+  "descripcion": {
+    "titulo": "<3SOR",
+    "link": "https://www.instagram.com/ainessanjo/",
+    "texto": []
+  },
+  "tipo_proyecto": "eventos",
+  "ubicacion": "CCCB, Barcelona",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "Meritxell Desoto",
+      "rol": "COMISARIADO",
+      "link": "https://www.instagram.com/meritxelldesoto/"
+    },
+    {
+      "nombre": "Isla666 Collective",
+      "rol": "ARTIST",
+      "link": "https://www.instagram.com/isla666666/"
+    },
+    {
+      "nombre": "Tiyumii",
+      "rol": "ARTIST",
+      "link": "https://www.instagram.com/tiyumii/"
+    },
+    {
+      "nombre": "Lechugazafiro",
+      "rol": "ARTIST",
+      "link": "https://www.instagram.com/lechugazafiro/"
+    },
+    {
+      "nombre": "Infanta",
+      "rol": "ARTIST",
+      "link": "https://www.instagram.com/i.nfanta/"
+    }
+  ],
+  "imatges": [
+    "./img/2.jpg",
+    "./img/3.jpg",
+    "./img/4.jpg",
+    "./img/5.jpg",
+    "./img/6.jpg",
+    "./img/7.jpg",
+    "./img/8.jpg",
+    "./img/9.jpg",
+    "./img/10.jpg"
+  ]
+}

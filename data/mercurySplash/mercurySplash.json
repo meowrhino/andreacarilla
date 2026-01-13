@@ -1,0 +1,65 @@
+{
+  "slug": "mercurySplash",
+  "titulo": "mercury splash",
+  "primera_imatge": {
+    "src": "./img/1.jpeg"
+  },
+  "descripcion": {
+    "titulo": "MERCURY SPLASH",
+    "link": "https://www.nuvol.com/art/mercury-splash-rel%E2%98%BFaded-festa-i-culte-a-la-fundacio-miro-453802",
+    "texto": [
+      "La acción forma parte de Reencarnaciones, un programa de reenactments comisariado por la autora que revisita los 50 años de historia de la Fundació Miró a través del gesto y la performatividad. Les ¥€$Si y Ali reinterpretan Mercurio Splash (2015) de David Bestué y Antoni Hervàs, transformando la fundación en un templo dedicado a Mercurio, dios del comercio y símbolo del turismo contemporáneo.",
+      "La pieza establece un paralelismo entre el mercurio químico y la turistificación: ambos fluyen, transforman y contaminan. Así, se denuncia cómo el turismo convierte las ciudades en mercancía y degrada su autenticidad. Frente a ello, el gesto de \"salpicar\" se erige como acto de resistencia colectiva ante la precarización y el desarraigo que provoca."
+    ]
+  },
+  "tipo_proyecto": "eventos",
+  "ubicacion": "Fundación Miró, Barcelona",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "PHOTOGRAPHY, RETOUCH",
+      "link": ""
+    },
+    {
+      "nombre": "Ali Arévalo",
+      "rol": "COMISARIADO",
+      "link": "https://www.instagram.com/arevalo_ali_/"
+    },
+    {
+      "nombre": "Yessi Perse",
+      "rol": "COMISARIADO",
+      "link": "https://www.instagram.com/yessi_perse/"
+    }
+  ],
+  "imatges": [
+    "./img/2.jpeg",
+    "./img/3.jpeg",
+    "./img/4.jpeg",
+    "./img/5.jpeg",
+    "./img/6.jpeg",
+    "./img/7.jpeg",
+    "./img/8.jpeg",
+    "./img/9.jpeg",
+    "./img/10.jpeg",
+    "./img/11.jpeg",
+    "./img/12.jpeg",
+    "./img/13.jpeg",
+    "./img/14.jpeg",
+    "./img/15.jpeg",
+    "./img/16.jpeg",
+    "./img/17.jpeg",
+    "./img/18.jpeg",
+    "./img/19.jpeg",
+    "./img/20.jpeg",
+    "./img/21.jpeg",
+    "./img/22.jpeg",
+    "./img/23.jpeg",
+    "./img/24.jpeg",
+    "./img/25.jpeg",
+    "./img/26.jpeg",
+    "./img/27.jpeg",
+    "./img/28.jpeg",
+    "./img/29.jpeg",
+    "./img/30.jpeg"
+  ]
+}

@@ -30,7 +30,7 @@ export function injectComponents() {
             <a href="mailto:carillagonzalezandrea@gmail.com">carillagonzalezandrea@gmail.com</a>
             <a href="https://www.instagram.com/andreacarilla/" target="_blank" rel="noopener noreferrer">@andreacarilla</a>
             <span style="position:absolute; bottom:1rem;">
-                web: <a href="https://meowrhino.github.io/becasDigMeow/" target="_blank" rel="noopener noreferrer">meowrhino</a>
+                web: <a href="https://meowrhino.studio/" target="_blank" rel="noopener noreferrer">meowrhino</a>
             </span>
         </div>
     </div>

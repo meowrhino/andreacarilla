@@ -1,4 +1,4 @@
-import { injectComponents, renderProject, applyHomeMeta, normalizeCategory } from "./components.js";
+import { injectComponents, renderProject, applyHomeMeta, normalizeCategory, getImageSize } from "./components.js";
 
 // Detectar si estamos en página de proyecto
 const pageType = document.body.dataset.pageType;
@@ -103,7 +103,7 @@ async function initHome() {
       const wrapper = document.createElement("a");
       wrapper.className = "portada-wrapper";
       const slug = item.slug || item.url;
-      wrapper.href = `./proyecto.html?slug=${slug}`;
+      wrapper.href = `./proyectos/${slug}/`;
       wrapper.style.zIndex = style?.index || 0;
       container.appendChild(wrapper);
 
@@ -118,9 +118,13 @@ async function initHome() {
       });
       wrapper.appendChild(img);
 
+      // Medidas que build.js deja en el <head>: permiten colocar el wrapper
+      // antes de que la imagen cargue, en vez de esperar al naturalWidth
+      const knownSize = getImageSize(item.src);
+
       function resizeWrapper() {
-        const w = img.naturalWidth;
-        const h = img.naturalHeight;
+        const w = img.naturalWidth || knownSize?.[0];
+        const h = img.naturalHeight || knownSize?.[1];
         if (!w || !h) return;
 
         const widthPx = w * baseScale * factor;
@@ -139,7 +143,7 @@ async function initHome() {
       }
 
       img.addEventListener("load", resizeWrapper);
-      if (img.complete) resizeWrapper();
+      if (img.complete || knownSize) resizeWrapper();
     });
   }
 
@@ -154,7 +158,7 @@ async function initHome() {
 
     activeProjects.forEach((project) => {
       const link = document.createElement("a");
-      link.href = `./proyecto.html?slug=${project.url}`;
+      link.href = `./proyectos/${project.url}/`;
       link.className = "project-link";
       link.textContent = project.name;
       container.appendChild(link);

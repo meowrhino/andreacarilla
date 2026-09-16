@@ -9,7 +9,11 @@ web de andrea carilla con estructura basada en json. los proyectos se cargan din
 ```
 andreacarilla_web/
 ├── index.html              # página principal (home)
-├── proyecto.html           # página única para todos los proyectos
+├── proyecto.html           # solo redirige enlaces antiguos ?slug=
+├── build.js                # genera proyectos/<slug>/index.html
+├── proyectos/              # GENERADO, no editar a mano
+│   ├── 8kito/index.html
+│   └── ...
 ├── css/
 │   └── style.css           # estilos de la web
 ├── js/
@@ -39,11 +43,23 @@ andreacarilla_web/
 - navegación entre 3 sets de galería
 - botón "refrescar" que mezcla aleatoriamente los proyectos
 
-### página de proyecto (proyecto.html)
+### página de proyecto (proyectos/{slug}/)
 
-un único archivo html que:
-1. lee el parámetro `slug` de la url: `proyecto.html?slug=8kito`
-2. carga el json desde `/data/{slug}/{slug}.json`
+cada proyecto tiene su propia página en `proyectos/{slug}/index.html`. **son
+archivos generados: no se editan a mano.** los crea `build.js` a partir de los
+json, y el GitHub Action los regenera solo en cada push que toque `data/`.
+
+existen porque los scrapers de whatsapp, instagram, facebook o twitter no
+ejecutan javascript: si los meta se inyectan en cliente, al compartir el enlace
+sale una tarjeta vacía. estas páginas llevan el `<head>` ya escrito (título,
+descripción, `og:image`, `canonical`, json-ld) y el cuerpo lo sigue montando el
+javascript igual que antes.
+
+`proyecto.html?slug=8kito` sigue funcionando: redirige a `proyectos/8kito/`.
+
+cada página:
+1. lee el slug de `data-slug` en el `<body>`
+2. carga el json desde `data/{slug}/{slug}.json`
 3. renderiza dinámicamente el contenido según los campos presentes
 4. soporta dos tipos de layout:
    - **proyecto**: con header, descripción, metadata y galería
@@ -58,7 +74,7 @@ todos los campos son opcionales excepto `slug`:
   "slug": "8kito",
   "titulo": "8kito",
   "primera_imatge": {
-    "src": "./img/1.jpg"
+    "src": "./img/1.webp"
   },
   "descripcion": {
     "es": ["párrafo 1", "párrafo 2"]
@@ -77,7 +93,7 @@ todos los campos son opcionales excepto `slug`:
     }
   ],
   "imatges": [
-    "./img/2.jpg"
+    "./img/2.webp"
   ],
   "configuracion": {
     "mostrar_header": true,
@@ -145,6 +161,12 @@ npx http-server -p 8000
 ```
 5. opcional: añadir una portada en alguno de los `gallerySets` de `data/home.json` (para que salga en la galería principal).
 
+la página `proyectos/nuevo-proyecto/index.html` se genera sola al hacer push.
+si trabajas en local y quieres verla antes de subir, ejecuta `node build.js`.
+
+las imágenes se convierten a webp con <https://meowrhino.github.io/imgToWeb/>,
+con los valores por defecto: lado largo máximo 2000px y calidad 85.
+
 ### modificar un proyecto
 
 1. editar el archivo json en `data/{slug}/{slug}.json`
@@ -174,7 +196,10 @@ por:
 - los json están en `data/{slug}/` junto con sus imágenes
 - el javascript usa es6 modules (`type="module"`)
 - las rutas son relativas (`./css/`, `data/...`), funciona igual en dominio raíz o subcarpeta (GitHub Pages)
-- un único `proyecto.html` para todos los proyectos; el contenido se inyecta en cliente desde el JSON
+- las páginas de `proyectos/` llevan `<base href="../../">`, por eso las rutas relativas siguen funcionando desde una subcarpeta
+- `build.js` no depende de nada externo: lee los json tal cual y saca las medidas de cada imagen del propio fichero webp
+- las medidas van incrustadas en el `<head>` como `#img-sizes` para reservar el hueco de cada imagen y que la página no salte al cargar
+- `build.js` deduce la url del sitio del `CNAME`, y si no hay, del remote de git
 
 ## créditos
 

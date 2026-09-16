@@ -1,0 +1,48 @@
+name: generar paginas de proyecto
+
+# Regenera proyectos/<slug>/index.html cada vez que cambia un json o una
+# imagen. Asi Andrea sigue tocando solo data/ desde el formateador y las
+# paginas con los meta para compartir se actualizan solas.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "_portada/**"
+      - "build.js"
+      - "index.html"
+      - ".github/workflows/build.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generar-paginas
+  cancel-in-progress: false
+
+jobs:
+  generar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Generar
+        run: node build.js
+
+      - name: Commitear si hay cambios
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "nada que regenerar"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "regenerar paginas de proyecto [skip ci]"
+          git push

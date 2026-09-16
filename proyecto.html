@@ -4,17 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
     <title>proyecto</title>
     <link rel="stylesheet" href="./css/style.css">
+    <script>
+        // Los proyectos viven ahora en ./proyectos/<slug>/, que son paginas
+        // estaticas con sus meta ya escritas. Esto queda solo para que sigan
+        // funcionando los enlaces antiguos del tipo proyecto.html?slug=xxx
+        var slug = new URLSearchParams(location.search).get('slug');
+        location.replace(slug ? './proyectos/' + encodeURIComponent(slug) + '/' : './index.html');
+    </script>
 </head>
 
-<body data-page-type="proyecto">
+<body data-page-type="redirect">
 
     <noscript>
-        <p style="padding: 1rem;">Activa JavaScript para cargar el proyecto.</p>
+        <p style="padding: 1rem;">Esta pagina se ha movido. <a href="./index.html">Volver al inicio</a></p>
     </noscript>
-
-    <script type="module" src="./js/main.js"></script>
 
 </body>
 

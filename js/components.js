@@ -196,7 +196,9 @@ function buildProjectDescription(projectData) {
 
 function resolveAssetUrl(path) {
   if (!path) return '';
-  return new URL(path, window.location.href).href;
+  // Contra baseURI y no contra location.href: las paginas de proyectos/<slug>/
+  // llevan un <base>, y resolviendo contra la url se duplicaria la ruta
+  return new URL(path, document.baseURI).href;
 }
 
 function applyProjectMeta(projectData, titleText) {
@@ -211,19 +213,51 @@ function applyProjectMeta(projectData, titleText) {
 
   const imageUrl = imagePath ? resolveAssetUrl(`${base}${imagePath}`) : '';
 
+  // Si build.js ya dejo un canonical escrito, mandamos ese: es la url limpia
+  // del proyecto y no cambia aunque se entre por /index.html o con parametros
+  const prerendered = document.querySelector('link[rel="canonical"]')?.getAttribute('href');
+
   applyMeta({
     title: titleText,
     description,
-    url: window.location.href,
+    url: prerendered || window.location.href,
     imageUrl,
     type: 'website',
   });
 }
 
-// Obtener slug de la URL
+// Obtener slug: primero del atributo que escribe build.js en las paginas
+// estaticas de proyectos/<slug>/, y si no del ?slug= de los enlaces antiguos
 function getSlugFromURL() {
+  const fromBody = document.body.dataset.slug;
+  if (fromBody) return fromBody;
   const params = new URLSearchParams(window.location.search);
   return params.get('slug');
+}
+
+// Medidas que build.js incrusta en el <head>, para poder reservar el hueco de
+// cada imagen antes de que cargue y evitar que la pagina salte
+const imageSizes = (() => {
+  const tag = document.getElementById('img-sizes');
+  if (!tag) return {};
+  try {
+    return JSON.parse(tag.textContent) || {};
+  } catch (error) {
+    console.warn('[img-sizes] no se pudo leer el bloque de medidas:', error);
+    return {};
+  }
+})();
+
+export function getImageSize(src) {
+  return imageSizes[src] || imageSizes[`./${String(src).replace(/^\.\//, '')}`] || null;
+}
+
+export function applyImageSize(img, src) {
+  const size = imageSizes[src] || imageSizes[`./${String(src).replace(/^\.\//, '')}`];
+  if (!size) return;
+  img.width = size[0];
+  img.height = size[1];
+  img.style.aspectRatio = `${size[0]} / ${size[1]}`;
 }
 
 function normalizeImageEntry(imgData) {
@@ -241,7 +275,7 @@ export async function renderProject() {
   const slug = getSlugFromURL();
   
   if (!slug) {
-    document.body.innerHTML = '<p style="padding: 2rem;">No se especificó ningún proyecto</p>';
+    document.body.innerHTML = '<p style="padding: 2rem;">No se especificó ningún proyecto. <a href="./index.html">Volver al inicio</a></p>';
     return;
   }
   
@@ -273,7 +307,7 @@ export async function renderProject() {
     }
   } catch (error) {
     console.error('Error cargando proyecto:', error);
-    document.body.innerHTML = '<p style="padding: 2rem;">Error cargando el proyecto</p>';
+    document.body.innerHTML = '<p style="padding: 2rem;">Error cargando el proyecto. <a href="./index.html">Volver al inicio</a></p>';
   }
 }
 
@@ -291,6 +325,7 @@ function renderStandardProject(projectData, titleText) {
     
     const img = document.createElement('img');
     img.src = `data/${projectData.slug}/${projectData.primera_imatge.src}`;
+    applyImageSize(img, projectData.primera_imatge.src);
     const headerAlt = `Portada del proyecto ${projectTitle}`;
     img.alt = headerAlt;
     img.addEventListener('error', () => {
@@ -415,6 +450,7 @@ function renderStandardProject(projectData, titleText) {
       if (!normalized) return;
       const img = document.createElement('img');
       img.src = `data/${projectData.slug}/${normalized.src}`;
+      applyImageSize(img, normalized.src);
       const imageAlt = normalized.alt?.trim() || `Imagen ${idx + 1} del proyecto ${projectTitle}`;
       img.alt = imageAlt;
       img.loading = 'lazy';
@@ -445,6 +481,7 @@ function renderDiarioProject(projectData, titleText) {
       if (!normalized) return;
       const img = document.createElement('img');
       img.src = `data/${projectData.slug}/${normalized.src}`;
+      applyImageSize(img, normalized.src);
       const imageAlt = normalized.alt?.trim() || `Imagen ${idx + 1} del diario ${projectTitle}`;
       img.alt = imageAlt;
       img.loading = 'lazy';

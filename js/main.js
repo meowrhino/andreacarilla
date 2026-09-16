@@ -256,6 +256,9 @@ async function initHome() {
     };
   }
 
-  const onResize = debounce(() => renderGallery(), 200);
+  const onResize = debounce(() => {
+    renderGallery();
+    applyCategoryFilter();
+  }, 200);
   window.addEventListener("resize", onResize);
 }

@@ -2,7 +2,7 @@
   "slug": "8kito",
   "titulo": "8kito",
   "primera_imatge": {
-    "src": "./img/1.jpg"
+    "src": "./img/1.webp"
   },
   "descripcion": {
     "titulo": "8KITO",
@@ -24,6 +24,6 @@
     }
   ],
   "imatges": [
-    "./img/2.jpg"
+    "./img/2.webp"
   ]
 }

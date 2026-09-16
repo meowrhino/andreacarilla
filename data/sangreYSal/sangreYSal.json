@@ -2,7 +2,7 @@
   "slug": "sangreYSal",
   "titulo": "sangre y sal",
   "primera_imatge": {
-    "src": "./img/1.jpg"
+    "src": "./img/1.webp"
   },
   "descripcion": {
     "titulo": "SANGRE Y SAL.",
@@ -34,9 +34,9 @@
     }
   ],
   "imatges": [
-    "./img/2.jpg",
-    "./img/3.jpg",
-    "./img/4.jpg",
-    "./img/5.jpg"
+    "./img/2.webp",
+    "./img/3.webp",
+    "./img/4.webp",
+    "./img/5.webp"
   ]
 }

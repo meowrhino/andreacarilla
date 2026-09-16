@@ -1,6 +1,12 @@
 {
   "projectes_visibles": [
     {
+      "slug": "core8kiInvita",
+      "name": "core. 8ki invita.",
+      "category": "eventos",
+      "visible": true
+    },
+    {
       "slug": "didYouMissMeLook1",
       "name": "did you miss me? hifas studio. look 1",
       "category": "look book",

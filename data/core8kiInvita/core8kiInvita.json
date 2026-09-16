@@ -1,0 +1,41 @@
+{
+  "slug": "core8kiInvita",
+  "titulo": "core. 8ki invita.",
+  "primera_imatge": {
+    "src": "./img/1.webp"
+  },
+  "descripcion": {
+    "titulo": "CORE. 8KI INVITA.",
+    "link": "https://www.instagram.com/xxco.rexx/"
+  },
+  "tipo_proyecto": "eventos",
+  "ubicacion": "Club Core. Madrid",
+  "fecha": "Marzo 2026",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "FOTOGRAFÍA",
+      "link": ""
+    },
+    {
+      "nombre": "Pablo Ramirez",
+      "rol": "PRODUCCIÓN",
+      "link": "https://www.instagram.com/8ki.lat/"
+    }
+  ],
+  "imatges": [
+    "./img/2.webp",
+    "./img/3.webp",
+    "./img/4.webp",
+    "./img/5.webp",
+    "./img/6.webp",
+    "./img/7.webp",
+    "./img/8.webp",
+    "./img/9.webp",
+    "./img/10.webp",
+    "./img/11.webp",
+    "./img/12.webp",
+    "./img/13.webp",
+    "./img/14.webp"
+  ]
+}

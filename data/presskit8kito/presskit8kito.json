@@ -1,0 +1,31 @@
+{
+  "slug": "presskit8kito",
+  "titulo": "presskit 8kito",
+  "primera_imatge": {
+    "src": "./img/1.webp"
+  },
+  "descripcion": {
+    "titulo": "PRESSKIT 8KITO",
+    "link": "https://www.instagram.com/8ki.lat/"
+  },
+  "tipo_proyecto": "artist image",
+  "ubicacion": "Barcelona",
+  "fecha": "Febrero 2026",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "FOTOGRAFÍA",
+      "link": ""
+    },
+    {
+      "nombre": "Pablo Ramirez",
+      "rol": "ARTIST, DJ Y PRODUCTOR",
+      "link": "https://www.instagram.com/8ki.lat/"
+    }
+  ],
+  "imatges": [
+    "./img/2.webp",
+    "./img/3.webp",
+    "./img/4.webp"
+  ]
+}

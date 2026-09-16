@@ -1,6 +1,12 @@
 {
   "projectes_visibles": [
     {
+      "slug": "presskit8kito",
+      "name": "presskit 8kito",
+      "category": "artist image",
+      "visible": true
+    },
+    {
       "slug": "core8kiInvita",
       "name": "core. 8ki invita.",
       "category": "eventos",

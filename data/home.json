@@ -1,6 +1,18 @@
 {
   "projectes_visibles": [
     {
+      "slug": "didYouMissMeLook1",
+      "name": "did you miss me? hifas studio. look 1",
+      "category": "look book",
+      "visible": true
+    },
+    {
+      "slug": "naciConElDestinoDeUnaRosa",
+      "name": "nací con el destino de una rosa",
+      "category": "artist image",
+      "visible": true
+    },
+    {
       "slug": "granadaFilmFest",
       "name": "granada film fest",
       "category": "eventos",

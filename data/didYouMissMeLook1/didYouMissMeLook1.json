@@ -1,0 +1,47 @@
+{
+  "slug": "didYouMissMeLook1",
+  "titulo": "did you miss me? hifas studio. look 1",
+  "primera_imatge": {
+    "src": "./img/1.webp"
+  },
+  "descripcion": {
+    "titulo": "DID YOU MISS ME? HIFAS STUDIO. LOOK 1",
+    "link": "https://www.instagram.com/hifas.studio/"
+  },
+  "tipo_proyecto": "look book",
+  "ubicacion": "Barcelona",
+  "fecha": "Marzo 2026",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "FOTOGRAFÍA",
+      "link": ""
+    },
+    {
+      "nombre": "Hifas Studio",
+      "rol": "BRAND",
+      "link": "https://www.instagram.com/hifas.studio/"
+    },
+    {
+      "nombre": "Tobías Kisielnicki",
+      "rol": "STYLIST",
+      "link": "https://www.instagram.com/tobias.kisielnicki/"
+    },
+    {
+      "nombre": "Greta",
+      "rol": "MODEL",
+      "link": "https://www.instagram.com/chatelaine____/"
+    }
+  ],
+  "imatges": [
+    "./img/2.webp",
+    "./img/3.webp",
+    "./img/4.webp",
+    "./img/5.webp",
+    "./img/6.webp",
+    "./img/7.webp",
+    "./img/8.webp",
+    "./img/9.webp",
+    "./img/10.webp"
+  ]
+}

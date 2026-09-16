@@ -397,17 +397,23 @@ function renderStandardProject(projectData, titleText) {
       ul.appendChild(li);
     }
     
-    // Fecha
-    if (projectData.fecha) {
-      const li = document.createElement('li');
-      li.innerHTML = `${projectData.fecha.mes} <span class="meta">${projectData.fecha.anio}</span>`;
-      ul.appendChild(li);
-    }
-    
-    // Ubicación
+    // Ubicación. Admite html para poder enlazar espacios y galerias
     if (projectData.ubicacion) {
       const li = document.createElement('li');
-      li.textContent = projectData.ubicacion;
+      li.innerHTML = projectData.ubicacion;
+      ul.appendChild(li);
+    }
+
+    // Fecha, debajo de la ubicación. Acepta texto libre ("Marzo/Agosto 2026")
+    // o el objeto {mes, anio} del esquema antiguo
+    if (projectData.fecha) {
+      const li = document.createElement('li');
+      const fecha = projectData.fecha;
+      if (typeof fecha === 'string') {
+        li.textContent = fecha;
+      } else if (fecha.mes || fecha.anio) {
+        li.innerHTML = `${fecha.mes || ''} <span class="meta">${fecha.anio || ''}</span>`.trim();
+      }
       ul.appendChild(li);
     }
     
@@ -435,6 +441,7 @@ function renderStandardProject(projectData, titleText) {
     }
     
     meta.appendChild(ul);
+    ensureExternalRel(meta);
     projectBody.appendChild(meta);
   }
   

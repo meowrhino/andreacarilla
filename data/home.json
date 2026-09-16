@@ -1,6 +1,12 @@
 {
   "projectes_visibles": [
     {
+      "slug": "granadaFilmFest",
+      "name": "granada film fest",
+      "category": "eventos",
+      "visible": true
+    },
+    {
       "slug": "tuttiPari",
       "name": "tutti pari",
       "category": "eventos",

@@ -1,0 +1,38 @@
+{
+  "slug": "granadaFilmFest",
+  "titulo": "granada film fest",
+  "primera_imatge": {
+    "src": "./img/1.webp"
+  },
+  "descripcion": {
+    "titulo": "GRANADA FILM FEST",
+    "link": "https://www.instagram.com/granadafilmfest/"
+  },
+  "tipo_proyecto": "eventos",
+  "ubicacion": "Octubre 2025. Granada",
+  "creditos": [
+    {
+      "nombre": "Andrea Carilla",
+      "rol": "FOTOGRAFÍA",
+      "link": ""
+    }
+  ],
+  "imatges": [
+    "./img/2.webp",
+    "./img/3.webp",
+    "./img/4.webp",
+    "./img/5.webp",
+    "./img/6.webp",
+    "./img/7.webp",
+    "./img/8.webp",
+    "./img/9.webp",
+    "./img/10.webp",
+    "./img/11.webp",
+    "./img/12.webp",
+    "./img/13.webp",
+    "./img/14.webp",
+    "./img/15.webp",
+    "./img/16.webp",
+    "./img/17.webp"
+  ]
+}

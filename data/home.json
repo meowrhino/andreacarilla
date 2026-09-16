@@ -1,6 +1,12 @@
 {
   "projectes_visibles": [
     {
+      "slug": "tuttiPari",
+      "name": "tutti pari",
+      "category": "eventos",
+      "visible": true
+    },
+    {
       "slug": "mercurySplash",
       "name": "mercury splash",
       "category": "eventos",
@@ -207,7 +213,7 @@
         "src": "_portada/2/2_4.webp",
         "desktopStyle": { "bottom": 0, "right": 5, "index": 0, "scale": 280 },
         "mobileStyle":  { "top": 10, "right": 5, "index": 0, "scale": 165 },
-        "url": "8kito"
+        "url": "magicalTheys"
       }
     ],  
     [
@@ -215,7 +221,7 @@
         "src": "_portada/3/3_1.webp",
         "desktopStyle": { "top": 5, "left": 5,  "index": 2, "scale": 235 },
         "mobileStyle":  { "top": 5, "left": 10, "index": 1, "scale": 117 },
-        "url": "magicalTheys"
+        "url": "8kito"
       },
       {
         "src": "_portada/3/3_2.webp",

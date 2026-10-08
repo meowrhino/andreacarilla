@@ -1,73 +1,64 @@
 # andrea carilla - web con estructura json
 
-## descripción
+## regla de oro
 
-web de andrea carilla con estructura basada en json. los proyectos se cargan dinámicamente desde archivos json mediante javascript.
+**solo se tocan `data/` y `_portada/`.** todo lo demás que lleva contenido
+(`proyectos/`, los bloques marcados de `index.html`, `sitemap.xml`,
+`robots.txt`) lo escribe `build.js`, y la GitHub Action lo ejecuta sola en cada
+push que toque `data/`.
 
 ## estructura
 
 ```
-andreacarilla_web/
-├── index.html              # página principal (home)
+andreacarilla/
+├── index.html              # home. Los bloques <!-- build:x --> los rellena build.js
 ├── proyecto.html           # solo redirige enlaces antiguos ?slug=
-├── build.js                # genera proyectos/<slug>/index.html
+├── build.js                # json → html (proyectos, home, sitemap, robots)
 ├── proyectos/              # GENERADO, no editar a mano
 │   ├── 8kito/index.html
 │   └── ...
-├── css/
-│   └── style.css           # estilos de la web
+├── sitemap.xml, robots.txt # GENERADOS
+├── formateador.html        # editor de proyectos: rellenas el formulario y sale el json
+├── css/style.css
 ├── js/
-│   ├── main.js             # javascript principal
-│   └── components.js       # componentes y renderizado
-├── _portada/               # imágenes de la galería home
-│   ├── 1/
-│   ├── 2/
-│   └── 3/
+│   ├── main.js             # todas las páginas: popup "andrea carilla"
+│   └── home.js             # solo la home: galería, enlaces y filtros
+├── _portada/               # imágenes de la galería de la home (1/, 2/, 3/)
 └── data/
-    ├── home.json           # configuración global
-    ├── 8kito/
-    │   ├── 8kito.json      # datos del proyecto
-    │   └── img/            # imágenes del proyecto
-    ├── aines/
-    │   ├── aines.json
-    │   └── img/
-    └── ...                 # 24 proyectos en total
+    ├── home.json           # lista de proyectos + sets de la galería
+    └── <slug>/
+        ├── <slug>.json     # datos del proyecto
+        └── img/            # imágenes del proyecto
 ```
 
-## funcionamiento
+## cómo funciona
 
-### página home (index.html)
+el navegador recibe el html con el contenido ya escrito (textos, créditos,
+imágenes con su tamaño, enlaces, bio). así google lo lee entero y al compartir
+un enlace por whatsapp o instagram sale la tarjeta con su título e imagen. el
+javascript solo hace lo que no es contenido:
 
-- galería de imágenes posicionadas absolutamente (sets definidos en `data/home.json`)
-- lista de proyectos con filtros por categoría (datos de `projectes_visibles` en `data/home.json`)
-- navegación entre 3 sets de galería
-- botón "refrescar" que mezcla aleatoriamente los proyectos
+- **home**: coloca las portadas de la galería (posiciones de `data/home.json`),
+  reparte los enlaces a proyectos al azar sin que se pisen, filtros por
+  categoría, botones 1/2/3 de galería y "refrescar"
+- **todas las páginas**: abrir y cerrar el popup "andrea carilla" (también con Escape)
 
-### página de proyecto (proyectos/{slug}/)
+si el javascript falla, la web se sigue leyendo: los enlaces salen en fila y
+cada proyecto se ve completo.
 
-cada proyecto tiene su propia página en `proyectos/{slug}/index.html`. **son
-archivos generados: no se editan a mano.** los crea `build.js` a partir de los
-json, y el GitHub Action los regenera solo en cada push que toque `data/`.
+### seo
 
-existen porque los scrapers de whatsapp, instagram, facebook o twitter no
-ejecutan javascript: si los meta se inyectan en cliente, al compartir el enlace
-sale una tarjeta vacía. estas páginas llevan el `<head>` ya escrito (título,
-descripción, `og:image`, `canonical`, json-ld) y el cuerpo lo sigue montando el
-javascript igual que antes.
+- cada página lleva `title`, `description`, `og:*`, `twitter:*`, `canonical` y json-ld
+  (`Person` + `WebSite` en la home, `CreativeWork` en cada proyecto)
+- `sitemap.xml` con la home y todos los proyectos visibles; `robots.txt` apunta a él
+- las urls siempre son de `https://andreacarilla.work`, también en la copia de
+  meowrhino (`meowrhino.github.io/andreacarilla`): así el canonical de la copia
+  apunta al original y google no indexa dos webs iguales
+- la descripción de la home está en `HOME_DESCRIPTION`, arriba de `build.js`
 
-`proyecto.html?slug=8kito` sigue funcionando: redirige a `proyectos/8kito/`.
+## estructura json de proyectos
 
-cada página:
-1. lee el slug de `data-slug` en el `<body>`
-2. carga el json desde `data/{slug}/{slug}.json`
-3. renderiza dinámicamente el contenido según los campos presentes
-4. soporta dos tipos de layout:
-   - **proyecto**: con header, descripción, metadata y galería
-   - **diario**: solo galería de imágenes
-
-### estructura json de proyectos
-
-todos los campos son opcionales excepto `slug`:
+todos los campos son opcionales excepto `slug` (que es el nombre de la carpeta):
 
 ```json
 {
@@ -77,13 +68,12 @@ todos los campos son opcionales excepto `slug`:
     "src": "./img/1.webp"
   },
   "descripcion": {
-    "es": ["párrafo 1", "párrafo 2"]
+    "titulo": "título de la descripción",
+    "link": "https://... (opcional, el título enlaza aquí)",
+    "texto": ["párrafo 1", "párrafo 2 con <b>negrita</b> o <a href=\"...\">enlace</a>"]
   },
   "tipo_proyecto": "artist image",
-  "fecha": {
-    "mes": "diciembre",
-    "anio": "2024"
-  },
+  "fecha": "diciembre 2024",
   "ubicacion": "barcelona",
   "creditos": [
     {
@@ -93,7 +83,8 @@ todos los campos son opcionales excepto `slug`:
     }
   ],
   "imatges": [
-    "./img/2.webp"
+    "./img/2.webp",
+    { "src": "./img/3.webp", "alt": "descripción de la foto" }
   ],
   "configuracion": {
     "mostrar_header": true,
@@ -103,103 +94,61 @@ todos los campos son opcionales excepto `slug`:
 }
 ```
 
-las entradas de `imatges` suelen ser rutas (strings); si necesitas un `alt` específico en la galería, puedes usar objetos con `src` y `alt`. El `alt` se genera automáticamente cuando no se define. En la portada, el `alt` también se genera automáticamente.
-
-## características
-
-### renderizado dinámico
-
-el javascript (`components.js`) lee el json y renderiza:
-- imagen principal (si existe)
-- descripción con html (si existe)
-- metadata estructurada (tipo, fecha, ubicación, créditos)
-- galería de imágenes
-
-### casos especiales
-
-- **proyecto "diario"**: sin header ni metadata, solo galería
-- **descripciones con html**: soporta enlaces, párrafos con estilos
-- **múltiples colaboradores**: array flexible de créditos
-
-### ventajas
-
-1. **mantenimiento fácil**: editar un json es más simple que html
-2. **consistencia**: todos los proyectos siguen la misma estructura
-3. **flexibilidad**: campos opcionales permiten diferentes tipos de proyectos
-4. **escalabilidad**: fácil añadir nuevos campos sin romper proyectos existentes
-5. **organización**: cada proyecto tiene su carpeta con json e imágenes
+- `texto` y `ubicacion` admiten html (lo que sale del formateador)
+- `fecha` puede ser texto libre o `{ "mes": "diciembre", "anio": "2024" }` (el año sale en gris)
+- `imatges`: rutas, u objetos con `src` y `alt` si quieres un texto alternativo propio;
+  si no, se genera solo
+- `tipo_layout: "diario"`: sin cabecera ni créditos, solo una tira horizontal de fotos
+- `mostrar_header` / `mostrar_meta` a `false` ocultan la imagen principal / los créditos
 
 ## cómo usar
 
-### servidor local
-
-para probar la web localmente, necesitas un servidor http:
-
-```bash
-# con python 3
-python3 -m http.server 8000
-
-# con node.js
-npx http-server -p 8000
-
-# luego abrir: http://localhost:8000
-```
-
 ### añadir un nuevo proyecto
 
-1. crear carpeta `data/nuevo-proyecto/`
-2. crear archivo `data/nuevo-proyecto/nuevo-proyecto.json` con los datos
-3. crear carpeta `data/nuevo-proyecto/img/` y copiar imágenes
-4. añadir entrada en `data/home.json` en `projectes_visibles` (no hace falta tocar JS):
-```json
-{
-  "slug": "nuevo-proyecto",
-  "name": "nombre legible",
-  "category": "categoría",
-  "visible": true
-}
-```
-5. opcional: añadir una portada en alguno de los `gallerySets` de `data/home.json` (para que salga en la galería principal).
+1. crear `data/nuevo-proyecto/nuevo-proyecto.json` (con el formateador)
+2. meter las imágenes en `data/nuevo-proyecto/img/`, pasadas por
+   <https://meowrhino.github.io/imgToWeb/> con los valores por defecto (lado
+   largo máximo 2000px, calidad 85)
+3. añadir la entrada en `data/home.json`, en `projectes_visibles`:
+   ```json
+   {
+     "slug": "nuevo-proyecto",
+     "name": "nombre legible",
+     "category": "categoría",
+     "visible": true
+   }
+   ```
+4. opcional: añadir una portada en alguno de los `gallerySets` de `data/home.json`
+5. push. la action genera `proyectos/nuevo-proyecto/index.html`, añade el enlace
+   en la home y lo mete en el sitemap
 
-la página `proyectos/nuevo-proyecto/index.html` se genera sola al hacer push.
-si trabajas en local y quieres verla antes de subir, ejecuta `node build.js`.
+### modificar u ocultar un proyecto
 
-las imágenes se convierten a webp con <https://meowrhino.github.io/imgToWeb/>,
-con los valores por defecto: lado largo máximo 2000px y calidad 85.
+- modificar: editar `data/{slug}/{slug}.json` o sus imágenes y hacer push
+- ocultar: en `data/home.json`, `"visible": false`. su página se borra en el siguiente build
 
-### modificar un proyecto
+### verlo en local antes de subir
 
-1. editar el archivo json en `data/{slug}/{slug}.json`
-2. reemplazar imágenes en `data/{slug}/img/` si es necesario
-3. recargar la página
-
-### ocultar un proyecto
-
-en `data/home.json`, cambiar:
-```json
-"visible": true
-```
-por:
-```json
-"visible": false
+```bash
+node build.js
+python3 -m http.server 8000
 ```
 
-## compatibilidad
+y abrir `http://localhost:8000`. sin `node build.js` se ve la última versión generada.
 
-- funciona igual que la versión html original
-- mantiene todos los estilos css existentes
-- preserva la funcionalidad de navegación y filtros
-- compatible con todos los navegadores modernos
+si un json tiene un error (una coma que falta), `build.js` lo dice con el
+nombre del archivo, deja la página de ese proyecto como estaba y la action sale
+en rojo. el resto de la web no se rompe.
 
 ## notas técnicas
 
-- los json están en `data/{slug}/` junto con sus imágenes
-- el javascript usa es6 modules (`type="module"`)
-- las rutas son relativas (`./css/`, `data/...`), funciona igual en dominio raíz o subcarpeta (GitHub Pages)
-- las páginas de `proyectos/` llevan `<base href="../../">`, por eso las rutas relativas siguen funcionando desde una subcarpeta
-- `build.js` no depende de nada externo: lee los json tal cual y saca las medidas de cada imagen del propio fichero webp
-- las medidas van incrustadas en el `<head>` como `#img-sizes` para reservar el hueco de cada imagen y que la página no salte al cargar
-- `build.js` usa siempre `https://andreacarilla.work` como url del sitio, también en la copia de meowrhino, para que el canonical apunte al original
+- sin dependencias: `build.js` es node puro y saca el tamaño de cada imagen del propio webp
+- cada `<img>` lleva `width` y `height` reales para que la página no salte al cargar;
+  las portadas de la home los leen de `#img-sizes` en el `<head>`
+- las rutas son relativas (`./css/`, `data/...`): funciona igual en dominio raíz o en
+  subcarpeta. las páginas de `proyectos/` llevan `<base href="../../">` por eso
+- la web es siempre blanca (`color-scheme: light`), también con el modo oscuro del sistema
+- `proyecto.html?slug=8kito` sigue funcionando: redirige a `proyectos/8kito/`
 
 ## créditos
 

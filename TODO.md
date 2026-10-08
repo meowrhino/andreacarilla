@@ -1,28 +1,15 @@
 # TODO
 
-## Bloqueos (prioridad alta)
-- Arreglar rutas absolutas (`/data/...`, `/proyecto.html`, `/index.html`) para que funcionen en subcarpeta/GitHub Pages y evitar el error `Unexpected token '<'` en home.json. Propuesta: usar `const base = document.querySelector('base')?.href || window.location.origin + window.location.pathname.replace(/\\/[^/]*$/, '/')` y construir URLs relativas, o añadir `<base href="/">` solo si se sirve en raíz.
-- Añadir fallback `<noscript>` mínimo en `index.html` y `proyecto.html` para crawlers sin JS.
+## pendiente
+- pasar los cambios de esta copia al repo de Andrea (carillagonzalezandrea-source/andreacarilla), poco a poco
+- revisar `formateador.html` (700 líneas) con la misma lupa: no se ha tocado en esta pasada
+- preguntar a Andrea por el orden de las fotos: en 8 proyectos (vozMal, fleaMarket, lostLetter, tawla, henshin, diario, arcEnPix, dearxx) `imatges` va 1, 10, 11… 2, 3 (orden alfabético, no numérico). ¿es a propósito?
+- dar de alta andreacarilla.work en Google Search Console y enviar `sitemap.xml`
 
-## SEO / Social
-- Incluir en `index.html` y `proyecto.html`: `meta description`, `og:title/description/type/url`, `og:image`, `twitter:card`, `link rel="canonical"`. En proyectos, poblar dinámicamente con título, primer párrafo y primera imagen.
-- Añadir `<h1>` visible (home + cada proyecto) y jerarquía de headings en descripciones.
-- Generar JSON-LD: `Person` (Andrea) + `WebSite` en home; `CreativeWork`/`ImageObject` por proyecto con título/fecha/colaboradores.
-
-## Accesibilidad
-- Portadas del home: `alt` descriptivo (nombre del proyecto/tema) y `loading="lazy"` + dimensiones para evitar CLS.
-- Botones de tema/categoría/popup/home: `aria-label`, foco inicial en popup y cierre con Escape; añadir `rel="noopener noreferrer"` en enlaces externos.
-
-## Contenido y layout de proyecto
-- En `renderProject`: renderizar `<main>` + `<h1>` con título del proyecto antes de la descripción/galería.
-- Añadir `noscript` con mensaje “cargando proyecto…” y enlaces básicos a home.
-
-## CSS
-- Ajustar `.diario-gallery` para móvil (`width: min(80vw, 512px)`, evitar `position: fixed` en pantallas pequeñas). Limpiar reglas redundantes (`flex-direction` sobre grid, doble `display` en `.footer`).
-
-## Documentación
-- Reescribir `README.md` para reflejar que solo hay que tocar `data/home.json` al añadir proyectos; documentar despliegue en subcarpeta y SEO/OG.
-
-## Verificación
-- Probar en servidor local y en entorno simulado de subcarpeta (ej.: servir en `/andreacarilla/`) para confirmar rutas.
-- Revisar que las cards OG/Twitter muestran la imagen y texto correctos para home y un proyecto.
+## hecho (2026-10)
+- SEO: todo el contenido en el html (build.js), meta + og + canonical + json-ld en todas las páginas, sitemap.xml y robots.txt
+- canonical de la copia apuntando a andreacarilla.work
+- accesibilidad: `<main>`, h1 por página, popup con foco y Escape, `aria-pressed` en filtros, imágenes con alt, width/height y lazy
+- enlaces de la home sin solaparse y con carga suave; portadas con fundido
+- js: components.js eliminado (el html ya viene hecho); main.js (popup) + home.js (home)
+- css ordenado por secciones, sin reglas muertas; diario adaptado a móvil

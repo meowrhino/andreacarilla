@@ -12,4 +12,5 @@
 - accesibilidad: `<main>`, h1 por página, popup con foco y Escape, `aria-pressed` en filtros, imágenes con alt, width/height y lazy
 - enlaces de la home sin solaparse y con carga suave; portadas con fundido
 - js: components.js eliminado (el html ya viene hecho); main.js (popup) + home.js (home)
+- vista previa con Live Server sin build: plantillas.js compartida entre build.js y el navegador
 - css ordenado por secciones, sin reglas muertas; diario adaptado a móvil

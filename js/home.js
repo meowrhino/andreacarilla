@@ -2,10 +2,12 @@
 //
 // Los enlaces ya estan en el HTML (los escribe build.js con su data-category);
 // aqui solo se reparten por la pantalla y se filtran. La galeria se monta con
-// los gallerySets de data/home.json.
+// los gallerySets de data/home.json. En local (Live Server) los enlaces se
+// rehacen tambien desde home.json, para ver los cambios sin el build.
 
+const isLocal = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
 const linksContainer = document.getElementById("links-container");
-const links = [...linksContainer.querySelectorAll(".project-link")];
+let links = [...linksContainer.querySelectorAll(".project-link")];
 const galleryContainer = document.getElementById("gallery-container");
 
 const activeCategories = new Set();
@@ -207,9 +209,18 @@ scatterLinks();
 document.getElementById("shuffle-btn").addEventListener("click", scatterLinks);
 
 try {
-  const response = await fetch("data/home.json");
+  const response = await fetch("data/home.json", isLocal ? { cache: "no-store" } : {});
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  gallerySets = (await response.json()).gallerySets || [];
+  const home = await response.json();
+  gallerySets = home.gallerySets || [];
+
+  if (isLocal) {
+    const { previewHomeLinks } = await import("./vista-previa.js");
+    previewHomeLinks(home, linksContainer);
+    links = [...linksContainer.querySelectorAll(".project-link")];
+    renderCategoryNav();
+    scatterLinks();
+  }
 } catch (error) {
   console.error("[home] no se pudo cargar data/home.json:", error);
 }

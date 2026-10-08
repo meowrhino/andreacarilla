@@ -20,9 +20,12 @@ andreacarilla/
 ├── sitemap.xml, robots.txt # GENERADOS
 ├── formateador.html        # editor de proyectos: rellenas el formulario y sale el json
 ├── css/style.css
+├── package.json            # solo dice a node que los .js son módulos (sin dependencias)
 ├── js/
 │   ├── main.js             # todas las páginas: popup "andrea carilla"
-│   └── home.js             # solo la home: galería, enlaces y filtros
+│   ├── home.js             # solo la home: galería, enlaces y filtros
+│   ├── plantillas.js       # json → html. La usan build.js y la vista previa
+│   └── vista-previa.js     # solo en local: pinta desde los json en vivo
 ├── _portada/               # imágenes de la galería de la home (1/, 2/, 3/)
 └── data/
     ├── home.json           # lista de proyectos + sets de la galería
@@ -127,14 +130,17 @@ todos los campos son opcionales excepto `slug` (que es el nombre de la carpeta):
 - modificar: editar `data/{slug}/{slug}.json` o sus imágenes y hacer push
 - ocultar: en `data/home.json`, `"visible": false`. su página se borra en el siguiente build
 
-### verlo en local antes de subir
+### verlo en local antes de subir (Live Server)
 
-```bash
-node build.js
-python3 -m http.server 8000
-```
+igual que siempre: abrir la carpeta en VS Code y darle a "Go Live". al guardar
+un json, Live Server recarga y el cambio se ve al momento, **sin ejecutar nada**.
 
-y abrir `http://localhost:8000`. sin `node build.js` se ve la última versión generada.
+cómo: en local (`localhost` / `127.0.0.1`) el javascript vuelve a pintar el
+contenido leyendo los json en vivo, con la misma plantilla que usa el build
+(`js/plantillas.js`). los proyectos nuevos que aún no tienen página salen en
+la home y se abren con `proyecto.html?slug=...`. si un json tiene un error, la
+página lo dice con la línea y la columna. en la web publicada esto no se
+carga: allí se sirve el html generado.
 
 si un json tiene un error (una coma que falta), `build.js` lo dice con el
 nombre del archivo, deja la página de ese proyecto como estaba y la action sale

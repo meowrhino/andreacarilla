@@ -125,6 +125,38 @@ a:active {
   /* opcional para recortes suaves */
 }
 
+/* Entrada suave: cada portada aparece al cargar y los links uno tras otro
+   (el retraso de cada link lo pone main.js) */
+.portada {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.portada.is-loaded {
+  opacity: 1;
+}
+
+.project-link {
+  animation: aparecer 0.5s ease both;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portada {
+    transition: none;
+  }
+
+  .project-link {
+    animation: none;
+  }
+}
+
 /* Navegación fija abajo a la derecha */
 #home-nav {
   position: fixed;

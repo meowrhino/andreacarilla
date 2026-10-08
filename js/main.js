@@ -143,6 +143,7 @@ async function initHome() {
       }
 
       img.addEventListener("load", resizeWrapper);
+      img.addEventListener("load", () => img.classList.add("is-loaded"));
       if (img.complete || knownSize) resizeWrapper();
     });
   }
@@ -159,11 +160,12 @@ async function initHome() {
     const placed = [];
     let areaHeight = container.clientHeight;
 
-    activeProjects.forEach((project) => {
+    activeProjects.forEach((project, index) => {
       const link = document.createElement("a");
       link.href = `./proyectos/${project.url}/`;
       link.className = "project-link";
       link.textContent = project.name;
+      link.style.animationDelay = `${index * 30}ms`; // aparecen uno tras otro
       container.appendChild(link);
 
       // Posición aleatoria que no pise a los enlaces ya colocados. Si tras

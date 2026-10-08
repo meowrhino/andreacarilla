@@ -1,14 +1,19 @@
 #!/usr/bin/env node
-// build.js - genera una pagina estatica por proyecto en proyectos/<slug>/
+// build.js - escribe en HTML todo el contenido de la web a partir de los json
 //
-// Por que existe: proyecto.html es un esqueleto vacio que se rellena con JS,
-// asi que los scrapers de WhatsApp, Instagram, Facebook o Twitter -que no
-// ejecutan JS- veian siempre "proyecto" sin imagen ni descripcion. Estas
-// paginas llevan el <head> ya escrito, asi que las previsualizaciones al
-// compartir funcionan. El body lo sigue montando js/main.js igual que antes.
+// Genera:
+//   proyectos/<slug>/index.html   una pagina completa por proyecto
+//   index.html                    solo los bloques entre <!-- build:x --> y <!-- /build:x -->
+//   sitemap.xml, robots.txt
+//
+// Por que: si el contenido lo pinta el JS, Google ve una pagina vacia y los
+// scrapers de WhatsApp, Instagram o Twitter (que no ejecutan JS) no ven ni
+// titulo ni imagen. Asi el navegador recibe el HTML ya hecho y el JS solo
+// coloca cosas e interactua (galeria de la home, filtros, popup).
 //
 // No toca ningun json: lee data/home.json y data/<slug>/<slug>.json tal cual
 // los deja el formateador, y mide las imagenes leyendo los propios ficheros.
+// Sin dependencias. Lo ejecuta la Action en cada push que toque data/.
 //
 // Uso: node build.js
 
@@ -25,6 +30,28 @@ const OUT = path.join(ROOT, "proyectos");
 // original y Google no indexa dos webs iguales.
 // ---------------------------------------------------------------------------
 const SITE_URL = "https://andreacarilla.work";
+const SITE_NAME = "andrea carilla";
+const HOME_DESCRIPTION =
+  "Portfolio de fotografía de Andrea Carilla. Proyectos de moda, editorial y diario personal.";
+
+// Bio del popup "andrea carilla". Va en el HTML de todas las paginas
+const BIO_HTML = `
+            <p>Graduada en Comunicación Audiovisual por la Universidad de Granada en 2019, su práctica fotográfica se
+                articula entre la moda, el diario personal y la fotografía robada, tensionando los límites entre lo
+                documental y lo construido.</p>
+            <p>Es cofundadora de la editorial de autoedición <a href="https://quiennocorrevuela.bigcartel.com/"
+                    target="_blank" rel="noopener noreferrer">Quien no corre, vuela</a>, desde donde ha publicado
+                <i>archivo en pixel</i> y <i>no time left for square</i>, investigando nuevas formas de narrar,
+                publicar y distribuir fotografía contemporánea desde los márgenes.</p>
+            <p>Su trabajo se construye desde la serialidad y la repetición: las imágenes no funcionan de forma
+                aislada, sino que se organizan como fragmentos de una narrativa abierta. Dispara desde el impulso y
+                el error, con una cámara que no busca certezas ni discursos cerrados, sino que reacciona ante lo que
+                hiere, incomoda o emociona. Una mirada crítica, permeable y radicalmente encarnada en lo cotidiano.</p>
+            <div class="footer">
+                <a href="mailto:carillagonzalezandrea@gmail.com">carillagonzalezandrea@gmail.com</a>
+                <a href="https://www.instagram.com/andreacarilla/" target="_blank" rel="noopener noreferrer">@andreacarilla</a>
+                <span class="credit">web: <a href="https://meowrhino.studio/" target="_blank" rel="noopener noreferrer">meowrhino</a></span>
+            </div>`;
 
 // ---------------------------------------------------------------------------
 // Dimensiones de un webp sin dependencias. Hace falta para reservar el hueco
@@ -67,57 +94,10 @@ function webpSize(file) {
 }
 
 // ---------------------------------------------------------------------------
-// Mismas reglas de titulo y descripcion que js/components.js, para que el
-// <head> estatico y el que inyecta el JS digan exactamente lo mismo.
+// Utilidades de texto
 // ---------------------------------------------------------------------------
-const stripHtml = (s) => String(s).replace(/<[^>]*>/g, "");
-const normalizeWhitespace = (s) => String(s).replace(/\s+/g, " ").trim();
-
-// Identico al truncate de js/components.js: si no, el <head> estatico y el que
-// inyecta el JS dirian cosas distintas en las descripciones largas
-function truncate(value, maxLength) {
-  if (value.length <= maxLength) return value;
-  return value.slice(0, maxLength - 3).trimEnd() + "...";
-}
-
-function projectTitle(data, fallback = "proyecto") {
-  return data?.titulo || data?.slug || fallback;
-}
-
-function projectDescription(data) {
-  const d = data.descripcion;
-  let candidate = "";
-  if (d) {
-    const paragraphs = Array.isArray(d.texto) ? d.texto : Array.isArray(d.es) ? d.es : [];
-    if (paragraphs.length > 0) candidate = paragraphs[0];
-    else if (d.titulo) candidate = d.titulo;
-  }
-  if (!candidate) candidate = projectTitle(data, "Proyecto");
-  return truncate(normalizeWhitespace(stripHtml(candidate)), 160);
-}
-
-function firstImage(data) {
-  if (data.primera_imatge?.src) return data.primera_imatge.src;
-  const list = Array.isArray(data.imatges) ? data.imatges : [];
-  for (const entry of list) {
-    const src = typeof entry === "string" ? entry : entry?.src;
-    if (src) return src;
-  }
-  return "";
-}
-
-function allImages(data) {
-  const out = [];
-  if (data.primera_imatge?.src) out.push(data.primera_imatge.src);
-  for (const entry of Array.isArray(data.imatges) ? data.imatges : []) {
-    const src = typeof entry === "string" ? entry : entry?.src;
-    if (src) out.push(src);
-  }
-  return out;
-}
-
 const escapeHtml = (s) =>
-  String(s)
+  String(s ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -126,49 +106,201 @@ const escapeHtml = (s) =>
 // JSON incrustado en el HTML: hay que cortar </script> o rompe el documento
 const escapeJson = (obj) => JSON.stringify(obj).replace(/</g, "\\u003c");
 
-// ---------------------------------------------------------------------------
+const stripHtml = (s) => String(s).replace(/<[^>]*>/g, "");
+const normalizeWhitespace = (s) => String(s).replace(/\s+/g, " ").trim();
 
-function imageSizeMap(slug, data) {
-  const sizes = {};
-  for (const src of allImages(data)) {
-    const clean = src.replace(/^\.\//, "");
-    const size = webpSize(path.join(DATA, slug, clean));
-    if (size) sizes[src] = [size.w, size.h];
-  }
-  return sizes;
+function truncate(value, maxLength) {
+  if (value.length <= maxLength) return value;
+  return value.slice(0, maxLength - 3).trimEnd() + "...";
 }
 
-function projectPage({ slug, data, siteUrl }) {
+// "Evento " y "eventos" son la misma categoria
+function normalizeCategory(value) {
+  if (!value) return "";
+  const normalized = String(value).trim().replace(/\s+/g, " ").toLowerCase();
+  const aliases = { evento: "eventos", producto: "product", investigacion: "investigación" };
+  return aliases[normalized] || normalized;
+}
+
+// Enlace externo: siempre en pestaña nueva y sin pasarle la ventana
+const externalLink = (href, text) =>
+  `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(text)}</a>`;
+
+// ---------------------------------------------------------------------------
+// Lectura del json de proyecto
+// ---------------------------------------------------------------------------
+const projectTitle = (data) => data.titulo || data.slug;
+
+// Los parrafos admiten html (negrita, cursiva, enlaces del formateador).
+// "es" es el nombre antiguo de "texto"
+function paragraphs(data) {
+  const d = data.descripcion || {};
+  return Array.isArray(d.texto) ? d.texto : Array.isArray(d.es) ? d.es : [];
+}
+
+// Para <meta description>: primer parrafo sin html, o el titulo
+function projectDescription(data) {
+  const candidate = paragraphs(data)[0] || data.descripcion?.titulo || projectTitle(data);
+  return truncate(normalizeWhitespace(stripHtml(candidate)), 160);
+}
+
+// Las imagenes pueden ser "./img/1.webp" o { src, alt }
+const imageEntry = (entry) =>
+  typeof entry === "string" ? { src: entry, alt: "" } : entry?.src ? { src: entry.src, alt: entry.alt || "" } : null;
+
+const galleryImages = (data) => (Array.isArray(data.imatges) ? data.imatges : []).map(imageEntry).filter(Boolean);
+
+// Ruta de una imagen del proyecto vista desde la raiz de la web
+const imagePath = (slug, src) => `data/${slug}/${src.replace(/^\.\//, "")}`;
+
+// <img> con su ancho y alto reales, para que el navegador reserve el hueco
+function imgTag(file, alt, attrs = "") {
+  const size = webpSize(path.join(ROOT, file));
+  const dims = size ? ` width="${size.w}" height="${size.h}"` : "";
+  return `<img src="./${escapeHtml(file)}" alt="${escapeHtml(alt)}"${dims}${attrs ? " " + attrs : ""}>`;
+}
+
+// ---------------------------------------------------------------------------
+// Piezas de HTML comunes
+// ---------------------------------------------------------------------------
+
+// Boton "andrea carilla" + popup con la bio, y "home" fuera de la home
+function siteChrome({ isHome }) {
+  return `    <nav id="andrea-nav">
+        <button id="open-andrea" aria-haspopup="dialog" aria-controls="andrea-popup" aria-expanded="false">andrea carilla</button>
+    </nav>
+    <div id="andrea-popup" role="dialog" aria-modal="true" aria-label="sobre andrea carilla">
+        <button class="close-btn" id="close-andrea">cerrar</button>
+        <div class="content">${BIO_HTML}
+        </div>
+    </div>${isHome ? "" : `\n    <a class="home-button" href="./">home</a>`}`;
+}
+
+function metaTags({ title, description, url, imageUrl }) {
+  return [
+    `<meta name="description" content="${escapeHtml(description)}">`,
+    `<meta property="og:site_name" content="${SITE_NAME}">`,
+    `<meta property="og:title" content="${escapeHtml(title)}">`,
+    `<meta property="og:description" content="${escapeHtml(description)}">`,
+    `<meta property="og:type" content="website">`,
+    `<meta property="og:locale" content="es_ES">`,
+    `<meta property="og:url" content="${escapeHtml(url)}">`,
+    imageUrl && `<meta property="og:image" content="${escapeHtml(imageUrl)}">`,
+    `<meta name="twitter:card" content="${imageUrl ? "summary_large_image" : "summary"}">`,
+    `<meta name="twitter:title" content="${escapeHtml(title)}">`,
+    `<meta name="twitter:description" content="${escapeHtml(description)}">`,
+    imageUrl && `<meta name="twitter:image" content="${escapeHtml(imageUrl)}">`,
+    `<link rel="canonical" href="${escapeHtml(url)}">`,
+  ]
+    .filter(Boolean)
+    .map((m) => "    " + m)
+    .join("\n");
+}
+
+// ---------------------------------------------------------------------------
+// Pagina de proyecto
+// ---------------------------------------------------------------------------
+
+// Tipo, ubicacion, fecha y creditos. La ubicacion admite html (enlaces a
+// espacios y galerias); la fecha es texto libre o { mes, anio }
+function projectMeta(data) {
+  const items = [];
+
+  const category = normalizeCategory(data.tipo_proyecto);
+  if (category) {
+    items.push(`<a href="./?categoria=${encodeURIComponent(category)}">${escapeHtml(data.tipo_proyecto)}</a>`);
+  }
+  if (data.ubicacion) items.push(data.ubicacion);
+
+  const fecha = data.fecha;
+  if (typeof fecha === "string" && fecha) items.push(escapeHtml(fecha));
+  else if (fecha?.mes || fecha?.anio) {
+    items.push(`${escapeHtml(fecha.mes || "")} <span class="meta">${escapeHtml(fecha.anio || "")}</span>`.trim());
+  }
+
+  for (const c of Array.isArray(data.creditos) ? data.creditos : []) {
+    const name = c.link ? externalLink(c.link, c.nombre) : escapeHtml(c.nombre);
+    items.push(c.rol ? `${name} <span class="meta">${escapeHtml(c.rol)}</span>` : name);
+  }
+
+  if (!items.length) return "";
+  return `
+        <div class="project-meta">
+            <ul>
+${items.map((i) => `                <li>${i}</li>`).join("\n")}
+            </ul>
+        </div>`;
+}
+
+function projectDescriptionHtml(data) {
+  const d = data.descripcion || {};
+  const parts = [];
+  if (d.titulo) parts.push(`<h2>${d.link ? externalLink(d.link, d.titulo) : escapeHtml(d.titulo)}</h2>`);
+  for (const p of paragraphs(data)) parts.push(`<p>${p}</p>`);
+  if (!parts.length) return "";
+  return `
+        <div class="project-description">
+${parts.map((p) => `            ${p}`).join("\n")}
+        </div>`;
+}
+
+function standardBody(slug, data) {
+  const title = projectTitle(data);
+  const cfg = data.configuracion || {};
+  const out = [];
+
+  if (cfg.mostrar_header !== false && data.primera_imatge?.src) {
+    const header = imgTag(imagePath(slug, data.primera_imatge.src), `Portada del proyecto ${title}`, 'fetchpriority="high"');
+    out.push(`    <div class="project-header">\n        ${header}\n    </div>`);
+  }
+
+  const description = projectDescriptionHtml(data);
+  const meta = cfg.mostrar_meta !== false ? projectMeta(data) : "";
+  if (description || meta) out.push(`    <div class="project-body">${description}${meta}\n    </div>`);
+
+  const images = galleryImages(data);
+  if (images.length) {
+    const tags = images.map(
+      (img, i) =>
+        "        " +
+        imgTag(imagePath(slug, img.src), img.alt.trim() || `Imagen ${i + 1} del proyecto ${title}`, 'loading="lazy" decoding="async"')
+    );
+    out.push(`    <div class="project-gallery">\n${tags.join("\n")}\n    </div>`);
+  }
+  return out.join("\n");
+}
+
+// Diario: solo una tira horizontal de fotos
+function diarioBody(slug, data) {
+  const tags = galleryImages(data).map(
+    (img, i) =>
+      "        " +
+      imgTag(
+        imagePath(slug, img.src),
+        img.alt.trim() || `Imagen ${i + 1} del diario`,
+        i === 0 ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'
+      )
+  );
+  return `    <div class="diario-gallery">\n${tags.join("\n")}\n    </div>`;
+}
+
+function projectPage(slug, data) {
   const title = projectTitle(data);
   const description = projectDescription(data);
-  const url = siteUrl ? `${siteUrl}/proyectos/${slug}/` : "";
-  const img = firstImage(data);
-  const imageUrl = img && siteUrl ? `${siteUrl}/data/${slug}/${img.replace(/^\.\//, "")}` : "";
-  const sizes = imageSizeMap(slug, data);
+  const url = `${SITE_URL}/proyectos/${slug}/`;
+  const first = data.primera_imatge?.src || galleryImages(data)[0]?.src;
+  const imageUrl = first ? `${SITE_URL}/${imagePath(slug, first)}` : "";
+  const isDiario = data.configuracion?.tipo_layout === "diario";
 
   const ld = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     name: title,
     description,
-    author: { "@type": "Person", name: "Andrea Carilla" },
+    url,
+    author: { "@type": "Person", name: "Andrea Carilla", url: SITE_URL },
   };
-  if (url) ld.url = url;
   if (imageUrl) ld.image = imageUrl;
-
-  const meta = [
-    `<meta name="description" content="${escapeHtml(description)}">`,
-    `<meta property="og:title" content="${escapeHtml(title)}">`,
-    `<meta property="og:description" content="${escapeHtml(description)}">`,
-    `<meta property="og:type" content="website">`,
-    url && `<meta property="og:url" content="${escapeHtml(url)}">`,
-    imageUrl && `<meta property="og:image" content="${escapeHtml(imageUrl)}">`,
-    `<meta name="twitter:card" content="${imageUrl ? "summary_large_image" : "summary"}">`,
-    `<meta name="twitter:title" content="${escapeHtml(title)}">`,
-    `<meta name="twitter:description" content="${escapeHtml(description)}">`,
-    imageUrl && `<meta name="twitter:image" content="${escapeHtml(imageUrl)}">`,
-    url && `<link rel="canonical" href="${escapeHtml(url)}">`,
-  ].filter(Boolean);
 
   // <base> relativo: sirve igual en la raiz (andreacarilla.work) que en
   // subcarpeta (meowrhino.github.io/andreacarilla)
@@ -179,20 +311,20 @@ function projectPage({ slug, data, siteUrl }) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../../">
-    <title>${escapeHtml(title)}</title>
-${meta.map((m) => "    " + m).join("\n")}
+    <title>${escapeHtml(title)} · ${SITE_NAME}</title>
+${metaTags({ title, description, url, imageUrl })}
     <link rel="stylesheet" href="./css/style.css">
-    <link rel="modulepreload" href="./js/components.js">
-    <link rel="preload" as="fetch" href="./data/${slug}/${slug}.json" crossorigin>
     <script type="application/ld+json">${escapeJson(ld)}</script>
-    <script type="application/json" id="img-sizes">${escapeJson(sizes)}</script>
 </head>
 
-<body data-page-type="proyecto" data-slug="${escapeHtml(slug)}">
+<body data-page-type="proyecto">
 
-    <noscript>
-        <p style="padding: 1rem;">Activa JavaScript para cargar el proyecto. <a href="./index.html">Volver al inicio</a></p>
-    </noscript>
+    <main>
+    <h1 class="visually-hidden">${escapeHtml(title)}</h1>
+${isDiario ? diarioBody(slug, data) : standardBody(slug, data)}
+    </main>
+
+${siteChrome({ isHome: false })}
 
     <script type="module" src="./js/main.js"></script>
 
@@ -202,109 +334,149 @@ ${meta.map((m) => "    " + m).join("\n")}
 `;
 }
 
-// Bloque generado dentro de index.html, entre marcas, para no pisar el resto
-function homeBlock({ home, siteUrl }) {
+// ---------------------------------------------------------------------------
+// Home: solo se reescriben los bloques marcados de index.html
+// ---------------------------------------------------------------------------
+
+function homeHead(home) {
+  // Medidas de las portadas: la galeria las coloca antes de que carguen
   const sizes = {};
-  for (const set of Array.isArray(home.gallerySets) ? home.gallerySets : []) {
+  for (const set of home.gallerySets || []) {
     for (const item of set) {
-      if (!item?.src) continue;
-      const size = webpSize(path.join(ROOT, item.src));
+      const size = item?.src && webpSize(path.join(ROOT, item.src));
       if (size) sizes[item.src] = [size.w, size.h];
     }
   }
+  const firstCover = home.gallerySets?.[0]?.[0]?.src;
 
   const ld = [
     {
       "@context": "https://schema.org",
       "@type": "Person",
       name: "Andrea Carilla",
-      jobTitle: "Fotografa",
+      jobTitle: "Fotógrafa",
       email: "carillagonzalezandrea@gmail.com",
       sameAs: ["https://www.instagram.com/andreacarilla/"],
-      ...(siteUrl ? { url: siteUrl } : {}),
+      url: SITE_URL,
     },
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      name: "andrea carilla",
-      ...(siteUrl ? { url: siteUrl } : {}),
-    },
+    { "@context": "https://schema.org", "@type": "WebSite", name: SITE_NAME, url: SITE_URL },
   ];
 
   return [
-    `    <link rel="modulepreload" href="./js/components.js">`,
+    metaTags({
+      title: SITE_NAME,
+      description: HOME_DESCRIPTION,
+      url: `${SITE_URL}/`,
+      imageUrl: firstCover ? `${SITE_URL}/${firstCover}` : "",
+    }),
+    `    <link rel="modulepreload" href="./js/home.js">`,
     `    <link rel="preload" as="fetch" href="./data/home.json" crossorigin>`,
     `    <script type="application/ld+json">${escapeJson(ld)}</script>`,
     `    <script type="application/json" id="img-sizes">${escapeJson(sizes)}</script>`,
   ].join("\n");
 }
 
-function updateHome(block) {
-  const file = path.join(ROOT, "index.html");
-  const html = fs.readFileSync(file, "utf8");
-  const start = "<!-- build:start -->";
-  const end = "<!-- build:end -->";
-  if (!html.includes(start) || !html.includes(end)) {
-    throw new Error("index.html no tiene las marcas <!-- build:start --> / <!-- build:end -->");
-  }
-  const re = new RegExp(`${start}[\\s\\S]*?${end}`);
-  const next = html.replace(re, `${start}\n${block}\n    ${end}`);
-  if (next === html) return false;
-  fs.writeFileSync(file, next);
-  return true;
+// Lista de proyectos. home.js los reparte por la pantalla; sin JS se ven en fila
+function homeLinks(projects) {
+  return projects
+    .map(
+      (p) =>
+        `            <a class="project-link" href="./proyectos/${escapeHtml(p.slug)}/" data-category="${escapeHtml(
+          normalizeCategory(p.category || "otros")
+        )}">${escapeHtml(p.name || p.slug)}</a>`
+    )
+    .join("\n");
+}
+
+// Sustituye lo que hay entre <!-- build:name --> y <!-- /build:name -->
+function replaceBlock(html, name, content) {
+  const start = `<!-- build:${name} -->`;
+  const end = `<!-- /build:${name} -->`;
+  const from = html.indexOf(start);
+  const to = html.indexOf(end);
+  if (from === -1 || to === -1) throw new Error(`index.html no tiene las marcas ${start} / ${end}`);
+  const indent = html.slice(html.lastIndexOf("\n", from) + 1, from);
+  return html.slice(0, from + start.length) + `\n${content}\n${indent}` + html.slice(to);
 }
 
 // ---------------------------------------------------------------------------
 
-function main() {
-  const siteUrl = SITE_URL;
+// Escribe solo si cambia, para que la Action no haga commits vacios
+function writeIfChanged(file, content) {
+  const prev = fs.existsSync(file) ? fs.readFileSync(file, "utf8") : null;
+  if (prev === content) return false;
+  fs.writeFileSync(file, content);
+  return true;
+}
 
+function main() {
   const home = JSON.parse(fs.readFileSync(path.join(DATA, "home.json"), "utf8"));
-  const slugs = (home.projectes_visibles || [])
-    .filter((p) => p.visible !== false)
-    .map((p) => p.slug)
-    .filter(Boolean);
+  const visible = (home.projectes_visibles || []).filter((p) => p.visible !== false && p.slug);
 
   fs.mkdirSync(OUT, { recursive: true });
 
   let written = 0;
-  const generated = new Set();
+  const published = [];
+  const keep = new Set(); // carpetas de proyectos/ que no se borran
 
-  for (const slug of slugs) {
+  for (const project of visible) {
+    const { slug } = project;
     const jsonPath = path.join(DATA, slug, `${slug}.json`);
     if (!fs.existsSync(jsonPath)) {
       console.warn(`[build] sin json, me lo salto: ${slug}`);
       continue;
     }
-    const data = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
-    if (!data.slug) data.slug = slug;
-
-    const dir = path.join(OUT, slug);
-    fs.mkdirSync(dir, { recursive: true });
-    const file = path.join(dir, "index.html");
-    const html = projectPage({ slug, data, siteUrl });
-
-    const prev = fs.existsSync(file) ? fs.readFileSync(file, "utf8") : null;
-    if (prev !== html) {
-      fs.writeFileSync(file, html);
-      written++;
+    let data;
+    try {
+      data = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
+    } catch (error) {
+      // Un json roto no debe tumbar toda la web: se avisa y se salta
+      console.error(`[build] ${slug}.json no se puede leer (¿falta una coma?): ${error.message}`);
+      process.exitCode = 1;
+      keep.add(slug); // se queda la pagina de la ultima vez que estaba bien
+      continue;
     }
-    generated.add(slug);
+    data.slug = slug; // la carpeta manda: es la que sale en la url
+
+    fs.mkdirSync(path.join(OUT, slug), { recursive: true });
+    if (writeIfChanged(path.join(OUT, slug, "index.html"), projectPage(slug, data))) written++;
+    published.push(project);
+    keep.add(slug);
   }
 
   // Borrar paginas de proyectos que ya no estan en home.json
   let removed = 0;
-  for (const entry of fs.existsSync(OUT) ? fs.readdirSync(OUT) : []) {
-    if (!generated.has(entry) && fs.statSync(path.join(OUT, entry)).isDirectory()) {
+  for (const entry of fs.readdirSync(OUT)) {
+    if (!keep.has(entry) && fs.statSync(path.join(OUT, entry)).isDirectory()) {
       fs.rmSync(path.join(OUT, entry), { recursive: true, force: true });
       removed++;
     }
   }
 
-  const homeChanged = updateHome(homeBlock({ home, siteUrl }));
+  // index.html
+  const indexFile = path.join(ROOT, "index.html");
+  let index = fs.readFileSync(indexFile, "utf8");
+  index = replaceBlock(index, "head", homeHead(home));
+  index = replaceBlock(index, "links", homeLinks(published));
+  index = replaceBlock(index, "chrome", siteChrome({ isHome: true }));
+  const homeChanged = writeIfChanged(indexFile, index);
+
+  // sitemap.xml y robots.txt
+  const urls = [`${SITE_URL}/`, ...published.map((p) => `${SITE_URL}/proyectos/${p.slug}/`)];
+  writeIfChanged(
+    path.join(ROOT, "sitemap.xml"),
+    `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((u) => `  <url><loc>${u}</loc></url>`).join("\n")}
+</urlset>
+`
+  );
+  writeIfChanged(path.join(ROOT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 
   console.log(
-    `[build] ${generated.size} proyectos | ${written} paginas escritas | ${removed} eliminadas | index.html ${homeChanged ? "actualizado" : "sin cambios"}`
+    `[build] ${published.length} proyectos | ${written} paginas escritas | ${removed} eliminadas | index.html ${
+      homeChanged ? "actualizado" : "sin cambios"
+    }`
   );
 }
 

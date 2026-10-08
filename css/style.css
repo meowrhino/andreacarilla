@@ -1,4 +1,14 @@
-/* Reset básico */
+/* style.css - andrea carilla
+   1. base
+   2. home: galería de portadas
+   3. home: enlaces a proyectos
+   4. home: filtros (abajo a la derecha)
+   5. botón "andrea carilla", popup y botón home
+   6. página de proyecto
+   7. diario */
+
+/* ===== 1. base ===== */
+
 * {
   margin: 0;
   padding: 0;
@@ -12,29 +22,15 @@ body {
   font-family: sans-serif;
 }
 
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* Solo en páginas de proyecto: aseguramos que se pueda hacer scroll */
-body[data-page-type="proyecto"] {
-  overflow-y: auto;
-  height: auto;
+/* La web es siempre blanca, también con el modo oscuro del sistema */
+html {
+  color-scheme: light;
+  background: #fff;
 }
 
 a {
   text-decoration: none;
   color: inherit;
-  /*target: _blank; !important
-  esta puesto en el js en el main abajo del todo*/
 }
 
 a:hover {
@@ -45,70 +41,52 @@ a:active {
   color: #000;
 }
 
-/* móvil: dejamos que el body fluya */
-@media (max-width: 768px) {
-  html,
-  body {
-    overflow: visible;
-  }
-
-  #links-container {
-    /* para un scroll interior más suave */
-    -webkit-overflow-scrolling: touch;
-  }
+/* Solo para lectores de pantalla y buscadores (h1 de cada página) */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 
-/* escritorio: seguimos sin scroll global */
+/* Escritorio: la home es una sola pantalla, sin scroll */
 @media (min-width: 769px) {
   body[data-page-type="home"] {
     overflow: hidden;
   }
 }
 
-/* Contenedor de galería: ocupa los primeros 2/3 de la ventana */
+/* Móvil: la página fluye y se hace scroll normal */
+@media (max-width: 768px) {
+  html,
+  body {
+    overflow: visible;
+  }
+}
+
+body[data-page-type="proyecto"] {
+  overflow-y: auto;
+  height: auto;
+}
+
+/* Texto en gris claro: años, roles... */
+span.meta {
+  color: #c4c4c4;
+  text-transform: lowercase;
+}
+
+/* ===== 2. home: galería de portadas =====
+   home.js coloca cada portada con el top/left/scale de data/home.json */
+
 #gallery-container {
   height: 70vh;
   position: relative;
   overflow: hidden;
 }
 
-/* Contenedor de enlaces: ocupa el último tercio, con scroll si hace falta */
-#links-container {
-  height: 30vh;
-  width: 90%; /* nuevo: solo ocupa el 90% del ancho */
-  margin-right: auto; /* deja el margen derecho libre */
-  position: relative;
-  overflow-y: auto;
-}
-
-/* Estilo base para todos los project-link */
-.project-link {
-  position: absolute;
-  display: inline-block;
-  font-size: 14px;
-  color: black;
-  padding: 0.4em 0.6em;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  pointer-events: auto;
-}
-
-/* Opcional: solo aplicar en pantallas pequeñas */
-@media (max-width: 768px) {
-  .project-link {
-    max-width: 70vw;
-  }
-}
-
-/* Media query de ejemplo para móvil: ajustar alturas si hace falta */
-@media (max-width: 768px) {
-  #links-container {
-    height: 101vh;
-    width: 75%;
-  }
-}
-
-/* Portadas */
 .portada-wrapper {
   position: absolute;
   overflow: hidden;
@@ -116,18 +94,12 @@ a:active {
   filter: drop-shadow(2px 2px 2.5px rgba(0, 0, 0, 0.12));
 }
 
+/* Fundido al terminar de cargar (home.js añade .is-loaded) */
 .portada {
   display: block;
-
-  height: auto;
-  /* altura según proporción real */
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  /* opcional para recortes suaves */
-}
-
-/* Entrada suave: cada portada aparece al cargar y los links uno tras otro
-   (el retraso de cada link lo pone main.js) */
-.portada {
   opacity: 0;
   transition: opacity 0.6s ease;
 }
@@ -136,8 +108,30 @@ a:active {
   opacity: 1;
 }
 
+/* ===== 3. home: enlaces a proyectos =====
+   home.js los reparte al azar sin que se pisen; si no caben, la zona hace scroll */
+
+#links-container {
+  height: 30vh;
+  width: 90%;
+  position: relative;
+  overflow-y: auto;
+}
+
 .project-link {
+  position: absolute;
+  display: inline-block;
+  font-size: 14px;
+  color: black;
+  padding: 0.4em 0.6em;
+  overflow-wrap: break-word;
+  /* aparecen uno tras otro: el retraso de cada uno lo pone home.js */
   animation: aparecer 0.5s ease both;
+}
+
+/* Filtrado por categoría (home.js pone hidden) */
+.project-link[hidden] {
+  display: none;
 }
 
 @keyframes aparecer {
@@ -147,17 +141,22 @@ a:active {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .portada {
-    transition: none;
+/* Móvil: si no caben, siguen hacia abajo con el scroll de la página
+   (sin un segundo scroll dentro) */
+@media (max-width: 768px) {
+  #links-container {
+    height: 101vh;
+    width: 75%;
+    overflow: visible;
   }
 
   .project-link {
-    animation: none;
+    max-width: 70vw;
   }
 }
 
-/* Navegación fija abajo a la derecha */
+/* ===== 4. home: filtros (abajo a la derecha) ===== */
+
 #home-nav {
   position: fixed;
   bottom: 1rem;
@@ -174,49 +173,34 @@ a:active {
   gap: 0.5rem;
 }
 
-/* Botones generales de nav */
-.category-btn {
-  background: none;
-  border: none;
-  font-family: inherit;
-  font-size: 14px;
-  text-align: right;
-}
-
-.tema-btn {
-  background: none;
-  border: none;
-  font-family: inherit;
-  font-size: 14px;
-}
-
-/* Tema y categoría: estado base (inactivo) */
-#home-nav .tema-btn,
-#home-nav .category-btn {
-  color: #ccc;
-  font-weight: normal;
-}
-
-/* Hover: negrita pero no negro */
-#home-nav .tema-btn:hover,
-#home-nav .category-btn:hover {
-  font-weight: bold;
-}
-
-/* Activo: negrita y negro */
-#home-nav .active {
-  color: black;
-  font-weight: bold;
-}
-
-/* Contenedor de categorías con alineación flexible */
 #category-nav {
   display: flex;
   flex-direction: column;
   text-align: right;
 }
 
-/* Andrea nav */
+.tema-btn,
+.category-btn {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: right;
+  color: #ccc;
+}
+
+.tema-btn:hover,
+.category-btn:hover {
+  font-weight: bold;
+}
+
+#home-nav .active {
+  color: black;
+  font-weight: bold;
+}
+
+/* ===== 5. botón "andrea carilla", popup y botón home ===== */
+
 #andrea-nav {
   position: fixed;
   top: 1rem;
@@ -224,16 +208,8 @@ a:active {
   z-index: 60;
 }
 
-.home-button {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-
-  background: none;
-  border: none;
-}
-
-#andrea-nav button {
+#andrea-nav button,
+#andrea-popup .close-btn {
   background: none;
   border: none;
 }
@@ -242,15 +218,19 @@ a:active {
   text-decoration: underline;
 }
 
-/* Popup overlay */
+/* Es un enlace, pero se ve como los botones de al lado */
+.home-button {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  font: 13.3333px Arial, sans-serif;
+}
+
 #andrea-popup {
   display: none;
   flex-direction: column;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(255, 255, 255, 0.9);
   justify-content: center;
   align-items: center;
@@ -266,7 +246,6 @@ a:active {
   text-align: center;
   padding: 2rem;
   font-size: 0.8rem;
-
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -276,44 +255,33 @@ a:active {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: none;
-  border: none;
 }
 
-.footer {
+#andrea-popup .footer {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 1rem;
   margin-top: 1rem;
-  bottom: 20px;
 }
 
-/* === PROYECTO INDIVIDUAL === */
+/* "web: meowrhino", abajo del todo */
+#andrea-popup .credit {
+  position: absolute;
+  bottom: 1rem;
+}
+
+/* ===== 6. página de proyecto ===== */
 
 .project-header img {
   display: block;
-  margin: 10vh auto 0 auto;
+  margin: 10vh auto 0;
   width: 100%;
   height: auto;
   max-width: 900px;
 }
 
-.project-gallery {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  padding-bottom: 10vh;
-}
-
-.project-gallery img {
-  width: 100%;
-  height: auto;
-  max-width: 80vw;
-}
-
+/* Descripción a la izquierda (2/3) y créditos a la derecha (1/3) */
 .project-body {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -324,19 +292,7 @@ a:active {
   align-items: start;
 }
 
-/* Esto define el comportamiento en móvil */
-@media (max-width: 768px) {
-  .project-body {
-    grid-template-columns: 1fr;
-  }
-  .project-meta {
-    justify-self: end;
-    width: 33.333%; /* mantiene 1/3 de ancho */
-  }
-}
-
 .project-description {
-  flex: 2;
   min-width: 200px;
   text-align: center;
 }
@@ -346,10 +302,6 @@ a:active {
   font-size: 1.1rem;
   line-height: 1.2;
   font-weight: 400;
-}
-
-.project-description h2 a {
-  color: inherit;
 }
 
 .project-description p {
@@ -367,8 +319,6 @@ a:active {
 
 .project-meta ul {
   list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
 .project-meta li {
@@ -377,20 +327,52 @@ a:active {
   line-height: 1.3;
 }
 
+.project-meta li:last-child {
+  margin-bottom: 0;
+}
+
+.project-gallery {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding-bottom: 10vh;
+}
+
+.project-gallery img {
+  width: 100%;
+  height: auto;
+  max-width: 80vw;
+}
+
+/* Móvil: todo en una columna y los créditos en el tercio derecho */
+@media (max-width: 768px) {
+  .project-body {
+    grid-template-columns: 1fr;
+  }
+
+  .project-meta {
+    justify-self: end;
+    width: 33.333%;
+  }
+}
+
+/* ===== 7. diario: una tira horizontal centrada en la pantalla ===== */
+
 .diario-gallery {
   position: fixed;
   top: 50%;
   left: 0;
   transform: translateY(-50%);
   width: 100vw;
-  height: auto;
   display: flex;
   gap: 50px;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+
 .diario-gallery::-webkit-scrollbar {
   display: none;
 }
@@ -403,39 +385,28 @@ a:active {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.galleryMargin {
-  flex: 0 0 auto;
-}
-
-/* Responsive */
+/* Móvil: cada foto cabe en la pantalla y se ve un trozo de la siguiente */
 @media (max-width: 768px) {
-  .project-body {
-    flex-direction: column;
-    align-items: stretch;
+  .diario-gallery {
+    gap: 24px;
+  }
+
+  .diario-gallery img {
+    width: min(80vw, 512px);
   }
 }
 
-span.meta {
-  color: #c4c4c4;
-  text-transform: lowercase;
-}
+/* Sin animaciones si el sistema pide reducir movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .portada {
+    transition: none;
+  }
 
+  .project-link {
+    animation: none;
+  }
 
-/*animación T de waiting the (T)rain*/
-.animate-e {
-  /* Duración 5s, va y vuelve (alternate), y se repite infinitamente */
-  animation: colorFade 1.8s infinite alternate ease-in-out;
-}
-
-@keyframes colorFade {
-  from {
-    color: white;
-  } /* inicio en blanco */
-  to {
-    color: black;
-  } /* acaba en rojo */
-}
-
-li:last-child {
-  margin: 0 !important;
+  .diario-gallery {
+    scroll-behavior: auto;
+  }
 }

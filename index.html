@@ -6,30 +6,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>andrea carilla</title>
     <link rel="stylesheet" href="./css/style.css">
+    <!-- sin JS los enlaces de proyectos se ven en fila, no amontonados -->
+    <noscript><style>.project-link { position: static; }</style></noscript>
 
-    <!-- build:start -->
-    <link rel="modulepreload" href="./js/components.js">
+    <!-- lo de dentro de cada build:x lo escribe build.js, no editar a mano -->
+    <!-- build:head -->
+    <meta name="description" content="Portfolio de fotografía de Andrea Carilla. Proyectos de moda, editorial y diario personal.">
+    <meta property="og:site_name" content="andrea carilla">
+    <meta property="og:title" content="andrea carilla">
+    <meta property="og:description" content="Portfolio de fotografía de Andrea Carilla. Proyectos de moda, editorial y diario personal.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:url" content="https://andreacarilla.work/">
+    <meta property="og:image" content="https://andreacarilla.work/_portada/1/1_1.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="andrea carilla">
+    <meta name="twitter:description" content="Portfolio de fotografía de Andrea Carilla. Proyectos de moda, editorial y diario personal.">
+    <meta name="twitter:image" content="https://andreacarilla.work/_portada/1/1_1.webp">
+    <link rel="canonical" href="https://andreacarilla.work/">
+    <link rel="modulepreload" href="./js/home.js">
     <link rel="preload" as="fetch" href="./data/home.json" crossorigin>
-    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"Person","name":"Andrea Carilla","jobTitle":"Fotografa","email":"carillagonzalezandrea@gmail.com","sameAs":["https://www.instagram.com/andreacarilla/"],"url":"https://andreacarilla.work"},{"@context":"https://schema.org","@type":"WebSite","name":"andrea carilla","url":"https://andreacarilla.work"}]</script>
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"Person","name":"Andrea Carilla","jobTitle":"Fotógrafa","email":"carillagonzalezandrea@gmail.com","sameAs":["https://www.instagram.com/andreacarilla/"],"url":"https://andreacarilla.work"},{"@context":"https://schema.org","@type":"WebSite","name":"andrea carilla","url":"https://andreacarilla.work"}]</script>
     <script type="application/json" id="img-sizes">{"_portada/1/1_1.webp":[2000,1333],"_portada/1/1_2.webp":[2000,1333],"_portada/1/1_3.webp":[2000,1600],"_portada/1/1_4.webp":[2000,1333],"_portada/2/2_1.webp":[1600,2000],"_portada/2/2_2.webp":[2000,1334],"_portada/2/2_3.webp":[2000,1333],"_portada/2/2_4.webp":[2000,1333],"_portada/3/3_1.webp":[2000,1333],"_portada/3/3_2.webp":[2000,1333],"_portada/3/3_3.webp":[2000,2000]}</script>
-    <!-- build:end -->
+    <!-- /build:head -->
 </head>
 
 <body data-page-type="home">
 
-    <h1 class="visually-hidden">andrea carilla</h1>
+    <main>
+        <h1 class="visually-hidden">andrea carilla</h1>
 
-    <div id="gallery-container"></div>
-    <div id="links-container"></div>
-    <nav id="home-nav">
+        <div id="gallery-container"></div>
+
+        <nav id="links-container" aria-label="proyectos">
+            <!-- build:links -->
+            <a class="project-link" href="./proyectos/presskit8kito/" data-category="artist image">presskit 8kito</a>
+            <a class="project-link" href="./proyectos/core8kiInvita/" data-category="eventos">core. 8ki invita.</a>
+            <a class="project-link" href="./proyectos/didYouMissMeLook1/" data-category="look book">did you miss me? hifas studio. look 1</a>
+            <a class="project-link" href="./proyectos/naciConElDestinoDeUnaRosa/" data-category="artist image">nací con el destino de una rosa</a>
+            <a class="project-link" href="./proyectos/granadaFilmFest/" data-category="eventos">granada film fest</a>
+            <a class="project-link" href="./proyectos/tuttiPari/" data-category="eventos">tutti pari</a>
+            <a class="project-link" href="./proyectos/mercurySplash/" data-category="eventos">mercury splash</a>
+            <a class="project-link" href="./proyectos/tresor/" data-category="eventos">&lt;3sor</a>
+            <a class="project-link" href="./proyectos/sangreYSal/" data-category="album design">sangre y sal</a>
+            <a class="project-link" href="./proyectos/testigoDelPero/" data-category="artist image">alejandra grillo</a>
+            <a class="project-link" href="./proyectos/aines/" data-category="artist image">aines</a>
+            <a class="project-link" href="./proyectos/stFrances/" data-category="artist image">st. frances</a>
+            <a class="project-link" href="./proyectos/8kito/" data-category="artist image">8kito</a>
+            <a class="project-link" href="./proyectos/ariezz/" data-category="artist image">ariezz</a>
+            <a class="project-link" href="./proyectos/magicalTheys/" data-category="artist image">ali arévalo</a>
+            <a class="project-link" href="./proyectos/estrellaFugaz/" data-category="artist image">ela rea</a>
+            <a class="project-link" href="./proyectos/quienNoCorre/" data-category="editorial">quien no corre vuela</a>
+            <a class="project-link" href="./proyectos/arcEnPix/" data-category="editorial">archivo en pixel</a>
+            <a class="project-link" href="./proyectos/blackCover/" data-category="editorial">black cover</a>
+            <a class="project-link" href="./proyectos/vozMal/" data-category="eventos">performance jaume ferrete</a>
+            <a class="project-link" href="./proyectos/fleaMarket/" data-category="eventos">flea market</a>
+            <a class="project-link" href="./proyectos/tawla/" data-category="eventos">tawla cenitas club</a>
+            <a class="project-link" href="./proyectos/henshin/" data-category="eventos">henshin concert</a>
+            <a class="project-link" href="./proyectos/highTide/" data-category="fashion story">high tide</a>
+            <a class="project-link" href="./proyectos/waiting/" data-category="fashion story">waiting the rain</a>
+            <a class="project-link" href="./proyectos/working/" data-category="fashion story">working on the periphery</a>
+            <a class="project-link" href="./proyectos/lostLetter/" data-category="fashion story">lost letter for a tale thief</a>
+            <a class="project-link" href="./proyectos/recogeteme/" data-category="investigación">recogeteme el pelo</a>
+            <a class="project-link" href="./proyectos/dearxx/" data-category="look book">dear xx. are you mad at me?</a>
+            <a class="project-link" href="./proyectos/diario/" data-category="personal">diario</a>
+            <a class="project-link" href="./proyectos/spinCol/" data-category="product">spin-collection</a>
+            <a class="project-link" href="./proyectos/oneByOne/" data-category="fashion story">one by one</a>
+            <!-- /build:links -->
+        </nav>
+    </main>
+
+    <nav id="home-nav" aria-label="filtros">
         <div id="tema-nav"></div>
         <div id="category-nav"></div>
         <button class="category-btn" id="shuffle-btn">refrescar</button>
     </nav>
 
-    <noscript>
-        <p style="padding: 1rem;">Activa JavaScript para ver la galería y la lista de proyectos.</p>
-    </noscript>
+    <!-- build:chrome -->
+    <nav id="andrea-nav">
+        <button id="open-andrea" aria-haspopup="dialog" aria-controls="andrea-popup" aria-expanded="false">andrea carilla</button>
+    </nav>
+    <div id="andrea-popup" role="dialog" aria-modal="true" aria-label="sobre andrea carilla">
+        <button class="close-btn" id="close-andrea">cerrar</button>
+        <div class="content">
+            <p>Graduada en Comunicación Audiovisual por la Universidad de Granada en 2019, su práctica fotográfica se
+                articula entre la moda, el diario personal y la fotografía robada, tensionando los límites entre lo
+                documental y lo construido.</p>
+            <p>Es cofundadora de la editorial de autoedición <a href="https://quiennocorrevuela.bigcartel.com/"
+                    target="_blank" rel="noopener noreferrer">Quien no corre, vuela</a>, desde donde ha publicado
+                <i>archivo en pixel</i> y <i>no time left for square</i>, investigando nuevas formas de narrar,
+                publicar y distribuir fotografía contemporánea desde los márgenes.</p>
+            <p>Su trabajo se construye desde la serialidad y la repetición: las imágenes no funcionan de forma
+                aislada, sino que se organizan como fragmentos de una narrativa abierta. Dispara desde el impulso y
+                el error, con una cámara que no busca certezas ni discursos cerrados, sino que reacciona ante lo que
+                hiere, incomoda o emociona. Una mirada crítica, permeable y radicalmente encarnada en lo cotidiano.</p>
+            <div class="footer">
+                <a href="mailto:carillagonzalezandrea@gmail.com">carillagonzalezandrea@gmail.com</a>
+                <a href="https://www.instagram.com/andreacarilla/" target="_blank" rel="noopener noreferrer">@andreacarilla</a>
+                <span class="credit">web: <a href="https://meowrhino.studio/" target="_blank" rel="noopener noreferrer">meowrhino</a></span>
+            </div>
+        </div>
+    </div>
+    <!-- /build:chrome -->
 
     <script type="module" src="./js/main.js"></script>
 

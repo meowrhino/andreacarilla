@@ -199,7 +199,7 @@ por:
 - las páginas de `proyectos/` llevan `<base href="../../">`, por eso las rutas relativas siguen funcionando desde una subcarpeta
 - `build.js` no depende de nada externo: lee los json tal cual y saca las medidas de cada imagen del propio fichero webp
 - las medidas van incrustadas en el `<head>` como `#img-sizes` para reservar el hueco de cada imagen y que la página no salte al cargar
-- `build.js` deduce la url del sitio del `CNAME`, y si no hay, del remote de git
+- `build.js` usa siempre `https://andreacarilla.work` como url del sitio, también en la copia de meowrhino, para que el canonical apunte al original
 
 ## créditos
 

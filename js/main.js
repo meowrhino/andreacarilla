@@ -156,6 +156,9 @@ async function initHome() {
     const activeProjects = projects.filter((p) => p.status);
     shuffle(activeProjects);
 
+    const placed = [];
+    let areaHeight = container.clientHeight;
+
     activeProjects.forEach((project) => {
       const link = document.createElement("a");
       link.href = `./proyectos/${project.url}/`;
@@ -163,13 +166,23 @@ async function initHome() {
       link.textContent = project.name;
       container.appendChild(link);
 
-      // Colocar cada enlace en una posición aleatoria dentro del contenedor usando el tamaño real
-      const maxTopPx = Math.max(0, container.clientHeight - link.offsetHeight);
-      const maxLeftPx = Math.max(0, container.clientWidth - link.offsetWidth);
-      const top = Math.random() * (maxTopPx || 1);
-      const left = Math.random() * (maxLeftPx || 1);
-      link.style.top = `${top}px`;
-      link.style.left = `${left}px`;
+      // Posición aleatoria que no pise a los enlaces ya colocados. Si tras
+      // 50 intentos no hay hueco, la zona crece hacia abajo (scroll interno).
+      const { width: w, height: h } = link.getBoundingClientRect();
+      let pos = null;
+      for (let i = 1; !pos; i++) {
+        // -1px: pegado al borde derecho el texto se parte por redondeo y crece
+        const left = Math.random() * Math.max(0, container.clientWidth - w - 1);
+        const top = Math.random() * Math.max(0, areaHeight - h);
+        const overlaps = placed.some(
+          (r) => left < r.left + r.w && r.left < left + w && top < r.top + r.h && r.top < top + h
+        );
+        if (!overlaps) pos = { left, top };
+        else if (i % 50 === 0) areaHeight += h;
+      }
+      placed.push({ ...pos, w, h });
+      link.style.top = `${pos.top}px`;
+      link.style.left = `${pos.left}px`;
     });
   }
 

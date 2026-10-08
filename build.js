@@ -14,34 +14,17 @@
 
 const fs = require("fs");
 const path = require("path");
-const { execSync } = require("child_process");
 
 const ROOT = __dirname;
 const DATA = path.join(ROOT, "data");
 const OUT = path.join(ROOT, "proyectos");
 
 // ---------------------------------------------------------------------------
-// URL del sitio: sale del CNAME si lo hay, y si no del remote de git.
-// Asi el mismo script funciona en el repo del cliente (andreacarilla.work)
-// y en la copia (meowrhino.github.io/andreacarilla) sin configurar nada.
+// URL del sitio: siempre el dominio de Andrea, tambien en la copia
+// (meowrhino.github.io/andreacarilla). Asi el canonical de la copia apunta al
+// original y Google no indexa dos webs iguales.
 // ---------------------------------------------------------------------------
-function detectSiteUrl() {
-  const cname = path.join(ROOT, "CNAME");
-  if (fs.existsSync(cname)) {
-    const host = fs.readFileSync(cname, "utf8").trim();
-    if (host) return `https://${host}`;
-  }
-  try {
-    const remote = execSync("git config --get remote.origin.url", {
-      cwd: ROOT,
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }).trim();
-    const m = remote.match(/github\.com[/:]([^/]+)\/([^/.]+)/i);
-    if (m) return `https://${m[1].toLowerCase()}.github.io/${m[2]}`;
-  } catch (_) {}
-  return "";
-}
+const SITE_URL = "https://andreacarilla.work";
 
 // ---------------------------------------------------------------------------
 // Dimensiones de un webp sin dependencias. Hace falta para reservar el hueco
@@ -274,12 +257,7 @@ function updateHome(block) {
 // ---------------------------------------------------------------------------
 
 function main() {
-  const siteUrl = detectSiteUrl();
-  if (!siteUrl) {
-    console.warn("[build] aviso: sin CNAME ni remote de github, las urls absolutas (og:url, canonical) se omiten");
-  } else {
-    console.log(`[build] sitio: ${siteUrl}`);
-  }
+  const siteUrl = SITE_URL;
 
   const home = JSON.parse(fs.readFileSync(path.join(DATA, "home.json"), "utf8"));
   const slugs = (home.projectes_visibles || [])

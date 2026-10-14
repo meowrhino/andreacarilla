@@ -69,7 +69,10 @@ andreacarilla/
 ## los dos repos
 
 - `carillagonzalezandrea-source/andreacarilla`: el de Andrea, con el dominio
-  (`CNAME`). ahí edita ella.
+  (`CNAME`). ahí edita ella. **sigue con la estructura de antes**
+  (`data/<slug>/<slug>.json`, `home.json`, la Action commitea `proyectos/`) y
+  su propia `GUIA.md`: esta versión necesita Pages en "GitHub Actions", y ese
+  ajuste solo lo puede cambiar ella.
 - `meowrhino/andreacarilla`: nuestra copia. no comparten historia: los cambios
   se pasan copiando el árbol (y antes, trayendo su `projects/`, `data/` y
   `_portada/` si ella ha tocado algo).

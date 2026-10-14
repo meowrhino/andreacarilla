@@ -1,7 +1,7 @@
 # TODO
 
 ## pendiente
-- repo de Andrea: que cambie Settings → Pages → Source a **GitHub Actions** (hace falta ser admin) y entonces pasarle esta versión
+- repo de Andrea: se queda con la estructura de antes (`data/<slug>/<slug>.json`, la Action commitea `proyectos/`) y su propia `GUIA.md`, porque pasar a esta versión necesita Settings → Pages → Source: **GitHub Actions**, y eso solo lo puede cambiar ella (admin). Si algún día lo cambia, se le pasa esta versión (antes, convertir lo que haya tocado en `data/`)
 - preguntar a Andrea por el orden de las fotos: en 8 proyectos (vozMal, fleaMarket, lostLetter, tawla, henshin, diario, arcEnPix, dearxx) `photos` va 1, 10, 11… 2, 3 (orden alfabético, no numérico). ¿es a propósito?
 - dar de alta andreacarilla.work en Google Search Console y enviar `sitemap.xml`
 

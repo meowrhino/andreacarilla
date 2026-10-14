@@ -1,0 +1,64 @@
+{
+  "title": "andrea carilla",
+  "url": "https://andreacarilla.work/",
+  "description": "Portfolio de fotografía de Andrea Carilla. Proyectos de moda, editorial y diario personal.",
+  "email": "carillagonzalezandrea@gmail.com",
+  "social": ["https://www.instagram.com/andreacarilla/"],
+  "lists": {
+    "artist-image": {
+      "name": "artist image",
+      "projects": ["presskit8kito", "naciConElDestinoDeUnaRosa", "testigoDelPero", "aines", "stFrances", "8kito", "ariezz", "magicalTheys", "estrellaFugaz"]
+    },
+    "eventos": {
+      "name": "eventos",
+      "projects": ["core8kiInvita", "granadaFilmFest", "tuttiPari", "mercurySplash", "tresor", "vozMal", "fleaMarket", "tawla", "henshin"]
+    },
+    "look-book": {
+      "name": "look book",
+      "projects": ["didYouMissMeLook1", "dearxx"]
+    },
+    "album-design": {
+      "name": "album design",
+      "projects": ["sangreYSal"]
+    },
+    "editorial": {
+      "name": "editorial",
+      "projects": ["quienNoCorre", "arcEnPix", "blackCover"]
+    },
+    "fashion-story": {
+      "name": "fashion story",
+      "projects": ["highTide", "waiting", "working", "lostLetter", "oneByOne"]
+    },
+    "investigacion": {
+      "name": "investigación",
+      "projects": ["recogeteme"]
+    },
+    "personal": {
+      "name": "personal",
+      "projects": ["diario"]
+    },
+    "product": {
+      "name": "product",
+      "projects": ["spinCol"]
+    }
+  },
+  "gallery": [
+    [
+      { "photo": "1", "project": "ariezz", "desktop": { "top": 10, "left": 5, "index": 1, "scale": 270 }, "mobile": { "top": 10, "left": 5, "index": 0, "scale": 148 } },
+      { "photo": "2", "project": "estrellaFugaz", "desktop": { "bottom": 10, "left": 45, "index": 2, "scale": 151 }, "mobile": { "bottom": 0, "left": 50, "index": 1, "scale": 67 } },
+      { "photo": "3", "project": "diario", "desktop": { "top": 5, "right": 25, "index": 2, "scale": 117 }, "mobile": { "top": 40, "right": 5, "index": 1, "scale": 81 } },
+      { "photo": "4", "project": "lostLetter", "desktop": { "top": 25, "right": 2, "index": 1, "scale": 181 }, "mobile": { "bottom": 5, "left": 12, "index": 0, "scale": 115 } }
+    ],
+    [
+      { "photo": "1", "project": "working", "desktop": { "top": 30, "left": 5, "index": 2, "scale": 113 }, "mobile": { "bottom": 0, "left": 20, "index": 0, "scale": 63 } },
+      { "photo": "2", "project": "waiting", "desktop": { "bottom": 10, "left": 15, "index": 2, "scale": 119 }, "mobile": { "bottom": 10, "right": 10, "index": 2, "scale": 95 } },
+      { "photo": "3", "project": "lostLetter", "desktop": { "top": 5, "left": 20, "index": 1, "scale": 204 }, "mobile": { "top": 45, "left": 5, "index": 1, "scale": 79 } },
+      { "photo": "4", "project": "magicalTheys", "desktop": { "bottom": 0, "right": 5, "index": 0, "scale": 280 }, "mobile": { "top": 10, "right": 5, "index": 0, "scale": 165 } }
+    ],
+    [
+      { "photo": "1", "project": "8kito", "desktop": { "top": 5, "left": 5, "index": 2, "scale": 235 }, "mobile": { "top": 5, "left": 10, "index": 1, "scale": 117 } },
+      { "photo": "2", "project": "diario", "desktop": { "bottom": 10, "right": 20, "index": 1, "scale": 178 }, "mobile": { "top": 50, "right": 5, "index": 0, "scale": 96 } },
+      { "photo": "3", "project": "stFrances", "desktop": { "top": 20, "right": 10, "index": 2, "scale": 107 }, "mobile": { "bottom": 5, "left": 20, "index": 0, "scale": 64 } }
+    ]
+  ]
+}

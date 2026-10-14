@@ -1,0 +1,11 @@
+{
+  "title": "BLACK COVER.",
+  "short": "black cover",
+  "place": "Barcelona",
+  "credits": [
+    { "role": "maquetación, PHOTOGRAPHY", "name": "Andrea Carilla" },
+    { "role": "editorial", "name": "quien no corre, vuela", "url": "https://www.instagram.com/quien.nocorrevuela" }
+  ],
+  "cover": ["1"],
+  "photos": ["2", "3", "4", "5"]
+}

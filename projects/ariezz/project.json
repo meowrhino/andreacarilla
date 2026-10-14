@@ -1,0 +1,12 @@
+{
+  "title": "ARIEZZZ",
+  "short": "ariezz",
+  "url": "https://www.instagram.com/xo.el.ariez/",
+  "place": "Barcelona",
+  "credits": [
+    { "role": "PHOTOGRAPHY, RETOUCH", "name": "Andrea Carilla" },
+    { "role": "STYLIST", "name": "Beto Villagrasa", "url": "https://www.instagram.com/bet0vil/" }
+  ],
+  "cover": ["1"],
+  "photos": ["2", "3", "4", "5", "6", "7", "8", "9"]
+}

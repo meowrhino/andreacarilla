@@ -1,0 +1,14 @@
+{
+  "title": "SANGRE Y SAL.",
+  "short": "sangre y sal",
+  "url": "https://www.instagram.com/vangoura_/",
+  "place": "Barcelona",
+  "credits": [
+    { "role": "PHOTOGRAPHY, CREATIVE DIRECTION, RETOUCH", "name": "Andrea Carilla" },
+    { "role": "ART DIRECTION", "name": "Marta Coder", "url": "https://www.instagram.com/martacoder/" },
+    { "role": "STYLIST", "name": "Adrian Lorca", "url": "https://www.instagram.com/_adrianlorca/" },
+    { "role": "PHOTO ASISTANT", "name": "Sofia Milena", "url": "https://www.instagram.com/sofimezaaa/" }
+  ],
+  "cover": ["1"],
+  "photos": ["2", "3", "4", "5"]
+}

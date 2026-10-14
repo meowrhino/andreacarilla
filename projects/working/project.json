@@ -1,0 +1,13 @@
+{
+  "title": "WORKING ON THE PERIPHERY.",
+  "short": "working on the periphery",
+  "place": "granada",
+  "credits": [
+    { "role": "ART DIRECTION, PHOTOGRAPHY, RETOUCH", "name": "Andrea Carilla" },
+    { "role": "stylist", "name": "anna hope", "url": "https://www.instagram.com/annahope._/" },
+    { "role": "model", "name": "isra", "url": "https://www.instagram.com/amanda.huevos/" },
+    { "role": "makeup, hair", "name": "Yanna Chach" }
+  ],
+  "cover": ["1"],
+  "photos": ["2", "3"]
+}

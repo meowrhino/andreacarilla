@@ -1,0 +1,12 @@
+{
+  "title": "ESTRELLA FUGAZ. ELA REA",
+  "short": "ela rea",
+  "url": "https://www.instagram.com/elaxrea/",
+  "place": "Barcelona",
+  "credits": [
+    { "role": "PHOTOGRAPHY, RETOUCH", "name": "Andrea Carilla" },
+    { "role": "creative direction stylist", "name": "ElaRea", "url": "https://www.instagram.com/elaxrea/" }
+  ],
+  "cover": ["1"],
+  "photos": ["2", "3", "4", "5"]
+}

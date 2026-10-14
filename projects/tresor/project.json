@@ -1,0 +1,16 @@
+{
+  "title": "<3SOR",
+  "short": "<3sor",
+  "url": "https://www.instagram.com/ainessanjo/",
+  "place": "CCCB, Barcelona",
+  "credits": [
+    { "role": "PHOTOGRAPHY, RETOUCH", "name": "Andrea Carilla" },
+    { "role": "COMISARIADO", "name": "Meritxell Desoto", "url": "https://www.instagram.com/meritxelldesoto/" },
+    { "role": "ARTIST", "name": "Isla666 Collective", "url": "https://www.instagram.com/isla666666/" },
+    { "role": "ARTIST", "name": "Tiyumii", "url": "https://www.instagram.com/tiyumii/" },
+    { "role": "ARTIST", "name": "Lechugazafiro", "url": "https://www.instagram.com/lechugazafiro/" },
+    { "role": "ARTIST", "name": "Infanta", "url": "https://www.instagram.com/i.nfanta/" }
+  ],
+  "cover": ["1"],
+  "photos": ["2", "3", "4", "5", "6", "7", "8", "9", "10"]
+}

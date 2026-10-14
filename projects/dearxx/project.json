@@ -1,0 +1,14 @@
+{
+  "title": "DEAR XX. ARE YOU MAD AT ME? HIFAS STUDIO",
+  "short": "dear xx. are you mad at me?",
+  "url": "https://www.instagram.com/hifas.studio/",
+  "place": "Barcelona",
+  "credits": [
+    { "role": "PHOTOGRAPHY, RETOUCH", "name": "Andrea Carilla" },
+    { "role": "STYLIST", "name": "Ana Montejo", "url": "https://www.instagram.com/_ktana/" },
+    { "role": "STYLIST", "name": "Luz Oscura", "url": "https://www.instagram.com/luz.os.cura/" },
+    { "role": "HIFAS STUDIO", "name": "HIFAS STUDIO", "url": "https://www.instagram.com/hifas.studio/" }
+  ],
+  "cover": ["1"],
+  "photos": ["10", "11", "12", "2", "3", "4", "5", "6", "7", "8", "9"]
+}

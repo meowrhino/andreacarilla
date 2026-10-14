@@ -1,18 +1,23 @@
 // home.js - galeria de portadas, enlaces a proyectos y filtros de la home
 //
-// Los enlaces ya estan en el HTML (los escribe build.js con su data-category);
-// aqui solo se reparten por la pantalla y se filtran. La galeria se monta con
-// los gallerySets de data/home.json. En local (Live Server) los enlaces se
-// rehacen tambien desde home.json, para ver los cambios sin el build.
+// Los enlaces ya estan en el HTML (los escribe el build con su data-category);
+// aqui solo se reparten por la pantalla y se filtran. Las galerias de
+// portadas y el nombre de cada lista los deja el build en #home-data.
 
-const isLocal = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
 const linksContainer = document.getElementById("links-container");
-let links = [...linksContainer.querySelectorAll(".project-link")];
+const links = [...linksContainer.querySelectorAll(".project-link")];
 const galleryContainer = document.getElementById("gallery-container");
 
+const { lists = {}, gallery: gallerySets = [] } = (() => {
+  try {
+    return JSON.parse(document.getElementById("home-data")?.textContent || "{}");
+  } catch {
+    return {};
+  }
+})();
+
 const activeCategories = new Set();
-let gallerySets = [];
-let selectedGallery = 0;
+let selectedGallery = Math.floor(Math.random() * gallerySets.length);
 
 // ---------------------------------------------------------------------------
 // Utilidades
@@ -44,16 +49,6 @@ function responsiveFactor() {
   if (w >= 1000) return 1 + ((w - 1000) / 800) * 0.4;
   return 1;
 }
-
-// Medidas de las portadas que build.js deja en el <head>: permiten colocar
-// cada portada antes de que cargue, sin esperar a naturalWidth
-const imageSizes = (() => {
-  try {
-    return JSON.parse(document.getElementById("img-sizes")?.textContent || "{}");
-  } catch {
-    return {};
-  }
-})();
 
 // ---------------------------------------------------------------------------
 // Enlaces a proyectos
@@ -96,16 +91,17 @@ function scatterLinks() {
   });
 }
 
-// Botones de categoria: se pueden activar varios a la vez; ninguno = todos
+// Botones de categoria (una por lista de site.json, en su orden): se pueden
+// activar varios a la vez; ninguno = todos
 function renderCategoryNav() {
   const nav = document.getElementById("category-nav");
-  const categories = [...new Set(links.map((link) => link.dataset.category))].sort();
+  const categories = [...new Set(links.map((link) => link.dataset.category))];
 
   nav.replaceChildren(
     ...categories.map((cat) => {
       const btn = document.createElement("button");
       btn.className = "category-btn";
-      btn.textContent = cat;
+      btn.textContent = lists[cat] || cat;
       const sync = () => {
         btn.classList.toggle("active", activeCategories.has(cat));
         btn.setAttribute("aria-pressed", String(activeCategories.has(cat)));
@@ -132,18 +128,16 @@ function renderGallery() {
 
   const mobile = isMobile();
   const factor = responsiveFactor();
-  const nameBySlug = new Map(links.map((link) => [link.pathname.split("/").filter(Boolean).pop(), link.textContent]));
 
   galleryContainer.replaceChildren(
     ...set.map((item) => {
       // Posicion, capa y escala de cada portada, distintas en movil y escritorio
-      const style = (mobile ? item.mobileStyle : item.desktopStyle) || {};
+      const style = (mobile ? item.mobile : item.desktop) || {};
       const scale = ((style.scale || 100) / 1000) * factor;
-      const slug = item.slug || item.url;
 
       const wrapper = document.createElement("a");
       wrapper.className = "portada-wrapper";
-      wrapper.href = `./proyectos/${slug}/`;
+      wrapper.href = item.href;
       wrapper.style.zIndex = style.index || 0;
       for (const dir of ["top", "left", "right", "bottom"]) {
         if (style[dir] != null) wrapper.style[dir] = `${style[dir]}%`;
@@ -152,11 +146,12 @@ function renderGallery() {
       const img = document.createElement("img");
       img.className = "portada";
       img.src = item.src;
-      img.alt = item.alt?.trim() || `Portada del proyecto ${nameBySlug.get(slug) || slug}`;
+      img.alt = item.alt;
       wrapper.append(img);
 
       const resize = () => {
-        const [w, h] = img.naturalWidth ? [img.naturalWidth, img.naturalHeight] : imageSizes[item.src] || [];
+        // La medida la deja el build: se coloca antes de que cargue
+        const [w, h] = img.naturalWidth ? [img.naturalWidth, img.naturalHeight] : item.size || [];
         if (!w || !h) return;
         wrapper.style.width = `${w * scale}px`;
         wrapper.style.height = `${h * scale}px`;
@@ -207,24 +202,6 @@ if (links.some((link) => link.dataset.category === initialCategory)) activeCateg
 renderCategoryNav();
 scatterLinks();
 document.getElementById("shuffle-btn").addEventListener("click", scatterLinks);
-
-try {
-  const response = await fetch("data/home.json", isLocal ? { cache: "no-store" } : {});
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  const home = await response.json();
-  gallerySets = home.gallerySets || [];
-
-  if (isLocal) {
-    const { previewHomeLinks } = await import("./vista-previa.js");
-    previewHomeLinks(home, linksContainer);
-    links = [...linksContainer.querySelectorAll(".project-link")];
-    renderCategoryNav();
-    scatterLinks();
-  }
-} catch (error) {
-  console.error("[home] no se pudo cargar data/home.json:", error);
-}
-selectedGallery = Math.floor(Math.random() * gallerySets.length);
 renderTemaNav();
 renderGallery();
 

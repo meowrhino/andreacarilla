@@ -1,0 +1,12 @@
+{
+  "title": "8KITO",
+  "short": "8kito",
+  "url": "https://www.instagram.com/8ki.lat/",
+  "place": "Barcelona",
+  "credits": [
+    { "role": "ART DIRECTION, PHOTOGRAPHY, RETOUCH", "name": "Andrea Carilla" },
+    { "role": "STYLIST", "name": "Sol Ruiz", "url": "https://www.instagram.com/solruizbastida" }
+  ],
+  "cover": ["1"],
+  "photos": ["2"]
+}

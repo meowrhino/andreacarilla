@@ -79,7 +79,7 @@ span.meta {
 }
 
 /* ===== 2. home: galería de portadas =====
-   home.js coloca cada portada con el top/left/scale de data/home.json */
+   home.js coloca cada portada con el top/left/scale de «gallery» en data/site.json */
 
 #gallery-container {
   height: 70vh;

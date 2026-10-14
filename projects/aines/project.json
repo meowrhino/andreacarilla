@@ -1,0 +1,12 @@
+{
+  "title": "AINES",
+  "short": "aines",
+  "url": "https://www.instagram.com/ainessanjo/",
+  "place": "Barcelona",
+  "credits": [
+    { "role": "PHOTOGRAPHY, RETOUCH", "name": "Andrea Carilla" },
+    { "role": "STYLIST", "name": "Wiebke", "url": "https://www.instagram.com/wabki.sabki/" }
+  ],
+  "cover": ["1"],
+  "photos": ["2", "3", "4", "5", "6", "7"]
+}

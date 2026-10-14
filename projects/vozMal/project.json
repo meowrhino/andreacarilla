@@ -1,0 +1,13 @@
+{
+  "title": "VOZ MAL. JAUME FERRETE VÁZQUEZ",
+  "short": "performance jaume ferrete",
+  "url": "https://www.macba.cat/es/actividades/voz-mal/",
+  "place": "macbacentro de arte contemporáneo de barcelona",
+  "credits": [
+    { "role": "PHOTOGRAPHY, RETOUCH", "name": "Andrea Carilla" },
+    { "role": "performer", "name": "Frances ribes renshaw", "url": "https://www.instagram.com/__st.frances/" },
+    { "role": "artist, director", "name": "jaume ferrete vázquez", "url": "https://www.instagram.com/mal_ferrete/" }
+  ],
+  "cover": ["1"],
+  "photos": ["10", "2", "3", "4", "5", "6", "7", "8", "9"]
+}

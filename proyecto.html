@@ -7,26 +7,14 @@
     <meta name="robots" content="noindex">
     <title>proyecto</title>
     <link rel="stylesheet" href="./css/style.css">
-    <script>
-        // Los proyectos viven en ./proyectos/<slug>/, paginas generadas por
-        // build.js. Esto redirige los enlaces antiguos proyecto.html?slug=xxx.
-        // En local (Live Server) no redirige: pinta el proyecto desde su json,
-        // asi se puede ver un proyecto nuevo antes de generar su pagina.
-        var slug = new URLSearchParams(location.search).get('slug');
-        var local = ['localhost', '127.0.0.1', '[::1]'].indexOf(location.hostname) !== -1;
-        if (!local || !slug) location.replace(slug ? './proyectos/' + encodeURIComponent(slug) + '/' : './index.html');
-    </script>
 </head>
 
-<body data-page-type="proyecto">
+<!-- Solo para Live Server: proyecto.html?slug=x pinta el proyecto desde su
+     project.json, sin build. En dist/ el build pone en su lugar una pagina
+     que redirige a projects/x/ (los enlaces antiguos siguen funcionando) -->
+<body data-page-type="proyecto" data-preview>
 
     <main></main>
-
-    <a class="home-button" href="./">home</a>
-
-    <noscript>
-        <p style="padding: 1rem;">Esta pagina se ha movido. <a href="./">Volver al inicio</a></p>
-    </noscript>
 
     <script type="module" src="./js/main.js"></script>
 

@@ -1,10 +1,15 @@
 // main.js - se carga en todas las paginas
 //
-// El contenido ya viene escrito en el HTML (lo genera build.js). Aqui solo:
+// El contenido ya viene escrito en el HTML (lo genera build/build.mjs). Aqui solo:
+//   - en Live Server, sin build (las plantillas llevan data-preview), pintar
+//     la pagina desde los json (build/preview.mjs)
 //   - abrir y cerrar el popup "andrea carilla"
 //   - en la home, cargar home.js (galeria, enlaces y filtros)
-//   - en local (Live Server), repintar el proyecto desde su json para ver los
-//     cambios sin ejecutar el build (vista-previa.js)
+
+if (document.body.hasAttribute("data-preview")) {
+  const { preview } = await import("../build/preview.mjs");
+  await preview();
+}
 
 const openBtn = document.getElementById("open-andrea");
 const closeBtn = document.getElementById("close-andrea");
@@ -25,13 +30,4 @@ if (openBtn && closeBtn && popup) {
   });
 }
 
-const pageType = document.body.dataset.pageType;
-const isLocal = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
-
-if (pageType === "home") {
-  import("./home.js");
-} else if (pageType === "proyecto" && isLocal) {
-  // proyecto.html?slug=x tambien vale en local, para proyectos aun sin generar
-  const slug = document.body.dataset.slug || new URLSearchParams(location.search).get("slug");
-  if (slug) import("./vista-previa.js").then(({ previewProject }) => previewProject(slug));
-}
+if (document.body.dataset.pageType === "home") import("./home.js");

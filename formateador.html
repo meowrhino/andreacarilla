@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
   <title>formateador</title>
   <style>
     /* Reset básico */
@@ -269,10 +270,10 @@
 
     <!-- Panel de importación -->
     <section class="panel import-panel">
-      <div class="panel-title">1. importar json existente</div>
+      <div class="panel-title">1. importar un project.json</div>
       <div class="field">
-        <textarea id="json-import" class="json-input" placeholder='pega aquí el json completo del proyecto...'></textarea>
-        <div class="helper-text">pega el json de un proyecto existente para cargarlo en el editor</div>
+        <textarea id="json-import" class="json-input" placeholder='pega aquí el project.json de un proyecto...'></textarea>
+        <div class="helper-text">para cambiar un proyecto que ya existe: pega su project.json y edítalo abajo</div>
       </div>
       <div class="button-group center">
         <button id="btn-import">cargar en editor</button>
@@ -286,55 +287,43 @@
       <div class="panel-title">2. editar proyecto</div>
 
       <div class="field-group">
-        <!-- Información básica -->
         <div class="field">
-          <label for="slug">slug (nombre único del proyecto, sin espacios)</label>
-          <input type="text" id="slug" placeholder="nombre-proyecto">
-          <div class="helper-text">solo letras, números y guiones</div>
+          <label for="slug">nombre de la carpeta (es la dirección: projects/<b>nombre</b>/)</label>
+          <input type="text" id="slug" placeholder="nuevoProyecto">
+          <div class="helper-text">solo letras, números y guiones, sin espacios ni tildes</div>
         </div>
 
         <div class="field">
-          <label for="titulo">título</label>
-          <input type="text" id="titulo" placeholder="Título del Proyecto">
+          <label for="title">título (title): el que sale grande en el proyecto</label>
+          <input type="text" id="title" placeholder="TÍTULO EN MAYÚSCULAS">
         </div>
 
         <div class="field">
-          <label for="tipo_proyecto">tipo de proyecto</label>
-          <input type="text" id="tipo_proyecto" placeholder="artist image">
+          <label for="title_url">link del título (url, opcional)</label>
+          <input type="text" id="title_url" placeholder="https://www.instagram.com/usuario/">
         </div>
 
         <div class="field">
-          <label for="ubicacion">ubicación</label>
-          <input type="text" id="ubicacion" placeholder="Barcelona">
-        </div>
-
-        <!-- Primera imagen -->
-        <div class="field">
-          <label for="primera_imatge_src">primera imagen (ruta)</label>
-          <input type="text" id="primera_imatge_src" placeholder="./img/1.webp">
-        </div>
-
-        <!-- Descripción -->
-        <div class="panel-title" style="margin-top: 1rem;">descripción</div>
-
-        <div class="field">
-          <label for="descripcion_titulo">título de la descripción</label>
-          <input type="text" id="descripcion_titulo" placeholder="TÍTULO EN MAYÚSCULAS">
+          <label for="short">nombre en la home (short)</label>
+          <input type="text" id="short" placeholder="título en minúsculas">
         </div>
 
         <div class="field">
-          <label for="descripcion_link">link (opcional)</label>
-          <input type="text" id="descripcion_link" placeholder="https://ejemplo.com">
+          <label for="place">lugar (place)</label>
+          <input type="text" id="place" placeholder="Barcelona">
         </div>
 
         <div class="field">
-          <label for="descripcion_texto">texto (cada párrafo separado por línea en blanco)</label>
-          <textarea id="descripcion_texto" placeholder="Párrafo 1
+          <label for="date">fecha (date, opcional)</label>
+          <input type="text" id="date" placeholder="Marzo 2026">
+        </div>
 
-Párrafo 2
+        <div class="field">
+          <label for="text">texto (text): cada párrafo separado por una línea en blanco</label>
+          <textarea id="text" placeholder="Párrafo 1
 
-Párrafo 3"></textarea>
-          <div class="helper-text">puedes usar markdown: **negrita**, *cursiva*, [link](url)</div>
+Párrafo 2"></textarea>
+          <div class="helper-text">**negrita**, *cursiva*, [link](https://…)</div>
           <div class="button-group" style="margin-top: 0.5rem;">
             <button id="btn-bold" type="button">negrita</button>
             <button id="btn-italic" type="button">cursiva</button>
@@ -342,93 +331,93 @@ Párrafo 3"></textarea>
           </div>
         </div>
 
-        <!-- Créditos -->
-        <div class="panel-title" style="margin-top: 1rem;">créditos</div>
-        <div id="creditos-container" class="creditos-list"></div>
+        <div class="panel-title" style="margin-top: 1rem;">créditos (credits)</div>
+        <div id="credits-container" class="creditos-list"></div>
         <div class="button-group">
-          <button id="btn-add-credito">+ añadir crédito</button>
+          <button id="btn-add-credit">+ añadir crédito</button>
         </div>
 
-        <!-- Imágenes de galería -->
-        <div class="panel-title" style="margin-top: 1rem;">galería de imágenes</div>
-        <div id="imagenes-container" class="imagenes-list"></div>
-        <div class="button-group">
-          <button id="btn-add-imagen">+ añadir imagen</button>
+        <div class="panel-title" style="margin-top: 1rem;">fotos</div>
+        <div class="field">
+          <label for="cover">portada (cover): el número de la foto</label>
+          <input type="text" id="cover" placeholder="1">
+        </div>
+        <div class="field">
+          <label for="photos">galería (photos): los números, en orden</label>
+          <input type="text" id="photos" placeholder="2-20">
+          <div class="helper-text">"2-20" son todas de la 2 a la 20; también "2, 3, 5, 4". Son las de su carpeta img/ (2.webp, 3.webp…)</div>
         </div>
       </div>
     </section>
 
     <!-- Panel de salida -->
     <section class="panel output-panel">
-      <div class="panel-title">3. exportar json</div>
+      <div class="panel-title">3. exportar project.json</div>
       <pre id="json-output">{}</pre>
+      <div class="helper-text" id="output-help"></div>
       <div class="button-group">
         <button id="btn-copy" class="primary">copiar al portapapeles</button>
-        <button id="btn-download">descargar .json</button>
+        <button id="btn-download">descargar project.json</button>
       </div>
       <div id="output-feedback"></div>
     </section>
   </main>
 
   <script>
-    // Estado global
-    let projectData = {
-      slug: '',
-      titulo: '',
-      primera_imatge: { src: '' },
-      descripcion: { titulo: '', link: '', texto: [] },
-      tipo_proyecto: '',
-      ubicacion: '',
-      creditos: [],
-      imatges: []
-    };
+    const $ = (id) => document.getElementById(id);
+    const fields = ['slug', 'title', 'title_url', 'short', 'place', 'date', 'text', 'cover', 'photos'];
+    const jsonOutput = $('json-output');
+    const creditsContainer = $('credits-container');
+    let projectData = {};
+    let layout = ''; // "diary" en el diario: no está en el formulario, se conserva al importar
 
-    // Referencias a elementos
-    const jsonImport = document.getElementById('json-import');
-    const btnImport = document.getElementById('btn-import');
-    const btnClearImport = document.getElementById('btn-clear-import');
-    const importFeedback = document.getElementById('import-feedback');
-
-    const slug = document.getElementById('slug');
-    const titulo = document.getElementById('titulo');
-    const tipoProyecto = document.getElementById('tipo_proyecto');
-    const ubicacion = document.getElementById('ubicacion');
-    const primeraImatgeSrc = document.getElementById('primera_imatge_src');
-    const descripcionTitulo = document.getElementById('descripcion_titulo');
-    const descripcionLink = document.getElementById('descripcion_link');
-    const descripcionTexto = document.getElementById('descripcion_texto');
-    const btnBold = document.getElementById('btn-bold');
-    const btnItalic = document.getElementById('btn-italic');
-    const btnLink = document.getElementById('btn-link');
-
-    const creditosContainer = document.getElementById('creditos-container');
-    const btnAddCredito = document.getElementById('btn-add-credito');
-
-    const imagenesContainer = document.getElementById('imagenes-container');
-    const btnAddImagen = document.getElementById('btn-add-imagen');
-
-    const jsonOutput = document.getElementById('json-output');
-    const btnCopy = document.getElementById('btn-copy');
-    const btnDownload = document.getElementById('btn-download');
-    const outputFeedback = document.getElementById('output-feedback');
-
-    // Funciones de utilidad
-    function normalizeText(text) {
-      return text.replace(/\r\n?/g, '\n').trim();
-    }
+    // ---------------------------------------------------------------------
+    // Utilidades
+    // ---------------------------------------------------------------------
+    const escapeAttr = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
     function textToParagraphs(text) {
-      const normalized = normalizeText(text);
+      const normalized = text.replace(/\r\n?/g, '\n').trim();
       if (!normalized) return [];
-      return normalized.split(/\n\s*\n+/).map(p => p.replace(/\n/g, ' ').trim()).filter(Boolean);
+      return normalized.split(/\n\s*\n+/).map((p) => p.replace(/\n/g, ' ').trim()).filter(Boolean);
     }
 
-    function paragraphsToText(paragraphs) {
-      return paragraphs.join('\n\n');
+    // "2-5, 8" → ["2", "3", "4", "5", "8"]
+    function parseNumbers(value) {
+      return value.split(/[\s,]+/).filter(Boolean).flatMap((part) => {
+        const range = part.match(/^(\d+)-(\d+)$/);
+        if (!range) return /^\d+$/.test(part) ? [String(Number(part))] : [];
+        const out = [];
+        for (let n = +range[1]; n <= +range[2]; n++) out.push(String(n));
+        return out;
+      });
     }
 
-    function validateSlug(value) {
-      return /^[A-Za-z0-9-]*$/.test(value);
+    // ["2", "3", "4", "8"] → "2-4, 8"
+    function formatNumbers(list) {
+      const parts = [];
+      for (let i = 0; i < list.length; i++) {
+        let j = i;
+        while (j + 1 < list.length && +list[j + 1] === +list[j] + 1) j++;
+        parts.push(j - i >= 2 ? `${list[i]}-${list[j]}` : list.slice(i, j + 1).join(', '));
+        i = j;
+      }
+      return parts.join(', ');
+    }
+
+    // El mismo formato que el resto de project.json: listas en una línea,
+    // un crédito por línea
+    const inline = (v) => Array.isArray(v) ? `[${v.map(inline).join(', ')}]`
+      : v && typeof v === 'object' ? `{ ${Object.entries(v).map(([k, x]) => `${JSON.stringify(k)}: ${inline(x)}`).join(', ')} }`
+      : JSON.stringify(v);
+    function toJson(obj) {
+      const lines = Object.entries(obj).map(([k, v]) => {
+        if (Array.isArray(v) && v.some((x) => typeof x === 'object' || String(x).length > 60)) {
+          return `  ${JSON.stringify(k)}: [\n${v.map((x) => '    ' + inline(x)).join(',\n')}\n  ]`;
+        }
+        return `  ${JSON.stringify(k)}: ${inline(v)}`;
+      });
+      return `{\n${lines.join(',\n')}\n}\n`;
     }
 
     function showFeedback(element, message, isError = false) {
@@ -436,264 +425,142 @@ Párrafo 3"></textarea>
       setTimeout(() => { element.innerHTML = ''; }, 3000);
     }
 
-    // Actualizar datos del proyecto
-    function updateProjectData() {
-      projectData.slug = slug.value.trim();
-      projectData.titulo = titulo.value.trim();
-      projectData.tipo_proyecto = tipoProyecto.value.trim();
-      projectData.ubicacion = ubicacion.value.trim();
-      projectData.primera_imatge.src = primeraImatgeSrc.value.trim();
-      projectData.descripcion.titulo = descripcionTitulo.value.trim();
-      projectData.descripcion.link = descripcionLink.value.trim();
-      projectData.descripcion.texto = textToParagraphs(descripcionTexto.value);
+    // ---------------------------------------------------------------------
+    // Formulario → json
+    // ---------------------------------------------------------------------
+    function update() {
+      const v = Object.fromEntries(fields.map((f) => [f, $(f).value.trim()]));
+      const credits = [...creditsContainer.querySelectorAll('.credito-item')]
+        .map((item) => {
+          const c = {
+            role: item.querySelector('.credit-role').value.trim(),
+            name: item.querySelector('.credit-name').value.trim(),
+          };
+          const url = item.querySelector('.credit-url').value.trim();
+          if (url) c.url = url;
+          return c;
+        })
+        .filter((c) => c.name || c.role);
 
-      // Actualizar créditos
-      projectData.creditos = [];
-      const creditoItems = creditosContainer.querySelectorAll('.credito-item');
-      creditoItems.forEach(item => {
-        const nombre = item.querySelector('.credito-nombre').value.trim();
-        const rol = item.querySelector('.credito-rol').value.trim();
-        const link = item.querySelector('.credito-link').value.trim();
-        if (nombre || rol) {
-          projectData.creditos.push({ nombre, rol, link });
-        }
-      });
+      projectData = {};
+      if (v.title) projectData.title = v.title;
+      if (v.short) projectData.short = v.short;
+      if (v.title_url) projectData.url = v.title_url;
+      if (v.place) projectData.place = v.place;
+      if (v.date) projectData.date = v.date;
+      const text = textToParagraphs($('text').value);
+      if (text.length) projectData.text = text;
+      if (credits.length) projectData.credits = credits;
+      const cover = parseNumbers(v.cover);
+      if (cover.length) projectData.cover = cover.slice(0, 1);
+      projectData.photos = parseNumbers(v.photos);
+      if (layout) projectData.layout = layout;
 
-      // Actualizar imágenes
-      projectData.imatges = [];
-      const imagenItems = imagenesContainer.querySelectorAll('.imagen-item input');
-      imagenItems.forEach(input => {
-        const value = input.value.trim();
-        if (value) {
-          projectData.imatges.push(value);
-        }
-      });
-
-      updateOutput();
+      jsonOutput.textContent = toJson(projectData);
+      $('slug').classList.toggle('error', !/^[A-Za-z0-9-]*$/.test(v.slug));
+      const slug = v.slug || 'nuevoProyecto';
+      $('output-help').innerHTML =
+        `guárdalo como <b>projects/${escapeAttr(slug)}/project.json</b>, con sus fotos en <b>projects/${escapeAttr(slug)}/img/</b>. ` +
+        `Para que salga en la web, añade <b>"${escapeAttr(slug)}"</b> a una de las listas de <b>data/site.json</b> (ver GUIA.md).`;
     }
 
-    // Actualizar output JSON
-    function updateOutput() {
-      const json = JSON.stringify(projectData, null, 2);
-      jsonOutput.textContent = json;
+    // json → formulario
+    function load(data) {
+      layout = data.layout || '';
+      $('title').value = data.title || '';
+      $('short').value = data.short || '';
+      $('title_url').value = data.url || '';
+      $('place').value = data.place || '';
+      $('date').value = data.date || '';
+      $('text').value = (data.text || []).join('\n\n');
+      $('cover').value = (data.cover || []).join(', ');
+      $('photos').value = formatNumbers(data.photos || []);
+      creditsContainer.innerHTML = '';
+      (data.credits || []).forEach(addCredit);
+      update();
     }
 
-    // Cargar datos en el formulario
-    function loadDataToForm(data) {
-      slug.value = data.slug || '';
-      titulo.value = data.titulo || '';
-      tipoProyecto.value = data.tipo_proyecto || '';
-      ubicacion.value = data.ubicacion || '';
-      primeraImatgeSrc.value = data.primera_imatge?.src || '';
-      descripcionTitulo.value = data.descripcion?.titulo || '';
-      descripcionLink.value = data.descripcion?.link || '';
-      descripcionTexto.value = paragraphsToText(data.descripcion?.texto || []);
-
-      // Cargar créditos
-      creditosContainer.innerHTML = '';
-      if (data.creditos && data.creditos.length > 0) {
-        data.creditos.forEach(credito => {
-          addCreditoItem(credito);
-        });
-      }
-
-      // Cargar imágenes
-      imagenesContainer.innerHTML = '';
-      if (data.imatges && data.imatges.length > 0) {
-        data.imatges.forEach(img => {
-          addImagenItem(img);
-        });
-      }
-
-      updateProjectData();
-    }
-
-    // Importar JSON
-    btnImport.addEventListener('click', () => {
-      const raw = jsonImport.value.trim();
-      if (!raw) {
-        showFeedback(importFeedback, 'no hay nada que importar', true);
-        return;
-      }
-
-      try {
-        const data = JSON.parse(raw);
-        loadDataToForm(data);
-        showFeedback(importFeedback, '¡json cargado correctamente!');
-        console.log('JSON importado:', data);
-      } catch (err) {
-        showFeedback(importFeedback, 'error: json no válido', true);
-        console.error('Error al parsear JSON:', err);
-      }
-    });
-
-    btnClearImport.addEventListener('click', () => {
-      jsonImport.value = '';
-      importFeedback.innerHTML = '';
-    });
-
-    // Añadir crédito
-    function addCreditoItem(credito = { nombre: '', rol: '', link: '' }) {
+    function addCredit(credit = {}) {
       const item = document.createElement('div');
       item.className = 'credito-item';
       item.innerHTML = `
         <button class="remove-btn" type="button">✕</button>
         <div class="field">
-          <label>nombre</label>
-          <input type="text" class="credito-nombre" value="${credito.nombre}" placeholder="Nombre Persona">
+          <label>rol (role)</label>
+          <input type="text" class="credit-role" value="${escapeAttr(credit.role)}" placeholder="FOTOGRAFÍA">
         </div>
         <div class="field">
-          <label>rol</label>
-          <input type="text" class="credito-rol" value="${credito.rol}" placeholder="ROL EN MAYÚSCULAS">
+          <label>nombre (name)</label>
+          <input type="text" class="credit-name" value="${escapeAttr(credit.name)}" placeholder="Nombre Persona">
         </div>
         <div class="field">
-          <label>link (opcional)</label>
-          <input type="text" class="credito-link" value="${credito.link}" placeholder="https://instagram.com/usuario">
+          <label>link (url, opcional)</label>
+          <input type="text" class="credit-url" value="${escapeAttr(credit.url)}" placeholder="https://www.instagram.com/usuario/">
         </div>
       `;
-
-      const removeBtn = item.querySelector('.remove-btn');
-      removeBtn.addEventListener('click', () => {
-        item.remove();
-        updateProjectData();
-      });
-
-      const inputs = item.querySelectorAll('input');
-      inputs.forEach(input => {
-        input.addEventListener('input', updateProjectData);
-      });
-
-      creditosContainer.appendChild(item);
+      item.querySelector('.remove-btn').addEventListener('click', () => { item.remove(); update(); });
+      item.querySelectorAll('input').forEach((input) => input.addEventListener('input', update));
+      creditsContainer.appendChild(item);
     }
 
-    btnAddCredito.addEventListener('click', () => {
-      addCreditoItem();
-      updateProjectData();
-    });
-
-    // Añadir imagen
-    function addImagenItem(src = '') {
-      const item = document.createElement('div');
-      item.className = 'imagen-item';
-      item.innerHTML = `
-        <input type="text" value="${src}" placeholder="./img/2.webp">
-        <button type="button" class="remove-imagen-btn">eliminar</button>
-      `;
-
-      const input = item.querySelector('input');
-      input.addEventListener('input', updateProjectData);
-
-      const removeBtn = item.querySelector('.remove-imagen-btn');
-      removeBtn.addEventListener('click', () => {
-        item.remove();
-        updateProjectData();
-      });
-
-      imagenesContainer.appendChild(item);
-    }
-
-    btnAddImagen.addEventListener('click', () => {
-      addImagenItem();
-      updateProjectData();
-    });
-
-    // Copiar al portapapeles
-    btnCopy.addEventListener('click', async () => {
-      const text = jsonOutput.textContent;
+    // ---------------------------------------------------------------------
+    // Botones
+    // ---------------------------------------------------------------------
+    $('btn-import').addEventListener('click', () => {
+      const raw = $('json-import').value.trim();
+      if (!raw) return showFeedback($('import-feedback'), 'no hay nada que importar', true);
       try {
-        await navigator.clipboard.writeText(text);
-        showFeedback(outputFeedback, '¡copiado al portapapeles!');
-        console.log('JSON copiado al portapapeles');
+        load(JSON.parse(raw));
+        showFeedback($('import-feedback'), '¡cargado!');
       } catch (err) {
-        showFeedback(outputFeedback, 'error al copiar', true);
-        console.error('Error al copiar:', err);
+        showFeedback($('import-feedback'), `no es un json válido (casi siempre es una coma): ${err.message}`, true);
       }
     });
 
-    // Descargar archivo
-    btnDownload.addEventListener('click', () => {
-      const text = jsonOutput.textContent;
-      const filename = projectData.slug || 'proyecto';
-      const blob = new Blob([text], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
+    $('btn-clear-import').addEventListener('click', () => {
+      $('json-import').value = '';
+      $('import-feedback').innerHTML = '';
+    });
+
+    $('btn-add-credit').addEventListener('click', () => { addCredit(); update(); });
+
+    $('btn-copy').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(jsonOutput.textContent);
+        showFeedback($('output-feedback'), '¡copiado!');
+      } catch {
+        showFeedback($('output-feedback'), 'no se ha podido copiar', true);
+      }
+    });
+
+    $('btn-download').addEventListener('click', () => {
+      const url = URL.createObjectURL(new Blob([jsonOutput.textContent], { type: 'application/json' }));
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${filename}.json`;
-      document.body.appendChild(a);
+      a.download = 'project.json';
       a.click();
-      document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showFeedback(outputFeedback, `descargado como ${filename}.json`);
-      console.log('JSON descargado:', filename);
+      showFeedback($('output-feedback'), 'descargado: project.json');
     });
 
-    // Validación de slug
-    slug.addEventListener('input', (e) => {
-      const value = e.target.value;
-      if (!validateSlug(value)) {
-        e.target.classList.add('error');
-      } else {
-        e.target.classList.remove('error');
-      }
-      updateProjectData();
-    });
-
-    // Funciones de formato de texto
-    function wrapTextSelection(before, after) {
-      const start = descripcionTexto.selectionStart;
-      const end = descripcionTexto.selectionEnd;
-      const value = descripcionTexto.value;
-      const selectedText = value.slice(start, end);
-      
-      const newText = value.slice(0, start) + before + selectedText + after + value.slice(end);
-      descripcionTexto.value = newText;
-      
-      // Mantener el foco y ajustar la selección
-      descripcionTexto.focus();
-      const newStart = start + before.length;
-      const newEnd = newStart + selectedText.length;
-      descripcionTexto.setSelectionRange(newStart, newEnd);
-      
-      updateProjectData();
+    // Negrita, cursiva y link sobre lo seleccionado en el texto
+    const textArea = $('text');
+    function wrapSelection(before, after) {
+      const { selectionStart: start, selectionEnd: end, value } = textArea;
+      textArea.value = value.slice(0, start) + before + value.slice(start, end) + after + value.slice(end);
+      textArea.focus();
+      textArea.setSelectionRange(start + before.length, end + before.length);
+      update();
     }
-
-    function addLinkToSelection() {
-      const start = descripcionTexto.selectionStart;
-      const end = descripcionTexto.selectionEnd;
-      const value = descripcionTexto.value;
-      const selectedText = value.slice(start, end);
-      
-      // Pedir la URL al usuario
-      const url = prompt('Introduce la URL del enlace:', 'https://');
-      if (!url) return; // Usuario canceló
-      
-      const linkText = selectedText || 'texto del enlace';
-      const markdownLink = `[${linkText}](${url})`;
-      
-      const newText = value.slice(0, start) + markdownLink + value.slice(end);
-      descripcionTexto.value = newText;
-      
-      // Mantener el foco
-      descripcionTexto.focus();
-      const newPos = start + markdownLink.length;
-      descripcionTexto.setSelectionRange(newPos, newPos);
-      
-      updateProjectData();
-    }
-
-    // Event listeners para botones de formato
-    btnBold.addEventListener('click', () => wrapTextSelection('**', '**'));
-    btnItalic.addEventListener('click', () => wrapTextSelection('*', '*'));
-    btnLink.addEventListener('click', addLinkToSelection);
-
-    // Event listeners para actualización en tiempo real
-    [titulo, tipoProyecto, ubicacion, primeraImatgeSrc, descripcionTitulo, descripcionLink, descripcionTexto].forEach(el => {
-      el.addEventListener('input', updateProjectData);
+    $('btn-bold').addEventListener('click', () => wrapSelection('**', '**'));
+    $('btn-italic').addEventListener('click', () => wrapSelection('*', '*'));
+    $('btn-link').addEventListener('click', () => {
+      const url = prompt('dirección del link:', 'https://');
+      if (url) wrapSelection('[', `](${url})`);
     });
 
-    // Inicializar
-    updateProjectData();
-    console.log('Formateador inicializado');
+    fields.forEach((f) => $(f).addEventListener('input', update));
+    update();
   </script>
 </body>
 

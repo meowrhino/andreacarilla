@@ -1,0 +1,13 @@
+{
+  "title": "PRESSKIT 8KITO",
+  "short": "presskit 8kito",
+  "url": "https://www.instagram.com/8ki.lat/",
+  "place": "Barcelona",
+  "date": "Febrero 2026",
+  "credits": [
+    { "role": "FOTOGRAFÍA", "name": "Andrea Carilla" },
+    { "role": "ARTIST, DJ Y PRODUCTOR", "name": "Pablo Ramirez", "url": "https://www.instagram.com/8ki.lat/" }
+  ],
+  "cover": ["1"],
+  "photos": ["2", "3", "4"]
+}

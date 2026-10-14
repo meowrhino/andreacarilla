@@ -1,0 +1,14 @@
+{
+  "title": "WAITING THE RAIN. HIFAS STUDIO",
+  "short": "waiting the rain",
+  "url": "https://www.instagram.com/hifas.studio/",
+  "place": "Barcelona",
+  "credits": [
+    { "role": "ART DIRECTION, PHOTOGRAPHY, RETOUCH", "name": "Andrea Carilla" },
+    { "role": "STYLIST", "name": "ana montejo", "url": "https://www.instagram.com/_ktana" },
+    { "role": "model", "name": "cecilia ruiz", "url": "https://www.instagram.com/cecinestpasunececi/" },
+    { "role": "HIFAS STUDIO", "name": "HIFAS STUDIO", "url": "https://www.instagram.com/hifas.studio/" }
+  ],
+  "cover": ["1"],
+  "photos": ["2", "3", "4", "5", "6", "7", "8"]
+}

@@ -1,0 +1,14 @@
+{
+  "title": "TESTIGO DEL PERO.",
+  "short": "alejandra grillo",
+  "url": "https://www.instagram.com/alejandra__grillo/",
+  "place": "madrid",
+  "text": ["ALEJANDRA GRILLO"],
+  "credits": [
+    { "role": "creative DIRECTION, PHOTOGRAPHY, RETOUCH", "name": "Andrea Carilla" },
+    { "role": "art direction", "name": "juan carlos camacho", "url": "https://www.instagram.com/jcamher/" },
+    { "role": "stylist, model", "name": "alejandra grillo", "url": "https://www.instagram.com/alejandra__grillo/" }
+  ],
+  "cover": ["1"],
+  "photos": ["2", "3", "4", "5", "6", "7"]
+}

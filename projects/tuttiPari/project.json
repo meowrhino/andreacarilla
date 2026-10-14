@@ -1,0 +1,13 @@
+{
+  "title": "TUTTI PARI",
+  "short": "tutti pari",
+  "url": "https://www.instagram.com/tuttiispace/",
+  "place": "Septiembre - junio 2026, Granada",
+  "credits": [
+    { "role": "FOTOGRAFÍA", "name": "Andrea Carilla" },
+    { "role": "PRODUCCIÓN", "name": "Mercedes Lucas" },
+    { "role": "PRODUCCIÓN", "name": "Diana Dyabi" }
+  ],
+  "cover": ["1"],
+  "photos": ["2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28"]
+}

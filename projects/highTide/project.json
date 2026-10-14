@@ -1,0 +1,14 @@
+{
+  "title": "HIGH TIDE. CROMMO",
+  "short": "high tide",
+  "url": "https://www.instagram.com/crommo__/",
+  "place": "granada",
+  "credits": [
+    { "role": "PHOTOGRAPHY, RETOUCH", "name": "Andrea Carilla" },
+    { "role": "creative direction STYLIST", "name": "anna hope", "url": "https://www.instagram.com/annahope._/" },
+    { "role": "MODEL", "name": "Panda Waack", "url": "https://www.instagram.com/pandawaack/" },
+    { "role": "crommo", "name": "crommo", "url": "https://www.instagram.com/crommo__/" }
+  ],
+  "cover": ["1"],
+  "photos": ["2", "3", "4", "5"]
+}

@@ -36,7 +36,6 @@ andreacarilla/
 ├── js/home.js             la home: galería, enlaces repartidos y filtros
 ├── js/transicion.js       la transición de la casa (con css/transicion.css)
 ├── css/style.css
-├── tools/imgToWeb/        copia de imgToWeb, con sus librerías dentro
 ├── formateador.html       formulario que escribe un project.json
 ├── wrangler.jsonc         la copia de Andrea → Workers Builds (su Cloudflare)
 ├── GUIA.md                para Andrea

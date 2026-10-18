@@ -6,7 +6,7 @@
 - dar de alta andreacarilla.work en Google Search Console y enviar `sitemap.xml`
 
 ## hecho (2026-10)
-- receta del 2026-10-18: transición de la casa, sharp (fuera ffmpeg), los dos hostings (base por `GITHUB_ACTIONS`, guarda en la Action, `wrangler.jsonc`), JSON Schema (`schema/`), ocultos, la vista previa enseña los errores, issue y `CLAUDE.md` si falla, imgToWeb en `tools/`, `engines` y `package-lock.json`, `TRASPASO.md`
+- receta del 2026-10-18: transición de la casa, sharp (fuera ffmpeg), los dos hostings (base por `GITHUB_ACTIONS`, guarda en la Action, `wrangler.jsonc`), JSON Schema (`schema/`), ocultos, la vista previa enseña los errores, issue y `CLAUDE.md` si falla, `engines` y `package-lock.json`, `TRASPASO.md`
 - nombres de la casa: `projects/<slug>/project.json` + `img/`, `data/site.json` (con `lists` y `gallery`) y `data/about.json`; campos en inglés; fotos por número
 - build a `dist/` (sin commitear) con validación y mensajes en castellano; publica la Action en Pages; og:image 1200×630 con ffmpeg
 - formateador con los campos nuevos; `GUIA.md` para Andrea

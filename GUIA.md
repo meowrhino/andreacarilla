@@ -28,9 +28,7 @@ Desde aquí, la web es esa carpeta: cada vez que abras VS Code, se abre ahí.
 Para preparar las fotos, **imgToWeb**: https://meowrhino.github.io/imgToWeb/
 (las pasa al formato de la web, `.webp`, del tamaño justo, y las numera:
 `1.webp`, `2.webp`…). **Ábrelo en Chrome o Firefox**, no en Safari: Safari no
-sabe hacer `.webp` y imgToWeb se salta las fotos. Tienes una copia dentro de
-la web, por si un día no está la nuestra: `tools/imgToWeb/index.html` (doble
-clic, y que se abra en Chrome o Firefox).
+sabe hacer `.webp` y imgToWeb se salta las fotos.
 
 **VS Code te ayuda con los campos**: al pasar el ratón por encima de uno
 (`"title"`, `"photos"`…) te dice qué es, y si escribes mal uno o te falta una

@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schema/project.json",
   "title": "PRESSKIT 8KITO",
   "short": "presskit 8kito",
   "url": "https://www.instagram.com/8ki.lat/",

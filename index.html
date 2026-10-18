@@ -4,7 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- la transicion de la casa (js/transicion.js): tapada antes de pintar si
+         se llega de otra pagina de la web. El build copia este mismo script a
+         las paginas de proyecto -->
+    <script>{
+    const html = document.documentElement;
+    html.classList.add('js');
+    let back = false;
+    try {
+      const d = JSON.parse(sessionStorage.getItem('transicion'));
+      back = !d && performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
+      if (d?.carga) html.style.setProperty('--carga', d.carga);
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches && (back || d)) html.classList.add('tapada');
+    } catch {}
+    window.revelada = 'onpagereveal' in window ? new Promise((done) => addEventListener('pagereveal', (e) => {
+      const vt = e.viewTransition;
+      if (vt && back && html.classList.contains('tapada')) { html.classList.add('tapando'); done(vt); }
+      else { vt?.ready.catch(() => {}); vt?.skipTransition(); done(null); }   // saltarla rechaza ready: sin error en la consola
+    }, { once: true })) : Promise.resolve(null);
+    }</script>
     <title>andrea carilla</title>
+    <link rel="stylesheet" href="./css/transicion.css">
     <link rel="stylesheet" href="./css/style.css">
     <!-- sin JS los enlaces de proyectos se ven en fila, no amontonados -->
     <noscript><style>.project-link { position: static; }</style></noscript>
@@ -37,6 +57,7 @@
     <!-- build:chrome -->
     <!-- /build:chrome -->
 
+    <script src="./js/transicion.js" defer></script>
     <script type="module" src="./js/main.js"></script>
 
 </body>

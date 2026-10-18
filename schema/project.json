@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "projects/<slug>/project.json: un proyecto",
+  "description": "projects/<slug>/project.json: un proyecto. El nombre de la carpeta es su dirección (/projects/<slug>/). Sus fotos (1.webp, 2.webp… de imgToWeb), en img/ de la misma carpeta. Este fichero lo lee VS Code (por el \"$schema\" de arriba del JSON) para autocompletar, explicar cada campo y subrayar lo que está mal; el build y la vista previa validan con él mismo.",
+  "type": "object",
+  "required": [
+    "title"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "description": "El título grande de la página. Sale también en Google y al compartir si no hay «short»."
+    },
+    "short": {
+      "type": "string",
+      "description": "El nombre en la home y en la pestaña del navegador."
+    },
+    "url": {
+      "type": "string",
+      "pattern": "^(https?://|mailto:)",
+      "description": "Opcional: adónde lleva el título al pulsarlo (https://…)."
+    },
+    "place": {
+      "type": "string",
+      "description": "Opcional: el lugar. Admite **negrita**, *cursiva* y [texto](https://…)."
+    },
+    "date": {
+      "type": "string",
+      "description": "Opcional: la fecha, como quieras escribirla."
+    },
+    "text": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Opcional: el texto, una lista de párrafos: [\"primero\", \"segundo\"]. El primero sale también en Google (si no hay «description»). Admite **negrita**, *cursiva* y [texto](https://…)."
+    },
+    "description": {
+      "type": "string",
+      "description": "Opcional: la frase que sale en Google y al compartir. Si no está, sale el primer párrafo de «text»."
+    },
+    "credits": {
+      "type": "array",
+      "description": "Opcional: quién hizo qué, una persona por línea.",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "type": "string",
+            "description": "Qué hizo: \"STYLIST\"."
+          },
+          "name": {
+            "type": "string",
+            "description": "Su nombre."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^(https?://|mailto:)",
+            "description": "Opcional: su web o su Instagram (https://…)."
+          }
+        }
+      }
+    },
+    "cover": {
+      "type": "array",
+      "maxItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9]+$",
+        "description": "El número de la foto, sin .webp: \"3\" es img/3.webp."
+      },
+      "description": "Opcional: la portada, la foto grande de arriba y la que sale al compartir: [\"1\"]."
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9]+$",
+        "description": "El número de la foto, sin .webp: \"3\" es img/3.webp."
+      },
+      "description": "Las fotos de la página, en orden: [\"2\", \"3\", \"4\"]."
+    },
+    "layout": {
+      "enum": [
+        "diary"
+      ],
+      "description": "Solo el diario: \"diary\", una tira de fotos sin textos."
+    }
+  }
+}

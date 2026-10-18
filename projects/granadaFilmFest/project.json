@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schema/project.json",
   "title": "GRANADA FILM FEST",
   "short": "granada film fest",
   "url": "https://www.instagram.com/granadafilmfest/",

@@ -442,7 +442,8 @@ Párrafo 2"></textarea>
         })
         .filter((c) => c.name || c.role);
 
-      projectData = {};
+      // el esquema: VS Code explica cada campo y subraya lo que este mal
+      projectData = { $schema: '../../schema/project.json' };
       if (v.title) projectData.title = v.title;
       if (v.short) projectData.short = v.short;
       if (v.title_url) projectData.url = v.title_url;

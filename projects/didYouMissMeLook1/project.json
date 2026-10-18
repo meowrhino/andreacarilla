@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schema/project.json",
   "title": "DID YOU MISS ME? HIFAS STUDIO. LOOK 1",
   "short": "did you miss me? hifas studio. look 1",
   "url": "https://www.instagram.com/hifas.studio/",

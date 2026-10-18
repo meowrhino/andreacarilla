@@ -1,4 +1,5 @@
 {
+  "$schema": "../schema/site.json",
   "title": "andrea carilla",
   "url": "https://andreacarilla.work/",
   "description": "Portfolio de fotografía de Andrea Carilla. Proyectos de moda, editorial y diario personal.",

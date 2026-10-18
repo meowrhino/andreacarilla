@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schema/project.json",
   "title": "VOZ MAL. JAUME FERRETE VÁZQUEZ",
   "short": "performance jaume ferrete",
   "url": "https://www.macba.cat/es/actividades/voz-mal/",

@@ -43,10 +43,17 @@ const truncate = (s, max) => (s.length <= max ? s : s.slice(0, max - 3).trimEnd(
 // ---------------------------------------------------------------------------
 
 // Los proyectos publicados, en el orden de las listas de site.json, cada uno
-// con su lista: [{ slug, list, listName }]
+// con su lista: [{ slug, list, listName, hidden }]. En la lista, "slug" o, para
+// esconderlo, { "project": "slug", "visible": false }: tiene su pagina (con
+// noindex) pero no sale en la home ni en el sitemap
 export const listedProjects = (site) =>
   Object.entries(site.lists || {}).flatMap(([list, { name, projects }]) =>
-    (projects || []).map((slug) => ({ slug, list, listName: name || list }))
+    (projects || []).map((e) => ({
+      slug: typeof e === "string" ? e : e.project,
+      list,
+      listName: name || list,
+      hidden: e.visible === false,
+    }))
   );
 
 export const photoPath = (slug, n) => `projects/${slug}/img/${n}.webp`;
@@ -55,7 +62,7 @@ export const portadaPath = (set, n) => `_portada/${set + 1}/${n}.webp`;
 // El nombre de un proyecto en la home y en la pestaña del navegador
 export const projectName = (p) => p.short || p.title || p.slug;
 
-export const projectDescription = (p) => truncate(plain(p.text?.[0] || p.title || p.slug), 160);
+export const projectDescription = (p) => truncate(plain(p.description || p.text?.[0] || p.title || p.slug), 160);
 
 // <img> con su ancho y alto reales (si se conocen), para que el navegador
 // reserve el hueco. sizeOf(ruta) → { w, h } o null
@@ -173,6 +180,7 @@ ${[
 // hrefOf(slug) permite a la vista previa enlazar a proyecto.html?slug=
 export const homeLinks = (projects, hrefOf = (slug) => `./projects/${slug}/`) =>
   projects
+    .filter((p) => !p.hidden)
     .map(
       (p) =>
         `            <a class="project-link" href="${escapeHtml(hrefOf(p.slug))}" data-category="${escapeHtml(

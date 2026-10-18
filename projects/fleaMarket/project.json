@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schema/project.json",
   "title": "FLEA MARKET. MERCANTIC",
   "short": "flea market",
   "url": "https://www.instagram.com/mercanticsantcugat/",

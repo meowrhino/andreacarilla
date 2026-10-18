@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schema/project.json",
   "title": "<3SOR",
   "short": "<3sor",
   "url": "https://www.instagram.com/ainessanjo/",

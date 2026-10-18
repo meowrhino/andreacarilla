@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schema/project.json",
   "title": "SANGRE Y SAL.",
   "short": "sangre y sal",
   "url": "https://www.instagram.com/vangoura_/",

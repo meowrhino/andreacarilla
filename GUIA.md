@@ -28,7 +28,14 @@ Desde aquí, la web es esa carpeta: cada vez que abras VS Code, se abre ahí.
 Para preparar las fotos, **imgToWeb**: https://meowrhino.github.io/imgToWeb/
 (las pasa al formato de la web, `.webp`, del tamaño justo, y las numera:
 `1.webp`, `2.webp`…). **Ábrelo en Chrome o Firefox**, no en Safari: Safari no
-sabe hacer `.webp` y imgToWeb se salta las fotos.
+sabe hacer `.webp` y imgToWeb se salta las fotos. Tienes una copia dentro de
+la web, por si un día no está la nuestra: `tools/imgToWeb/index.html` (doble
+clic, y que se abra en Chrome o Firefox).
+
+**VS Code te ayuda con los campos**: al pasar el ratón por encima de uno
+(`"title"`, `"photos"`…) te dice qué es, y si escribes mal uno o te falta una
+coma, lo subraya en rojo. Para ver qué campos puedes poner, dentro de las
+llaves pulsa **Ctrl+Espacio**.
 
 ---
 
@@ -133,8 +140,13 @@ carpeta):
 }
 ```
 
-- Para **esconder** un proyecto sin borrarlo, quítalo de la lista. Para que
-  vuelva, lo pones otra vez.
+- Para **esconder** un proyecto sin quitarlo de su sitio, cambia su nombre
+  por `{ "project": "tuttiPari", "visible": false }`: sigue teniendo su página
+  (para mandarla a quien quieras), pero no sale en la home ni en Google. Para
+  que vuelva, pon otra vez solo `"tuttiPari"`. (Si está en las fotos de la
+  home, `gallery`, quítalo también de ahí.)
+- Para **quitarlo del todo** de la web, bórralo de la lista (la carpeta se
+  puede quedar).
 - Para **cambiarlo de categoría**, lo mueves de una lista a otra.
 - Para una **categoría nueva**, copia un bloque entero (desde `"eventos": {`
   hasta su `}`), pégalo debajo con una coma entre los dos, y cámbiale el
@@ -209,12 +221,18 @@ sola** con la portada: no tienes que hacer nada.
 | `date` | *(opcional)* la fecha, como quieras escribirla | `"Marzo 2026"` |
 | `text` | *(opcional)* el texto, lista de párrafos | `["Uno.", "Dos."]` |
 | `credits` | *(opcional)* quién hizo qué: una persona por línea, con `role`, `name` y, si quieres, `url` | ver arriba |
-| `cover` | *(opcional)* la portada | `["1"]` |
+| `description` | *(opcional)* la frase que sale en Google y al compartir; si no está, sale el primer párrafo de `text` | `"Fotos de la fiesta…"` |
+| `cover` | *(opcional)* la portada, y la foto al compartir | `["1"]` |
 | `photos` | las fotos de la página, en orden | `["2", "3", "4"]` |
 | `layout` | *(solo el diario)* `"diary"`: solo una tira de fotos, sin textos | `"diary"` |
 
 En los textos (`text`, `place` y el about): `**negrita**`, `*cursiva*` y
 `[texto del link](https://…)`.
+
+**Lo que sale en Google y al compartir** (WhatsApp, Instagram…): de la home,
+`title` y `description` de `data/site.json`, con la primera foto de `gallery`;
+de un proyecto, su `short` (o `title`), su `description` (o el primer párrafo
+de `text`) y su `cover`.
 
 ---
 
@@ -223,7 +241,8 @@ En los textos (`text`, `place` y el about): `**negrita**`, `*cursiva*` y
 Con la extensión **Live Server** de VS Code (búscala en Extensions, el icono de
 los cuadraditos, e instálala): abajo a la derecha pulsa **Go Live** y se abre
 la web en el navegador, leyendo tus archivos. Cada vez que guardas, se
-actualiza.
+actualiza. Si algo está mal (una coma, una foto que no está), en vez de la web
+sale en rojo lo mismo que diría al publicar: así lo ves antes de subirlo.
 
 ---
 
@@ -235,20 +254,22 @@ actualiza.
 - entre dos cosas de una lista va una coma: `["1", "2", "3"]`;
 - **después de la última, no**: `["1", "2", "3",]` ✗.
 
-**Cómo saber si ha ido bien**: en tu repositorio en github.com, pestaña
-**Actions**. Lo último que has subido sale con un círculo:
+**Cómo saber si ha ido bien**: en tu repositorio en github.com, al lado de tu
+último cambio (arriba de la lista de archivos) sale una bolita:
 
 - 🟢 verde: publicado.
-- 🟡 amarillo: publicándose (2-3 minutos).
-- 🔴 rojo: no se ha publicado, y **la web sigue como estaba**. Entra, pulsa en
-  **build** y verás una línea con ✗ que dice qué pasa y dónde. Por ejemplo:
+- 🟡 amarilla: publicándose (2-3 minutos).
+- 🔴 roja: no se ha publicado, y **la web sigue como estaba**. Pulsa la bolita
+  → **Details** y verás una línea con ✗ que dice qué pasa y dónde. Por ejemplo:
 
   ```
-  ✗ projects/tuttiPari/project.json no es un JSON válido (casi siempre es una coma): … (line 12 column 5)
+  ✗ projects/tuttiPari/project.json no es un JSON válido (línea 12, columna 5). Suele ser una coma de más o de menos…
+  ✗ projects/tuttiPari/project.json: "titel" no es un campo de aquí (¿mal escrito?). Los que hay: title, short, …
   ✗ projects/tuttiPari/project.json: en «photos», 29 no está en su carpeta img/ (falta 29.webp)
   ✗ la lista «eventos» de data/site.json nombra «tutiPari», y no hay projects/tutiPari/project.json
   ```
 
   Arréglalo (el número de línea te dice dónde mirar), sube otra vez, y listo.
+  Con Live Server (punto 6) lo ves igual antes de subir.
 
 Si no ves qué es, escríbeme con el mensaje en rojo y lo miramos.

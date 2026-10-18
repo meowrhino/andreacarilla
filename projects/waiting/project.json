@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schema/project.json",
   "title": "WAITING THE RAIN. HIFAS STUDIO",
   "short": "waiting the rain",
   "url": "https://www.instagram.com/hifas.studio/",

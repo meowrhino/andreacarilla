@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schema/project.json",
   "title": "NACÍ CON EL DESTINO DE UNA ROSA",
   "short": "nací con el destino de una rosa",
   "place": "[Hangar](https://www.instagram.com/hangar_org/) Barcelona. [DA2 Domus Artium](https://www.instagram.com/da2domusartium2002/) Salamanca.",

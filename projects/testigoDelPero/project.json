@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schema/project.json",
   "title": "TESTIGO DEL PERO.",
   "short": "alejandra grillo",
   "url": "https://www.instagram.com/alejandra__grillo/",

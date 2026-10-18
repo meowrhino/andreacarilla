@@ -4,7 +4,7 @@
 //
 //   dist/index.html                 la home, con los enlaces y el about dentro
 //   dist/projects/<slug>/index.html una pagina por proyecto, con sus fotos
-//   dist/projects/<slug>/og.jpg     la imagen al compartir (ffmpeg)
+//   dist/projects/<slug>/og.jpg     la imagen al compartir (sharp)
 //   dist/proyectos/<slug>/          redirige las direcciones de antes
 //   dist/sitemap.xml, robots.txt
 //
@@ -12,13 +12,18 @@
 // WhatsApp o Instagram (que no ejecutan JS) no ven ni titulo ni imagen. Asi
 // el navegador recibe el HTML ya hecho y el JS solo coloca e interactua.
 //
-// Si algo no cuadra (una coma, una foto que no existe, un proyecto que no
-// esta) para con un mensaje en castellano y no escribe nada: la web publicada
-// se queda como estaba.
+// Si algo no cuadra (una coma, un campo que no dice schema/, una foto que no
+// existe, un proyecto que no esta) para con un mensaje en castellano y no
+// escribe nada: la web publicada se queda como estaba (en la Action, ademas,
+// un issue: CLAUDE.md). La vista previa (Live Server) lo enseña igual.
 //
-// Uso: node build/build.mjs   (sin dependencias; ffmpeg opcional)
+// Donde se publica, segun donde se construye (JAMstack, patrones.md §5): en
+// la Action de GitHub (nuestra copia), meowrhino.github.io/andreacarilla/ y
+// sin indexar; en cualquier otro sitio (Workers Builds, la copia de Andrea:
+// wrangler.jsonc), la raiz con el dominio de data/site.json → "url".
+//
+// Uso: npm ci && node build/build.mjs   (la unica dependencia, sharp, es opcional)
 
-import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -36,6 +41,7 @@ import {
   projectName,
   siteChrome,
 } from "./paginas.mjs";
+import { cargar, leerJSON, validar } from "./validar.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "dist");
@@ -43,20 +49,24 @@ const at = (...p) => path.join(ROOT, ...p);
 
 const errors = [];
 const fail = () => {
-  console.error(`\n✗ ${errors.join("\n✗ ")}\n\nNo se ha publicado nada: la web sigue como estaba.\n`);
+  console.error(`\n✗ ${errors.join("\n✗ ")}\n\nNo se ha publicado nada: la web sigue como estaba. En VS Code sale subrayado en rojo; la vista previa (Live Server) lo enseña igual.\n`);
   process.exit(1);
 };
 
-// Un JSON roto dice cual y donde
-function read(file) {
+// Cada JSON se lee y se comprueba con su esquema (schema/), el mismo con el
+// que VS Code subraya lo que esta mal: un JSON roto dice donde, y un campo
+// mal escrito o del tipo que no es para el build
+const schema = (type) => JSON.parse(fs.readFileSync(at("schema", `${type}.json`), "utf8"));
+function read(file, type) {
+  let data;
   try {
-    return JSON.parse(fs.readFileSync(at(file), "utf8"));
+    data = leerJSON(fs.readFileSync(at(file), "utf8"), file);
   } catch (e) {
-    errors.push(
-      e.code === "ENOENT" ? `falta ${file}` : `${file} no es un JSON válido (casi siempre es una coma): ${e.message}`
-    );
+    errors.push(e.code === "ENOENT" ? `falta ${file}` : e.message);
     return null;
   }
+  errors.push(...validar(data, schema(type), file));
+  return data;
 }
 
 // ---------------------------------------------------------------------------
@@ -98,91 +108,91 @@ const sizeOf = (file) => webpSize(at(file));
 // ---------------------------------------------------------------------------
 // Leer y comprobar
 // ---------------------------------------------------------------------------
-const site = read("data/site.json");
-const about = read("data/about.json");
-if (!site || !about) fail();
-if (!site.url) errors.push('falta "url" en data/site.json: la dirección donde se publica la web');
+const site = read("data/site.json", "site");
+const about = read("data/about.json", "about");
+if (errors.length) fail();
+
+const files = new Map();
+for (const { slug } of listedProjects(site)) {
+  const file = `projects/${slug}/project.json`;
+  if (fs.existsSync(at(file))) files.set(file, read(file, "project"));
+}
+if (errors.length) fail();
+
+const github = process.env.GITHUB_ACTIONS === "true";
+const [owner, repo] = (process.env.GITHUB_REPOSITORY || "meowrhino/andreacarilla").split("/");
+if (github) site.url = `https://${owner}.github.io/${repo}/`;
+site.noindex = github;
 const abs = (p) => new URL(p, site.url).href;
 
-const projects = [];
-const seen = new Map();
-for (const entry of listedProjects(site)) {
-  const where = `la lista «${entry.list}» de data/site.json`;
-  if (seen.has(entry.slug)) {
-    errors.push(`${where} repite «${entry.slug}», que ya está en «${seen.get(entry.slug)}»`);
-    continue;
-  }
-  seen.set(entry.slug, entry.list);
-  const file = `projects/${entry.slug}/project.json`;
-  if (!fs.existsSync(at(file))) {
-    errors.push(`${where} nombra «${entry.slug}», y no hay ${file}`);
-    continue;
-  }
-  const data = read(file);
-  if (!data) continue;
-  const p = { ...data, ...entry };
-  if (!p.title && !p.short) errors.push(`${file}: le falta «title»`);
-  for (const field of ["cover", "photos"]) {
-    if (p[field] != null && !Array.isArray(p[field])) {
-      errors.push(`${file}: «${field}» va entre corchetes, así: ["1", "2"]`);
-      continue;
-    }
-    for (const n of p[field] || []) {
-      if (!fs.existsSync(at(photoPath(p.slug, n)))) errors.push(`${file}: en «${field}», ${n} no está en su carpeta img/ (falta ${n}.webp)`);
-    }
-  }
-  projects.push(p);
-}
-if (!projects.length) errors.push("data/site.json: no hay ningún proyecto en «lists»");
-
-(site.gallery || []).forEach((set, i) =>
-  set.forEach((item) => {
-    if (!fs.existsSync(at(portadaPath(i, item.photo)))) errors.push(`data/site.json: en «gallery» ${i + 1}, falta ${portadaPath(i, item.photo)}`);
-    if (!seen.has(item.project)) errors.push(`data/site.json: en «gallery» ${i + 1}, «${item.project}» no está en ninguna lista`);
-  })
-);
-
-for (const slug of fs.readdirSync(at("projects"))) {
-  if (fs.statSync(at("projects", slug)).isDirectory() && !seen.has(slug)) {
-    console.warn(`⚠ projects/${slug} no está en ninguna lista de data/site.json: no sale en la web`);
-  }
-}
-
+const { projects, errors: wrong, warnings } = cargar(site, {
+  json: (file) => files.get(file),
+  exists: (file) => fs.existsSync(at(file)),
+  folders: fs.readdirSync(at("projects")).filter((slug) => fs.statSync(at("projects", slug)).isDirectory()),
+});
+for (const w of warnings) console.warn(`⚠ ${w}`);
+errors.push(...wrong);
 if (errors.length) fail();
 
 // ---------------------------------------------------------------------------
 // La imagen al compartir (og:image): 1200×630 en JPG, que es lo que esperan
 // WhatsApp, Instagram y compañia. La foto entera sobre blanco, con aire.
-// La hace ffmpeg (en la Action la instala el workflow) en .cache/og/, con
-// nombre segun la foto de la que sale, asi que solo se rehace si cambia.
-// Sin ffmpeg se comparte la foto tal cual y se avisa.
+// La hace sharp (npm ci; va igual en la Action que en Workers Builds, donde
+// no hay ffmpeg) en .cache/og/, con nombre segun la foto de la que sale, asi
+// que solo se rehace si cambia. Sin sharp se comparte la foto tal cual y se avisa.
 // ---------------------------------------------------------------------------
-const FIT = "scale=1104:534:force_original_aspect_ratio=decrease,pad=1200:630:(ow-iw)/2:(oh-ih)/2:white";
-let ffmpeg = true;
+const OG_W = 1200;
+const OG_H = 630;
+const AIR = 48; // margen blanco alrededor, en px
+const WHITE = { r: 255, g: 255, b: 255 };
 
-function ogImage(out, src) {
+let sharp;
+try {
+  sharp = (await import("sharp")).default;
+} catch (e) {
+  console.warn(`⚠ sin sharp (${e.code || e.message}): al compartir sale la foto tal cual. Se arregla con: npm ci`);
+}
+
+async function makeOg(src) {
   const cached = at(".cache", "og", createHash("sha1").update(src).digest("hex").slice(0, 12) + ".jpg");
-  let ok = fs.existsSync(cached) && fs.statSync(cached).mtimeMs >= fs.statSync(at(src)).mtimeMs;
-  if (!ok && ffmpeg) {
+  if (fs.existsSync(cached) && fs.statSync(cached).mtimeMs >= fs.statSync(at(src)).mtimeMs) return cached;
+  fs.mkdirSync(path.dirname(cached), { recursive: true });
+  await sharp(at(src))
+    .resize(OG_W - 2 * AIR, OG_H - 2 * AIR, { fit: "contain", background: WHITE })
+    .flatten({ background: WHITE })
+    .extend({ top: AIR, bottom: AIR, left: AIR, right: AIR, background: WHITE })
+    .jpeg({ quality: 85, mozjpeg: true })
+    .toFile(cached);
+  return cached;
+}
+
+// Su ruta en dist/ → la foto de la que sale: la de la home, la primera de la
+// galeria; la de cada proyecto, su portada
+const ogs = new Map();
+const first = site.gallery?.[0]?.[0];
+if (first) ogs.set("og.jpg", portadaPath(0, first.photo));
+for (const p of projects) {
+  const cover = p.cover?.[0] ?? p.photos?.[0];
+  if (cover != null) ogs.set(`projects/${p.slug}/og.jpg`, photoPath(p.slug, cover));
+}
+const ogDone = new Map(); // su ruta en dist/ → la hecha, en .cache/og/
+if (sharp) {
+  for (const [out, src] of ogs) {
     try {
-      fs.mkdirSync(path.dirname(cached), { recursive: true });
-      execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-i", at(src), "-vf", FIT, "-q:v", "3", cached]);
-      ok = true;
-    } catch {
-      ffmpeg = false;
-      console.warn("⚠ sin ffmpeg (brew install ffmpeg): al compartir sale la foto tal cual");
+      ogDone.set(out, await makeOg(src));
+    } catch (e) {
+      console.warn(`⚠ ${src}: no se ha podido hacer la imagen para compartir (${e.message})`);
     }
   }
-  if (!ok) return src;
-  fs.copyFileSync(cached, path.join(OUT, out));
-  return out;
 }
+const ogImage = (out) => (ogDone.has(out) ? out : ogs.get(out) || "");
 
 // ---------------------------------------------------------------------------
 // Piezas de las paginas
 // ---------------------------------------------------------------------------
-function metaTags({ title, description, url, image }) {
+function metaTags({ title, description, url, image, noindex = site.noindex }) {
   return [
+    noindex && `<meta name="robots" content="noindex">`,
     `<meta name="description" content="${escapeHtml(description)}">`,
     `<meta property="og:site_name" content="${escapeHtml(site.title)}">`,
     `<meta property="og:title" content="${escapeHtml(title)}">`,
@@ -217,9 +227,12 @@ function replaceBlock(html, name, content) {
 // main.js sabe que esta en Live Server sin build. En dist/ se quita
 const template = (file) => fs.readFileSync(at(file), "utf8").replace(" data-preview", "");
 
+// La transicion de la casa (js/transicion.js): el <script> del <head> que tapa
+// la pagina antes de pintar si se llega de otra. Uno solo, el de index.html
+const tapar = template("index.html").match(/ *<script>\{\n[\s\S]*?\n *\}<\/script>/)[0];
+
 function homePage() {
-  const first = site.gallery?.[0]?.[0];
-  const image = first ? ogImage("og.jpg", portadaPath(0, first.photo)) : "";
+  const image = ogImage("og.jpg");
   const ld = [
     {
       "@context": "https://schema.org",
@@ -249,8 +262,7 @@ function projectPage(p) {
   const title = projectName(p);
   const description = projectDescription(p);
   const url = abs(`projects/${p.slug}/`);
-  const cover = p.cover?.[0] ?? p.photos?.[0];
-  const image = cover != null ? ogImage(`projects/${p.slug}/og.jpg`, photoPath(p.slug, cover)) : "";
+  const image = ogImage(`projects/${p.slug}/og.jpg`);
   const ld = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
@@ -270,8 +282,10 @@ function projectPage(p) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../../">
+${tapar}
     <title>${escapeHtml(title)} · ${escapeHtml(site.title)}</title>
-${metaTags({ title, description, url, image })}
+${metaTags({ title, description, url, image, noindex: site.noindex || p.hidden })}
+    <link rel="stylesheet" href="./css/transicion.css">
     <link rel="stylesheet" href="./css/style.css">
     <script type="application/ld+json">${escapeJson(ld)}</script>
 </head>
@@ -284,6 +298,7 @@ ${projectMain(p, sizeOf)}
 
 ${siteChrome(site, about, { isHome: false })}
 
+    <script src="./js/transicion.js" defer></script>
     <script type="module" src="./js/main.js"></script>
 
 </body>
@@ -331,7 +346,7 @@ fs.mkdirSync(OUT, { recursive: true });
 for (const name of fs.readdirSync(OUT)) fs.rmSync(path.join(OUT, name), { recursive: true, force: true });
 
 for (const dir of ["css", "js", "_portada"]) fs.cpSync(at(dir), path.join(OUT, dir), { recursive: true });
-for (const file of ["formateador.html", "CNAME"]) {
+for (const file of ["formateador.html", "CNAME", "_headers"]) {
   if (fs.existsSync(at(file))) fs.copyFileSync(at(file), path.join(OUT, file));
 }
 
@@ -344,12 +359,13 @@ for (const p of projects) {
 }
 fs.writeFileSync(path.join(OUT, "index.html"), homePage());
 fs.writeFileSync(path.join(OUT, "proyecto.html"), oldProjectUrl);
+for (const [out, cached] of ogDone) fs.copyFileSync(cached, path.join(OUT, out));
 
 fs.writeFileSync(
   path.join(OUT, "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${[abs(""), ...projects.map((p) => abs(`projects/${p.slug}/`))].map((u) => `  <url><loc>${u}</loc></url>`).join("\n")}
+${[abs(""), ...projects.filter((p) => !p.hidden).map((p) => abs(`projects/${p.slug}/`))].map((u) => `  <url><loc>${u}</loc></url>`).join("\n")}
 </urlset>
 `
 );

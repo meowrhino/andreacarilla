@@ -4,5 +4,7 @@
 
 # La web generada: la escribe node build/build.mjs y la publica la Action
 dist/
-# Las imagenes para compartir (ffmpeg): las hace el build
+node_modules/
+.wrangler/
+# Las imagenes para compartir (sharp): las hace el build
 .cache/

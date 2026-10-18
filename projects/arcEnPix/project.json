@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schema/project.json",
   "title": "ARCHIVO EN PIXEL",
   "short": "archivo en pixel",
   "url": "https://quiennocorrevuela.bigcartel.com/product/archivo-en-pixel",

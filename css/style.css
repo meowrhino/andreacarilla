@@ -109,7 +109,7 @@ span.meta {
 }
 
 /* ===== 3. home: enlaces a proyectos =====
-   home.js los reparte al azar sin que se pisen; si no caben, la zona hace scroll */
+   home.js los reparte al azar, pisándose como mucho un tercio; si no caben, la zona hace scroll */
 
 #links-container {
   height: 30vh;
@@ -127,6 +127,12 @@ span.meta {
   overflow-wrap: break-word;
   /* aparecen uno tras otro: el retraso de cada uno lo pone home.js */
   animation: aparecer 0.5s ease both;
+}
+
+/* Si se pisa con otro, al pasar por encima queda delante */
+.project-link:hover,
+.project-link:focus-visible {
+  z-index: 1;
 }
 
 /* Filtrado por categoría (home.js pone hidden) */

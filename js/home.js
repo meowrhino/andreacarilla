@@ -54,8 +54,16 @@ function responsiveFactor() {
 // Enlaces a proyectos
 // ---------------------------------------------------------------------------
 
-// Reparte los enlaces visibles en posiciones aleatorias sin que se pisen.
-// Si tras 50 intentos un enlace no cabe, la zona crece hacia abajo (scroll).
+// Cuanto puede tapar un enlace a otro: parte del area del mas pequeño
+const MAX_OVERLAP = 0.35;
+
+const overlap = (a, b) =>
+  Math.max(0, Math.min(a.left + a.w, b.left + b.w) - Math.max(a.left, b.left)) *
+  Math.max(0, Math.min(a.top + a.h, b.top + b.h) - Math.max(a.top, b.top));
+
+// Reparte los enlaces visibles al azar: se pueden pisar, pero ninguno tapa mas
+// de un tercio de otro. Si tras 50 intentos un enlace no cabe, la zona crece
+// hacia abajo (scroll).
 function scatterLinks() {
   const visible = links.filter((link) => {
     const show = activeCategories.size === 0 || activeCategories.has(link.dataset.category);
@@ -79,13 +87,11 @@ function scatterLinks() {
       // -1px: pegado al borde derecho el texto se parte por redondeo y crece
       const left = Math.random() * Math.max(0, linksContainer.clientWidth - w - 1);
       const top = Math.random() * Math.max(0, areaHeight - h);
-      const overlaps = placed.some(
-        (r) => left < r.left + r.w && r.left < left + w && top < r.top + r.h && r.top < top + h
-      );
-      if (!overlaps) pos = { left, top };
+      const rect = { left, top, w, h };
+      if (!placed.some((p) => overlap(rect, p) > MAX_OVERLAP * Math.min(w * h, p.w * p.h))) pos = rect;
       else if (i % 50 === 0) areaHeight += h;
     }
-    placed.push({ ...pos, w, h });
+    placed.push(pos);
     link.style.top = `${pos.top}px`;
     link.style.left = `${pos.left}px`;
   });
